@@ -6,7 +6,6 @@ $menu = array(
 echo $this->Html->nestedList($menu);
 echo $this->Html->tag('h4', 'quelle list');
 $menu = array(
-    $this->Html->link('back', '/serbian'),
     $this->Html->link('people', '/serbianApi/listQuele/people'),
     $this->Html->link('organizations', '/serbianApi/listQuele/organizations'),
     $this->Html->link('events', '/serbianApi/listQuele/events'),
