@@ -59,9 +59,9 @@ class SerbianController extends AppController {
         $id = !is_null($id) ? $id : 540;
 //        $content = 'lipa jak CHUJ: i wielka jak DUPA JANA: i kurwa chuj w dupe KUITAS i BABA jaga';
 
-        $content = $this->SerbianSpeecheIndex->findById($id);
+        $content = $this->Serbia->extraktContent('/Дванаеста_седница_Другог_редовног.23906.43.html');
         if ($content) {
-            $combine = $this->SerbianSpeecheContent->combineToApiArray($content);
+//            $combine = $this->SerbianSpeecheContent->combineToApiArray($content);
         }
         $this->set(compact('content', 'combine'));
     }

@@ -135,19 +135,19 @@ class AppModel extends Model {
         $searchs = explode(' ', $name);
 //        pr($searchs);
         foreach ($searchs as $na) {
-            $cond[] = array('SerbianDelegate.name LIKE' => '%' . $na . '%');
+            $cond[] = array('SerbianMpsDetail.name LIKE' => '%' . $na . '%');
         }
         $conditions[] = array('AND' => $cond);
 
-        App::import('Model', 'SerbianDelegate');
-        $this->SerbianDelegate = new SerbianDelegate();
-        $checkName = $this->SerbianDelegate->field(
-                'SerbianDelegate.api_uid', $conditions
+        App::import('Model', 'SerbianMpsDetail');
+        $this->SerbianMpsDetail = new SerbianMpsDetail();
+        $checkName = $this->SerbianMpsDetail->field(
+                'SerbianMpsDetail.name', $conditions
         );
         if ($checkName) {
-            return 'mp_' . $checkName;
+            return 'mp_' . $this->toCamelCase($checkName);
         } else {
-            $newId = $this->toCamelCase($name);
+            $newId = 'mp_' . $this->toCamelCase($name);
             $data[]['people']['id'] = $newId;
 //            $data[]['logs'] = array(
 //                'id' => 'people_' . $newId . '_voteId_' . $this->voteId . '_' . time() . '_' . rand(0, 999),
@@ -157,7 +157,7 @@ class AppModel extends Model {
 //            );
             App::import('Model', 'QueleToSend');
             $this->QueleToSend = new QueleToSend();
-            $this->QueleToSend->putDataDB($data, 'Serbian');
+            $this->QueleToSend->putDataDB($data, 'Serbian', false);
             return $newId;
         }
     }

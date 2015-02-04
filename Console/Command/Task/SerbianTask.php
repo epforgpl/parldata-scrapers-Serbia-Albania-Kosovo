@@ -148,7 +148,7 @@ class SerbianTask extends Shell {
             $toLog .= $info . "\n";
         }
 
-        if ($content) {
+        if (isset($content) && is_array($content)) {
             foreach ($content as $k => $c) {
                 if (!empty($c)) {
                     if ($this->SerbianMpsDetail->saveAll($c)) {
@@ -480,7 +480,7 @@ class SerbianTask extends Shell {
         $toLog = $toLogPdf = $info . "\n";
 
         $change = false;
-        $listDataIndex = $this->SerbianSpeecheIndex->find('list', array(
+        $dataIndex = $this->SerbianSpeecheIndex->find('list', array(
             'fields' => array('SerbianSpeecheIndex.id', 'SerbianSpeecheIndex.url'),
             'conditions' => array(
                 'SerbianSpeecheIndex.active' => 1,
@@ -490,95 +490,123 @@ class SerbianTask extends Shell {
             'limit' => $limit
                 )
         );
+        $info = 'list index count: ' . count($dataIndex);
+        $this->out($info);
+        $toLog .= $info . "\n";
+
+        $oldtime = CakeTime::format('-45 days', '%Y-%m-%d %H:%M:%S');
+        $dataOldIndex = $this->SerbianSpeecheIndex->find('list', array(
+            'fields' => array('SerbianSpeecheIndex.id', 'SerbianSpeecheIndex.url'),
+            'conditions' => array(
+//                'SerbianSpeecheIndex.id' => 546,
+                'SerbianSpeecheIndex.active' => 1,
+                'SerbianSpeecheIndex.post_date >' => $oldtime,
+            ),
+            'order' => 'SerbianSpeecheIndex.post_date ASC',
+//            'limit' => $limit
+                )
+        );
+        $info = 'list old (' . $oldtime . ') check index count: ' . count($dataOldIndex);
+        $this->out($info);
+        $toLog .= $info . "\n";
+        $listDataIndex = array($dataIndex, $dataOldIndex);
+
         if ($listDataIndex) {
-            foreach ($listDataIndex as $key => $url) {
-                $content = $this->Serbia->extraktContent($url);
-                if ($content) {
-                    $c = $this->SerbianSpeecheContent->findBySerbianSpeecheIndexId($key);
-                    if (!$c) {
-                        $this->SerbianSpeecheContent->create();
-                        $content['serbian_speeche_index_id'] = $key;
-                        if ($this->SerbianSpeecheContent->save($content)) {
-
-                            $info = 'save new content (key: ' . $key . ') ' . $url;
-                            $this->out($info);
-                            $toLog .= $info . "\n";
-
-                            $change = true;
-                        }
-                    } else {
-                        if ($c['SerbianSpeecheContent']['content_md5'] != $content['content_md5']) {
-                            $this->SerbianSpeecheContent->id = $c['SerbianSpeecheContent']['id'];
+            foreach ($listDataIndex as $listData) {
+                foreach ($listData as $key => $url) {
+                    $content = $this->Serbia->extraktContent($url);
+                    if ($content) {
+                        $c = $this->SerbianSpeecheContent->findBySerbianSpeecheIndexId($key);
+                        if (!$c) {
+                            $this->SerbianSpeecheContent->create();
                             $content['serbian_speeche_index_id'] = $key;
-                            $content['status'] = 0;
                             if ($this->SerbianSpeecheContent->save($content)) {
 
-                                $info = 'diff md5 update content (key: ' . $key . ') ' . $url;
+                                $info = 'save new content (key: ' . $key . ') ' . $url;
                                 $this->out($info);
                                 $toLog .= $info . "\n";
 
                                 $change = true;
                             }
-                        }
-                    }
-                    if ($change) {
-                        $this->SerbianSpeecheIndex->id = $key;
-                        $this->SerbianSpeecheIndex->saveField('status', 1);
-                    }
-                    if (isset($content['pdfs'])) {
-                        $changePdf = false;
-                        $info = 'find content pdfs (key: ' . $key . ') pcs: ' . count($content['pdfs']);
-                        $this->out($info);
-                        $toLog .= $info . "\n";
-                        $toLogPdf .= $info . "\n";
+                        } else {
+                            $this->out($key);
+                            $this->out($c['SerbianSpeecheContent']['content_md5']);
+                            $this->out($content['content_md5']);
 
-                        foreach ($content['pdfs'] as $pdf) {
-                            $p = $this->SerbianPdf->findByStampInText($pdf['stamp_in_text']);
+                            if ($c['SerbianSpeecheContent']['content_md5'] != $content['content_md5']) {
+                                $this->SerbianSpeecheContent->id = $c['SerbianSpeecheContent']['id'];
+                                $content['serbian_speeche_index_id'] = $key;
+                                $content['status'] = 0;
+//                        print_r($content);
+                                if ($this->SerbianSpeecheContent->save($content)) {
 
-                            if (!$p) {
-                                $this->SerbianPdf->create();
-                                if ($this->SerbianPdf->save($pdf)) {
-
-                                    $info = 'save new pdf (key: ' . $pdf['stamp_in_text'] . ')';
+                                    $info = 'diff md5 update content (key: ' . $key . ') ' . $url;
                                     $this->out($info);
-                                    $toLogPdf .= $info . "\n";
+                                    $toLog .= $info . "\n";
 
-                                    $changePdf = true;
+                                    $change = true;
                                 }
-                            } else {
+                            }
+                        }
+                        if ($change) {
+                            $this->SerbianSpeecheIndex->id = $key;
+                            $this->SerbianSpeecheIndex->saveField('status', 1);
+                        }
+                        if (isset($content['pdfs'])) {
+                            $changePdf = false;
+                            $info = 'find content pdfs (key: ' . $key . ') pcs: ' . count($content['pdfs']);
+                            $this->out($info);
+                            $toLog .= $info . "\n";
+                            $toLogPdf .= $info . "\n";
 
-                                if ($p['SerbianPdf']['pdf_md5'] != $pdf['pdf_md5']) {
-                                    $this->SerbianPdf->id = $p['SerbianPdf']['id'];
-                                    $pdf['status'] = 0;
+                            foreach ($content['pdfs'] as $pdf) {
+                                $p = $this->SerbianPdf->findByStampInText($pdf['stamp_in_text']);
+
+                                if (!$p) {
+                                    $this->SerbianPdf->create();
                                     if ($this->SerbianPdf->save($pdf)) {
 
-                                        $info = 'diff md5 update pdf (key: ' . $pdf['stamp_in_text'] . ')';
+                                        $info = 'save new pdf (key: ' . $pdf['stamp_in_text'] . ')';
                                         $this->out($info);
                                         $toLogPdf .= $info . "\n";
 
                                         $changePdf = true;
                                     }
+                                } else {
+
+                                    if ($p['SerbianPdf']['pdf_md5'] != $pdf['pdf_md5']) {
+                                        $this->SerbianPdf->id = $p['SerbianPdf']['id'];
+                                        $pdf['status'] = 0;
+                                        if ($this->SerbianPdf->save($pdf)) {
+
+                                            $info = 'diff md5 update pdf (key: ' . $pdf['stamp_in_text'] . ')';
+                                            $this->out($info);
+                                            $toLogPdf .= $info . "\n";
+
+                                            $changePdf = true;
+                                        }
+                                    }
                                 }
                             }
-                        }
-                        if (!$changePdf) {
-                            $info = 'pdfs nothing to do';
+                            if (!$changePdf) {
+                                $info = 'pdfs nothing to do';
+                                $this->out($info);
+                                $toLog .= $info . "\n";
+                                $toLogPdf .= $info . "\n";
+                            }
+
+                            $info = 'end content pdfs';
                             $this->out($info);
                             $toLog .= $info . "\n";
                             $toLogPdf .= $info . "\n";
                         }
-
-                        $info = 'end content pdfs';
+                    } else {
+                        $info = 'something is wrong, I can not get content from (key: ' . $key . ') ' . $url;
                         $this->out($info);
                         $toLog .= $info . "\n";
-                        $toLogPdf .= $info . "\n";
                     }
-                } else {
-                    $info = 'something is wrong, I can not get content from (key: ' . $key . ') ' . $url;
-                    $this->out($info);
-                    $toLog .= $info . "\n";
+                    usleep(50000);
                 }
-                usleep(50000);
             }
             if (!$change) {
                 $info = 'content nothing changed';
@@ -617,7 +645,8 @@ class SerbianTask extends Shell {
         }
     }
 
-    public function combine_pdfs() {
+    public function combine_pdfs($limit = null) {
+        $limit = !is_null($limit) && (int) $limit ? $limit : 30;
         $info = CakeTime::toServer(time()) . ' Serbia combine_pdfs start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
@@ -625,7 +654,7 @@ class SerbianTask extends Shell {
         $list = $this->SerbianPdf->find('all', array(
             'fields' => array('id', 'name_sr', 'pdf_url'),
             'conditions' => array('SerbianPdf.status' => 0),
-            'limit' => 5
+            'limit' => $limit
         ));
 
         if (count($list)) {
@@ -649,16 +678,16 @@ class SerbianTask extends Shell {
                         $toLog .= $info . "\n";
 
                         $translate = $this->SerbianPdf->translateHtml($id);
-                        if ($translate) {
-
-                            $info = 'succes translate ' . $id . '.html (English lang)';
-                            $this->out($info);
-                            $toLog .= $info . "\n";
-                        } else {
-                            $info = '!!!ERROR  translate ' . $id . '.html (English lang)';
-                            $this->out($info);
-                            $toLog .= $info . "\n";
-                        }
+//                        if ($translate) {
+//
+//                            $info = 'succes translate ' . $id . '.html (English lang)';
+//                            $this->out($info);
+//                            $toLog .= $info . "\n";
+//                        } else {
+//                            $info = '!!!ERROR  translate ' . $id . '.html (English lang)';
+//                            $this->out($info);
+//                            $toLog .= $info . "\n";
+//                        }
                     } else {
                         $info = '!!!ERROR ' . $id . '.pdf to ' . $id . '.html (Serbian lang)';
                         $this->out($info);
@@ -1079,20 +1108,21 @@ class SerbianTask extends Shell {
             ),
             'conditions' => array(
 //                'SerbianPdf.lang' => 'sr',
-                'SerbianPdf.status' => 2
+                'SerbianPdf.status' => 1
             ),
 //            'order' => 'post_uid DESC',
-            'limit' => 10
+            'limit' => 1
         ));
         if ($content) {
             foreach ($content as $c) {
-                $c['doEvent'] = $this->SerbianSpeecheContent->find('first', array(
-                    'fields' => array('SerbianSpeecheContent.id', 'SerbianSpeecheContent.serbian_speeche_index_id', 'SerbianSpeecheContent.convert_date'),
+                $c['doEvent'] = $this->SerbianSpeecheIndex->find('first', array(
+                    'fields' => array('SerbianSpeecheIndex.id', 'SerbianSpeecheIndex.post_uid', 'SerbianSpeecheIndex.post_date'),
                     'conditions' => array(
-                        'SerbianSpeecheContent.convert_date' => $c['SerbianPdf']['post_date'],
+                        'SerbianSpeecheIndex.post_date' => $c['SerbianPdf']['post_date'],
+                        'SerbianSpeecheIndex.lang' => 'sr',
                     ),
                     'contain' => array(
-                        'SerbianSpeecheIndex.id', 'SerbianSpeecheIndex.post_uid',
+                        'SerbianSpeecheContent.id', 'SerbianSpeecheContent.serbian_speeche_index_id', 'SerbianSpeecheContent.convert_date',
                     )
                 ));
 //                pr($c);
@@ -1160,16 +1190,28 @@ class SerbianTask extends Shell {
             $toLog .= $info . "\n";
         }
         if (!$ids) {
-            $ids1 = $this->getListQueleToSend('votes', 300);
-            $info = 'votes count: ' . count($ids1);
+            $ids = $this->getListQueleToSend('votes', 500);
+            $info = 'votes count: ' . count($ids);
             $this->out($info);
             $toLog .= $info . "\n";
-            $ids2 = $this->getListQueleToSend('memberships', 300);
-            $info = 'memberships count: ' . count($ids2);
-            $this->out($info);
-            $toLog .= $info . "\n";
-            $ids = array_merge($ids1, $ids2);
         }
+        if (!$ids) {
+            $ids = $this->getListQueleToSend('memberships', 500);
+            $info = 'memberships count: ' . count($ids);
+            $this->out($info);
+            $toLog .= $info . "\n";
+        }
+//        if (!$ids) {
+//            $ids1 = $this->getListQueleToSend('votes', 300);
+//            $info = 'votes count: ' . count($ids1);
+//            $this->out($info);
+//            $toLog .= $info . "\n";
+//            $ids2 = $this->getListQueleToSend('memberships', 300);
+//            $info = 'memberships count: ' . count($ids2);
+//            $this->out($info);
+//            $toLog .= $info . "\n";
+//            $ids = array_merge($ids1, $ids2);
+//        }
         $result = null;
         $wait = $send = array();
         if ($ids) {
@@ -1182,7 +1224,7 @@ class SerbianTask extends Shell {
                 } else {
                     $hint = $this->QueleToSend->hint($id);
                     $wait[] = $id;
-                    if ($hint == 1 || $hint == 1000) {
+                    if ($hint == 1 || $hint == 100) {
 //                        $info = 'wait for id: ' . $id;
 //                        $this->out($info);
 //                        $toLog .= $info . "\n";
@@ -1213,8 +1255,8 @@ class SerbianTask extends Shell {
                         'conditions' => array(
                             'type' => $type, //organizations //people
                             'status' => 0,
-                            'hints <' => 1000,
-                            'modified <' => CakeTime::format('-' . 30 . ' minutes', '%Y-%m-%d %H:%M:%S')
+                            'hints <' => 100,
+//                            'modified <' => CakeTime::format('-' . 30 . ' minutes', '%Y-%m-%d %H:%M:%S')
                         ),
                         'orders' => 'modified DESC',
                         'limit' => $limit

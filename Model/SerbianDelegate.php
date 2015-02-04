@@ -7,7 +7,7 @@ class SerbianDelegate extends AppModel {
     );
 
     public function combineToApiArray($content) {
-        $personId = 'mp_' . $this->toCamelCase($content['SerbianDelegate']['name']);
+        $personId = $this->checkPeopleExist($content['SerbianDelegate']['name']);
         $chamberId = 'chamber_' . $content['SerbianMenuData']['start_date'];
         $data['memberships']['id'] = $chamberId . '-' . $personId;
         $data['memberships']['label'] = 'MP';
@@ -20,15 +20,16 @@ class SerbianDelegate extends AppModel {
         if (!empty($content['SerbianDelegate']['end_date'])) {
             $data['memberships']['end_date'] = $content['SerbianDelegate']['end_date'];
         }
-        if (empty($content['SerbianDelegate']['url_uid'])) {
-            $data['people']['id'] = $personId;
-            $data['logs'] = array(
-                'id' => 'people_memberships_' . $data['memberships']['id'] . '_' . time() . '_' . rand(0, 999),
-                'label' => 'people not data exists: ' . $personId,
-                'status' => 'finished',
-//                        'params' => $t
-            );
-        }
+//        $find =
+//        if (empty($content['SerbianDelegate']['url_uid'])) {
+//            $data['people']['id'] = $personId;
+//            $data['logs'] = array(
+//                'id' => 'people_memberships_' . $data['memberships']['id'] . '_' . time() . '_' . rand(0, 999),
+//                'label' => 'people not data exists: ' . $personId,
+//                'status' => 'finished',
+////                        'params' => $t
+//            );
+//        }
 
         return $data;
     }

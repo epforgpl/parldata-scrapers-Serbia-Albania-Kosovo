@@ -13,7 +13,7 @@ class ScheduleShell extends Shell {
 //        $now = CakeTime::toServer(time(), "- 84 minute");
 //        $now = CakeTime::format('2011-08-22 11:53:00', '%B %e, %Y %H:%M %p');
 //        $now = CakeTime::format('-84 minutes', '%Y-%m-%d %H:%M:%S');
-        $now = CakeTime::format('-' . 10 . ' minutes', '%Y-%m-%d %H:%M:%S');
+//        $now = CakeTime::format('-' . 10 . ' minutes', '%Y-%m-%d %H:%M:%S');
 //        return;
         //     echo $this->Albanian->check_mps_contacts($now);
 //        echo $this->Kosovan->combine_pdfs(3);
@@ -31,11 +31,12 @@ class ScheduleShell extends Shell {
 //        $output = shell_exec($command);
 //        echo $output;
 //        echo $this->Kosovan->get_mps_contacts(100);
-        return;
-        echo $this->Serbian->serbia_send_to_quelle();
-//
-
-        return;
+//        echo $this->Serbian->combine_pdfs(30);
+//        return;
+//        echo $this->Serbian->serbia_send_to_quelle();
+////////
+////        echo $this->Serbian->serbia_combine_to_quelle();
+//        return;
 
         $schedules = $this->Serbian->get_schedules();
         if ($schedules) {
@@ -176,7 +177,7 @@ class ScheduleShell extends Shell {
                         $this->out('#modified ' . $schedule['Schedule']['modified']);
                         if ($schedule['Schedule']['modified'] < $now) {
                             $this->out('var ' . $now);
-                            echo $this->Serbian->combine_pdfs();
+                            echo $this->Serbian->combine_pdfs(30);
                             echo $this->Schedule->hint($schedule['Schedule']['id']);
                         }
                         break;
@@ -198,6 +199,16 @@ class ScheduleShell extends Shell {
                             echo $this->Schedule->hint($schedule['Schedule']['id']);
                         }
                         break;
+                    case'serbia_send_to_quelle':
+                        $this->out('#$now ' . $now);
+                        $this->out('#modified ' . $schedule['Schedule']['modified']);
+                        if ($schedule['Schedule']['modified'] < $now) {
+                            $this->out('var ' . $now);
+                            echo $this->Serbian->serbia_send_to_quelle();
+                            echo $this->Schedule->hint($schedule['Schedule']['id']);
+                        }
+                        break;
+
                     //Albanian
 //                    case'index_albania_plenary_speeches':
 //                        $this->out('#now ' . $now);

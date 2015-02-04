@@ -37,7 +37,7 @@ class SerbianApiController extends AppController {
         $this->SerbianMpsDetail->recursive = -1;
         $content = $this->SerbianMpsDetail->find('all', array(
             'conditions' => array('status' => 0),
-            'limit' => 50
+//            'limit' => 50
         ));
         if ($content) {
             foreach ($content as $c) {
@@ -54,6 +54,30 @@ class SerbianApiController extends AppController {
             }
         }
 
+        $this->set(compact('content', 'combine'));
+    }
+
+    public function organizationConvocation() {
+        $this->SerbianMenuData->recursive = -1;
+        $content = $this->SerbianMenuData->find('all', array(
+            //'fields' => array('id', 'id'),
+            'conditions' => array('api' => 0),
+//            'limit' => 10
+        ));
+        if ($content) {
+            foreach ($content as $c) {
+                $combines = $this->SerbianMenuData->combineToApiArray($c);
+                $combine[] = $combines;
+                if (isset($combines) && $combines) {
+                    $result = $this->QueleToSend->putDataDB(array($combines), 'Serbian');
+                    //  pr($result);
+                    if ($result) {
+                        $this->SerbianMenuData->id = $c['SerbianMenuData']['id'];
+                        $this->SerbianMenuData->saveField('api', 1);
+                    }
+                }
+            }
+        }
         $this->set(compact('content', 'combine'));
     }
 
@@ -117,7 +141,7 @@ class SerbianApiController extends AppController {
                 'api' => 0,
             ),
 //            'recursive' => -1,
-            'limit' => 2
+//            'limit' => 2
         ));
         if ($content) {
             foreach ($content as $c) {
@@ -143,7 +167,7 @@ class SerbianApiController extends AppController {
                 'api' => 0,
             ),
 //            'recursive' => -1,
-            'limit' => 2
+//            'limit' => 2
         ));
         if ($content) {
             foreach ($content as $c) {
@@ -169,7 +193,7 @@ class SerbianApiController extends AppController {
                 'api' => 0,
             ),
 //            'recursive' => -1,
-            'limit' => 2
+//            'limit' => 2
         ));
         if ($content) {
             foreach ($content as $c) {
@@ -209,30 +233,6 @@ class SerbianApiController extends AppController {
         $this->set(compact('content', 'combine'));
     }
 
-    public function organizationConvocation() {
-        $this->SerbianMenuData->recursive = -1;
-        $content = $this->SerbianMenuData->find('all', array(
-            //'fields' => array('id', 'id'),
-            'conditions' => array('api' => 0),
-            'limit' => 10
-        ));
-        if ($content) {
-            foreach ($content as $c) {
-                $combines = $this->SerbianMenuData->combineToApiArray($c);
-                $combine[] = $combines;
-                if (isset($combines) && $combines) {
-                    $result = $this->QueleToSend->putDataDB(array($combines), 'Serbian');
-                    //  pr($result);
-                    if ($result) {
-                        $this->SerbianMenuData->id = $c['SerbianMenuData']['id'];
-                        $this->SerbianMenuData->saveField('api', 1);
-                    }
-                }
-            }
-        }
-        $this->set(compact('content', 'combine'));
-    }
-
     public function membershipConvocation() {
         $content = $this->SerbianDelegate->find('all', array(
             //'fields' => array('id', 'id'),
@@ -243,7 +243,7 @@ class SerbianApiController extends AppController {
             'contain' => array(
                 'SerbianMenuData.start_date'
             ),
-            'limit' => 100
+//            'limit' => 100
         ));
 
         if ($content) {
@@ -272,7 +272,7 @@ class SerbianApiController extends AppController {
                 'SerbianSpeecheIndex.status' => 1
             ),
             'order' => 'post_uid DESC',
-            'limit' => 50
+//            'limit' => 50
         ));
 //        pr($content);
         if ($content) {
@@ -307,7 +307,7 @@ class SerbianApiController extends AppController {
                 'SerbianPdf.status' => 1
             ),
 //            'order' => 'post_uid DESC',
-            'limit' => 1
+            'limit' => 5
         ));
         if ($content) {
             foreach ($content as $c) {
@@ -424,6 +424,7 @@ class SerbianApiController extends AppController {
             $result = $this->QueleToSend->doRequest($id, true);
         } else {
             echo 'daj ID w url';
+            $this->QueleToSend->deleteSerbiaAll();
         }
     }
 

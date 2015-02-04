@@ -37,7 +37,8 @@ class QueleToSend extends AppModel {
         parent::beforeFilter();
     }
 
-    public function putDataDB($data, $direct) {
+    public function putDataDB($data, $direct, $checkMd5 = true) {
+
         $puts = true;
         foreach ($data as $d) {
             foreach ($d as $k => $v) {
@@ -45,14 +46,18 @@ class QueleToSend extends AppModel {
                 $uid = $v['id'];
                 $serialize = serialize($v);
                 $md5 = md5($serialize);
+                $conditions = array();
+
+                $conditions[] = array('direct' => $direct);
+                $conditions[] = array('type' => $type);
+                $conditions[] = array('uid' => $uid);
+
+                if ($checkMd5) {
+                    $conditions[] = array('md5' => $md5);
+                }
                 $check = $this->find('first', array(
                     'fields' => array('id'),
-                    'conditions' => array(
-                        'direct' => $direct,
-                        'type' => $type,
-                        'uid' => $uid,
-                        'md5' => $md5
-                    )
+                    'conditions' => $conditions
                 ));
                 //  pr($check);
                 if (!$check) {
@@ -78,32 +83,43 @@ class QueleToSend extends AppModel {
 
     public function doRequest($id, $test = false) {
 
+        $data = $this->findById($id);
+        //set connect config
+        $direct = $data['QueleToSend']['direct'];
+        $getSet = Configure::read('api_server');
+
+        $username = $getSet[$direct]['username'];
+        $password = $getSet[$direct]['password'];
+        $baseUrl = $getSet[$direct]['base_url'];
+
         $HttpSocket = new HttpSocket(array(
             'ssl_allow_self_signed' => true
         ));
-        $HttpSocket->configAuth('Basic', 'scraper', 'ngaA(f77');
+
+
+
+        //  $HttpSocket->configAuth('Basic', 'scraper', 'ngaA(f77');
+        $HttpSocket->configAuth('Basic', $username, $password);
         $request = array(
             'header' => array('Content-Type' => 'application/json'),
             'raw' => null,
         );
 
-        $data = $this->findById($id);
+
         $postSend = unserialize($data['QueleToSend']['data']);
         $putSend = $postSend;
+        pr($putSend);
+        pr(json_encode($postSend));
         unset($putSend['id']);
 
         $delete = false;
         $combine = array(
-            'url_post' => 'https://api.parldata.eu/rs/parlament/' . $data['QueleToSend']['type'],
+            'url_post' => $baseUrl . $data['QueleToSend']['type'],
             'post_send' => json_encode($postSend),
-            'url_put' => 'https://api.parldata.eu/rs/parlament/' . $data['QueleToSend']['type'] . '/' . $data['QueleToSend']['uid'],
+            'url_put' => $baseUrl . $data['QueleToSend']['type'] . '/' . $data['QueleToSend']['uid'],
             'put_send' => json_encode($putSend),
-            'delete' => 'https://api.parldata.eu/rs/parlament/' . $data['QueleToSend']['type'],
+//            'delete' => 'https://api.parldata.eu/rs/skupstina/' . $data['QueleToSend']['type'],
         );
-//        if ($delete) {
-//            $results = $HttpSocket->delete($combine['delete'], array(), $request);
-//            return json_decode($results->body);
-//        }
 
         $results = $HttpSocket->post($combine['url_post'], $combine['post_send'], $request);
         if ($test) {
@@ -133,4 +149,22 @@ class QueleToSend extends AppModel {
         // return array($status, $data, $results, $postSend);
     }
 
+//    public function deleteSerbiaAll($delete = null) {
+//        $HttpSocket = new HttpSocket(array(
+//            'ssl_allow_self_signed' => true
+//        ));
+//        $HttpSocket->configAuth('Basic', 'scraper', 'ngaA(f77');
+//        $request = array(
+//            'header' => array('Content-Type' => 'application/json'),
+//            'raw' => null,
+//        );
+//        $list = array(
+//            'logs', 'people', 'posts', 'organizations', 'speeches', 'events', 'motions', 'votes', 'areas', 'memberships', 'vote-events'
+//        );
+//        if (is_null($delete)) {
+//            foreach ($list as $l) {
+//                $results = $HttpSocket->delete('https://api.parldata.eu/rs/skupstina/' . $l, array(), $request);
+//            }
+//        }
+//    }
 }

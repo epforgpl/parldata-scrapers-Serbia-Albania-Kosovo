@@ -160,6 +160,7 @@ class Serbia extends AppModel {
             $result = trim(preg_replace('/<hr\sclass="delimiter|"delimiter"\/>/', '', $result));
             // $contentArray['content'] = base64_decode(trim(preg_replace('/<div\s.*?(>)|<div>|<\/div>/', '', $result)));
             $content = trim(preg_replace('/<div\s.*?(>)|<div>|<\/div>/', '', $result));
+            $content = preg_replace('/<\!\-\-.*?(\-\->)/', '', $content);
             $contentArray['content_md5'] = md5($content);
             $pdfs = $this->extractPdfs($content, $contentArray['convert_date']);
             $contentArray = array_merge($contentArray, $pdfs);

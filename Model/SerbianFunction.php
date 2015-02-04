@@ -46,7 +46,7 @@ class SerbianFunction extends AppModel {
                 $chamber = $this->getChamber($mp['created']);
                 $person = $this->checkPeopleExist($mp['name']);
                 $group[$i]['memberships']['id'] = $chamber . '-speaker-' . $person;
-                $group[$i]['memberships']['organization_id'] = $chamber . '-' . $classification;
+                $group[$i]['memberships']['organization_id'] = $chamber . '-' . $type;
                 $group[$i]['memberships']['person_id'] = $person;
 //                $group['toMemberships'][$key]['memberships']['all'] = $mp;
 

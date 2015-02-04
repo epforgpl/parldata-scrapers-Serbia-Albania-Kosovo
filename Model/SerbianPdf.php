@@ -82,25 +82,35 @@ class SerbianPdf extends AppModel {
         if ($id) {
             $content = $this->field('content_sr', array('id' => $id));
             if (!empty($content)) {
-                $translate = null;
-                foreach (preg_split("/((\r?\n)|(\r\n?))/", $content) as $line) {
-                    //  if (!empty($line)) {
-                    $translates = $this->GoogleTranslate->setLangFrom(
-                                    $this->translate_from)
-                            ->setLangTo($this->translate_into)
-                            ->translate($line);
-                    $translate .= str_replace($vowels, $vowels1, $translates);
-                    $translate .= "\n";
-                    //  }
-                    usleep(1500);
-                }
+                $translate = true;
                 if ($translate) {
-                    $this->saveField('content_en', $translate);
+                    $this->saveField('content_en', 'disabled');
                     $this->saveField('status', 1);
                     return true;
                 } else {
                     return false;
                 }
+
+                //disable translate
+//                $translate = null;
+//                foreach (preg_split("/((\r?\n)|(\r\n?))/", $content) as $line) {
+//                    //  if (!empty($line)) {
+//                    $translates = $this->GoogleTranslate->setLangFrom(
+//                                    $this->translate_from)
+//                            ->setLangTo($this->translate_into)
+//                            ->translate($line);
+//                    $translate .= str_replace($vowels, $vowels1, $translates);
+//                    $translate .= "\n";
+//                    //  }
+//                    usleep(1500);
+//                }
+//                if ($translate) {
+//                    $this->saveField('content_en', $translate);
+//                    $this->saveField('status', 1);
+//                    return true;
+//                } else {
+//                    return false;
+//                }
             } else {
                 return false;
             }
