@@ -1,6 +1,10 @@
+/Config/config.php
 /Config/database.php
 /webroot/files/albania/
 /webroot/files/kosovo/
 /webroot/files/serbia/
 /Console/Command/Task/KosovanTask.php
 /Console/Command/Task/AlbanianTask.php
+
+# IDEs
+.idea
