@@ -8,6 +8,13 @@
 - [Unoconv](http://dag.wiee.rs/home-made/unoconv/): `sudo apt-get install unoconv`
 
 ### Installation
+1. Create directory for those scrapers
+
+   ```
+mkdir /home/scrapers/sak
+cd /home/scrapers/sak
+   ```
+
 1. Download [Cake 2.6.1](https://github.com/cakephp/cakephp/archive/2.6.1.tar.gz) and extract it
 
    ```
@@ -24,8 +31,8 @@ git clone https://github.com/contributors-kodujdlapolski-pl/parldata-scrapers-Se
 1. Give rights to files
 
    ```
-mkdir app/webroot/kosovo app/webroot/albania app/webroot/serbia
-chmod -R o+w app/webroot
+chmod -R g+w app/webroot
+sudo adduser www-data $(whoami)
    ```
 
 1. Create database and config in `app/Config/database.php`
@@ -34,6 +41,8 @@ chmod -R o+w app/webroot
 cp app/Config/database.php.default app/Config/database.php
 vim app/Config/database.php
    ```
+
+1. TODO Create database schema
 
 1. Update API user & pass
 
