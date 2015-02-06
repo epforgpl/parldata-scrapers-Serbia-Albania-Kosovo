@@ -207,31 +207,6 @@ class Albania extends AppModel {
         return $ndata;
     }
 
-    public function extractDateAndTrim($result) {
-        $formulaDate = '/\d{2}\.\d{2}\.\d{4}/i';
-        $formulaDate1 = '/\d{1}\.\d{2}\.\d{4}/i';
-        $formulaDate2 = '/\d{2}\.\d{2}\d{4}/i';
-        $date = null;
-        if (preg_match($formulaDate, $result, $matches)) {
-            $result = trim(reset($matches));
-            $date = CakeTime::format($result, '%Y-%m-%d');
-        }
-        if (is_null($date)) {
-            if (preg_match($formulaDate1, $result, $matches)) {
-                $result = trim(reset($matches));
-                $date = CakeTime::format($result, '%Y-%m-%d');
-            }
-        }
-        if (is_null($date)) {
-            if (preg_match($formulaDate2, $result, $matches)) {
-                $result = trim(reset($matches));
-                $result = preg_replace("/(\d{2})\.(\d{2})(\d{4})/", "$1.$2.$3", $result);
-                $date = CakeTime::format($result, '%Y-%m-%d');
-            }
-        }
-        return $date;
-    }
-
     public function extractAddress($result) {
         $formulaAddress = '/Adresa:.*?(<\/td>)/msxi';
         $formulaAddressReplace = '/Adresa:|<a|E-mail:.*$/';

@@ -88,15 +88,19 @@ class SerbianApiController extends AppController {
                 'api' => 0,
                 'shortcut !=' => '-'
             ),
-            'recursive' => -1,
-//            'limit' => 2
+            'contain' => array(
+                'SerbianMpsDetail' => array(
+                    'SerbianMenuData'
+                )
+            ),
+//            'limit' => 1
         ));
         if ($content) {
             foreach ($content as $c) {
                 $combines = $this->SerbianParty->combineToApiArray($c);
                 $combine[] = $combines;
                 if (isset($combines) && $combines) {
-                    $result = $this->QueleToSend->putDataDB(array($combines), 'Serbian');
+                    $result = $this->QueleToSend->putDataDB($combines, 'Serbian');
                     //  pr($result);
                     if ($result) {
                         $this->SerbianParty->id = $c['SerbianParty']['id'];

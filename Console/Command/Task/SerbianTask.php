@@ -803,7 +803,11 @@ class SerbianTask extends Shell {
                 'api' => 0,
                 'shortcut !=' => '-'
             ),
-            'recursive' => -1,
+            'contain' => array(
+                'SerbianMpsDetail' => array(
+                    'SerbianMenuData'
+                )
+            ),
 //            'limit' => 2
         ));
         if ($content) {
@@ -814,7 +818,7 @@ class SerbianTask extends Shell {
                 $this->out($info);
                 $toLog .= $info . "\n";
                 if (isset($combines) && $combines) {
-                    $result = $this->QueleToSend->putDataDB(array($combines), 'Serbian');
+                    $result = $this->QueleToSend->putDataDB($combines, 'Serbian');
                     //  pr($result);
                     if ($result) {
                         $this->SerbianParty->id = $c['SerbianParty']['id'];
@@ -980,7 +984,7 @@ class SerbianTask extends Shell {
         $toLog .= $info . "\n";
 
         ////////////////organizationSpeaker
-        $tmpTime = CakeTime::format('-' . 1 . ' month', '%Y-%m-%d %H:%M:%S');
+        $tmpTime = CakeTime::format('-' . 7 . ' days', '%Y-%m-%d %H:%M:%S');
         $info = CakeTime::toServer(time()) . ' Serbia organizationSpeaker start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
@@ -1092,7 +1096,7 @@ class SerbianTask extends Shell {
         $this->out($info);
         $toLog .= $info . "\n";
 
-
+        ;
         ////////////////votes
         $info = CakeTime::toServer(time()) . ' Serbia votes start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
@@ -1151,74 +1155,77 @@ class SerbianTask extends Shell {
         //
     }
 
-    public function serbia_send_to_quelle() {
+    public function serbia_send_to_quelle($limit = null) {
+        $limit = !is_null($limit) && (int) $limit ? $limit : 100;
+        $halfLimit = $limit / 2;
+        $trinityLimit = $limit * 3;
+
         $info = CakeTime::toServer(time()) . ' Serbia serbia_send_to_quelle start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
-        $ids = $this->getListQueleToSend('organizations', 100);
+        $ids = $this->getListQueleToSend('organizations', $limit);
         $info = 'organizations count: ' . count($ids);
         $this->out($info);
         $toLog .= $info . "\n";
-        if (!$ids) {
-            $ids = $this->getListQueleToSend('people', 1000);
-            $info = 'people count: ' . count($ids);
+        if (!$ids || count($ids) < $trinityLimit) {
+            $people = $this->getListQueleToSend('people', $trinityLimit);
+            $info = 'people count: ' . count($people);
             $this->out($info);
             $toLog .= $info . "\n";
+            $ids = array_merge($ids, $people);
         }
-        if (!$ids) {
-            $ids = $this->getListQueleToSend('events', 100);
-            $info = 'events count: ' . count($ids);
+        if (!$ids || count($ids) < $trinityLimit) {
+            $events = $this->getListQueleToSend('events', $limit);
+            $info = 'events count: ' . count($events);
             $this->out($info);
             $toLog .= $info . "\n";
+            $ids = array_merge($ids, $events);
         }
-        if (!$ids) {
-            $ids = $this->getListQueleToSend('speeches', 100);
-            $info = 'speeches count: ' . count($ids);
+        if (!$ids || count($ids) < $trinityLimit) {
+            $speeches = $this->getListQueleToSend('speeches', $limit);
+            $info = 'speeches count: ' . count($speeches);
             $this->out($info);
             $toLog .= $info . "\n";
+            $ids = array_merge($ids, $speeches);
         }
-        if (!$ids) {
-            $ids = $this->getListQueleToSend('motions', 300);
-            $info = 'motions count: ' . count($ids);
+        if (!$ids || count($ids) < $trinityLimit) {
+            $motions = $this->getListQueleToSend('motions', $limit);
+            $info = 'motions count: ' . count($motions);
             $this->out($info);
             $toLog .= $info . "\n";
+            $ids = array_merge($ids, $motions);
         }
-        if (!$ids) {
-            $ids = $this->getListQueleToSend('vote-events', 100);
-            $info = 'vote-events count: ' . count($ids);
+        if (!$ids || count($ids) < $trinityLimit) {
+            $vote_events = $this->getListQueleToSend('vote-events', $limit);
+            $info = 'vote-events count: ' . count($vote_events);
             $this->out($info);
             $toLog .= $info . "\n";
+            $ids = array_merge($ids, $vote_events);
         }
-        if (!$ids) {
-            $ids = $this->getListQueleToSend('votes', 500);
-            $info = 'votes count: ' . count($ids);
+        if (!$ids || count($ids) < $trinityLimit) {
+            $memberships = $this->getListQueleToSend('memberships', $trinityLimit);
+            $info = 'memberships count: ' . count($memberships);
             $this->out($info);
             $toLog .= $info . "\n";
+            $ids = array_merge($ids, $memberships);
         }
-        if (!$ids) {
-            $ids = $this->getListQueleToSend('memberships', 500);
-            $info = 'memberships count: ' . count($ids);
+        if (!$ids || count($ids) < $trinityLimit) {
+            $votes = $this->getListQueleToSend('votes', $trinityLimit);
+            $info = 'votes count: ' . count($votes);
             $this->out($info);
             $toLog .= $info . "\n";
+            $ids = array_merge($ids, $votes);
         }
-//        if (!$ids) {
-//            $ids1 = $this->getListQueleToSend('votes', 300);
-//            $info = 'votes count: ' . count($ids1);
-//            $this->out($info);
-//            $toLog .= $info . "\n";
-//            $ids2 = $this->getListQueleToSend('memberships', 300);
-//            $info = 'memberships count: ' . count($ids2);
-//            $this->out($info);
-//            $toLog .= $info . "\n";
-//            $ids = array_merge($ids1, $ids2);
-//        }
+
+
         $result = null;
         $wait = $send = array();
         if ($ids) {
             foreach ($ids as $id) {
                 $result = $this->QueleToSend->doRequest($id);
-                if ($result) {
-                    $this->QueleToSend->id = $id;
+//                print_r($result);
+                $this->QueleToSend->id = $id;
+                if ($result['status'] == 1) {
                     $this->QueleToSend->saveField('status', 1);
                     $send[] = $id;
                 } else {
@@ -1230,6 +1237,7 @@ class SerbianTask extends Shell {
 //                        $toLog .= $info . "\n";
                     }
                 }
+                $this->QueleToSend->saveField('code', $result['code']);
             }
             $info = 'send count: ' . count($send);
             $this->out($info);
@@ -1253,6 +1261,7 @@ class SerbianTask extends Shell {
             return $this->QueleToSend->find('list', array(
                         'fielsd' => array('id', 'id'),
                         'conditions' => array(
+//                            'direct' => 'Kosovan',
                             'type' => $type, //organizations //people
                             'status' => 0,
                             'hints <' => 100,

@@ -5,7 +5,7 @@
 </div>
 <div class="posts form">
     <?php echo $this->Session->flash(); ?>
-    <h2>organization Convocation: Kosovo – Api</h2>
+    <h2>organization Party: Kosovo – Api</h2>
     <?php
     echo $this->Html->tag('h2', 'combined Api data');
     if (!empty($combine)) {

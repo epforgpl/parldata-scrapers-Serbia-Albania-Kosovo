@@ -87,11 +87,13 @@ class SerbianParty extends AppModel {
     }
 
     public function combineToApiArray($data) {
-        $party['organizations']['id'] = 'party_' . $data['SerbianParty']['uid'];
-        $party['organizations']['name'] = $data['SerbianParty']['name'];
-        $party['organizations']['classification'] = 'party';
+        $i = 0;
+        $partyId = 'party_' . $data['SerbianParty']['uid'];
+        $party[$i]['organizations']['id'] = $partyId;
+        $party[$i]['organizations']['name'] = $data['SerbianParty']['name'];
+        $party[$i]['organizations']['classification'] = 'party';
         if (!empty($data['SerbianParty']['shortcut'])) {
-            $party['organizations']['other_names'] = array(
+            $party[$i]['organizations']['other_names'] = array(
                 array(
                     'name' => $data['SerbianParty']['shortcut'],
                     'note' => 'shortcut'
@@ -99,11 +101,11 @@ class SerbianParty extends AppModel {
             );
         }
         if (!empty($data['SerbianParty']['image'])) {
-            $party['organizations']['image'] = $this->getSerbiaHost . $data['SerbianParty']['image'];
+            $party[$i]['organizations']['image'] = $this->getSerbiaHost . $data['SerbianParty']['image'];
         }
 
         if (!empty($data['SerbianParty']['sources'])) {
-            $party['organizations']['sources'] = array(
+            $party[$i]['organizations']['sources'] = array(
                 array(
                     'url' => $data['SerbianParty']['sources'],
                 )
@@ -153,9 +155,20 @@ class SerbianParty extends AppModel {
             );
         }
         if (!empty($contact_details)) {
-            $party['organizations']['contact_details'] = $contact_details;
+            $party[$i]['organizations']['contact_details'] = $contact_details;
         }
-
+        $l = $i;
+        if (isset($data['SerbianMpsDetail']) && !empty($data['SerbianMpsDetail'])) {
+            foreach ($data['SerbianMpsDetail'] as $key => $mp) {
+                $i++;
+//                $person = $i;
+                $person = $this->checkPeopleExist($mp['name']);
+                $party[$i]['memberships']['id'] = $partyId . '-' . $person;
+                $party[$i]['memberships']['label'] = 'MP';
+                $party[$i]['memberships']['person_id'] = $person;
+                $party[$i]['memberships']['organization_id'] = $partyId;
+            }
+        }
         return $party;
     }
 

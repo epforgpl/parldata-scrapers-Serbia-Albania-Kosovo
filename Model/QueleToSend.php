@@ -120,26 +120,36 @@ class QueleToSend extends AppModel {
             'put_send' => json_encode($putSend),
 //            'delete' => 'https://api.parldata.eu/rs/skupstina/' . $data['QueleToSend']['type'],
         );
-
+        usleep(300);
         $results = $HttpSocket->post($combine['url_post'], $combine['post_send'], $request);
         if ($test) {
             pr($results);
         }
         $result = json_decode($results->body);
-        $status = false;
+        $status['status'] = false;
+        $status['code'] = $results->code;
+        if ($status['code'] == 500) {
+            sleep(5);
+            return $status;
+        }
 
         if ($result->_status == 'ERR') {
             $results = null;
             $results = $HttpSocket->put($combine['url_put'], $combine['put_send'], $request);
+            $status['code'] = $results->code;
+            if ($status['code'] == 500) {
+                sleep(5);
+                return $status;
+            }
             if ($test) {
                 pr($results);
             }
             $result = json_decode($results->body);
             if ($result->_status == 'OK') {
-                $status = true;
+                $status['status'] = true;
             }
         } elseif ($result->_status == 'OK') {
-            $status = true;
+            $status['status'] = true;
         }
         if ($test) {
             pr(array($status, $data, $results, $postSend));
@@ -149,22 +159,23 @@ class QueleToSend extends AppModel {
         // return array($status, $data, $results, $postSend);
     }
 
-//    public function deleteSerbiaAll($delete = null) {
-//        $HttpSocket = new HttpSocket(array(
-//            'ssl_allow_self_signed' => true
-//        ));
-//        $HttpSocket->configAuth('Basic', 'scraper', 'ngaA(f77');
-//        $request = array(
-//            'header' => array('Content-Type' => 'application/json'),
-//            'raw' => null,
-//        );
-//        $list = array(
-//            'logs', 'people', 'posts', 'organizations', 'speeches', 'events', 'motions', 'votes', 'areas', 'memberships', 'vote-events'
-//        );
-//        if (is_null($delete)) {
-//            foreach ($list as $l) {
-//                $results = $HttpSocket->delete('https://api.parldata.eu/rs/skupstina/' . $l, array(), $request);
-//            }
-//        }
-//    }
+    public function deleteSerbiaAll($delete = null) {
+        $HttpSocket = new HttpSocket(array(
+            'ssl_allow_self_signed' => true
+        ));
+        $HttpSocket->configAuth('Basic', 'scraper', 'ngaA(f77');
+        $request = array(
+            'header' => array('Content-Type' => 'application/json'),
+            'raw' => null,
+        );
+        $list = array(
+            'logs', 'people', 'posts', 'organizations', 'speeches', 'events', 'motions', 'votes', 'areas', 'memberships', 'vote-events'
+        );
+        if (is_null($delete)) {
+            foreach ($list as $l) {
+                $results = $HttpSocket->delete('https://api.parldata.eu/kv/kuvendi/' . $l, array(), $request);
+            }
+        }
+    }
+
 }

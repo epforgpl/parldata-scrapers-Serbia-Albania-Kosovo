@@ -2,6 +2,9 @@
 
 class SerbianMpsDetail extends AppModel {
 
+    public $belongsTo = array(
+        'SerbianMenuData'
+    );
     public $hasMany = array(
         'SerbianParliamentaryGroupFunc' => array('dependent' => true),
         'SerbianCommitteFunc' => array('dependent' => true),

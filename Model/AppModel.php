@@ -162,6 +162,39 @@ class AppModel extends Model {
         }
     }
 
+    public function checkKosovoPeopleExist($name, $menuId) {
+        $name = trim(preg_replace('/\:/', '', $name));
+        $searchs = explode(' ', $name);
+//        pr($searchs);
+        foreach ($searchs as $na) {
+            $cond[] = array('KosovoMpsDetail.name LIKE' => '%' . $na . '%');
+        }
+        $conditions[] = array('AND' => $cond);
+        $conditions[] = array('KosovoMpsDetail.kosovo_mps_index_id' => $menuId);
+
+        App::import('Model', 'KosovoMpsDetail');
+        $this->KosovoMpsDetail = new KosovoMpsDetail();
+        $checkName = $this->KosovoMpsDetail->field(
+                'KosovoMpsDetail.name', $conditions
+        );
+        if ($checkName) {
+            return 'mp_' . $menuId . '_' . $this->toCamelCase($checkName);
+        } else {
+            $newId = 'mp_' . $menuId . '_' . $this->toCamelCase($name);
+            $data[]['people']['id'] = $newId;
+//            $data[]['logs'] = array(
+//                'id' => 'people_' . $newId . '_voteId_' . $this->voteId . '_' . time() . '_' . rand(0, 999),
+//                'label' => 'not found: ' . $newId,
+//                'status' => 'finished',
+////                        'params' => $t
+//            );
+            App::import('Model', 'QueleToSend');
+            $this->QueleToSend = new QueleToSend();
+            $this->QueleToSend->putDataDB($data, 'Kosovan', false);
+            return $newId;
+        }
+    }
+
     public function checkPartyeExist($shortcut) {
         $shortcut = trim(preg_replace('/\s+|\(|\)/', '', $shortcut));
         $searchs = explode('-', $shortcut);
@@ -211,6 +244,31 @@ class AppModel extends Model {
             return $newId;
         }
         return $shortcut;
+    }
+
+    public function extractDateAndTrim($result) {
+        $formulaDate = '/\d{2}\.\d{2}\.\d{4}/i';
+        $formulaDate1 = '/\d{1}\.\d{2}\.\d{4}/i';
+        $formulaDate2 = '/\d{2}\.\d{2}\d{4}/i';
+        $date = null;
+        if (preg_match($formulaDate, $result, $matches)) {
+            $result = trim(reset($matches));
+            $date = CakeTime::format($result, '%Y-%m-%d');
+        }
+        if (is_null($date)) {
+            if (preg_match($formulaDate1, $result, $matches)) {
+                $result = trim(reset($matches));
+                $date = CakeTime::format($result, '%Y-%m-%d');
+            }
+        }
+        if (is_null($date)) {
+            if (preg_match($formulaDate2, $result, $matches)) {
+                $result = trim(reset($matches));
+                $result = preg_replace("/(\d{2})\.(\d{2})(\d{4})/", "$1.$2.$3", $result);
+                $date = CakeTime::format($result, '%Y-%m-%d');
+            }
+        }
+        return $date;
     }
 
 }

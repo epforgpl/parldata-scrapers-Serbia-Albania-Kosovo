@@ -36,16 +36,15 @@ class KosovanController extends AppController {
     }
 
     public function getPlenarySpeeches() {
-        $data = $this->KosovoMpsIndex->find('all', array(
-            'fields' => array('id', 'url', 'name', 'start_date', 'end_date'),
-            'conditions' => array(
-                'status' => 0
-            ),
-            'limit' => 1,
-            'recursive' => -1
-        ));
-
-        $content = $this->KosovoMps->getMpsContact($data[0]);
+//        $data = $this->KosovoMpsIndex->find('all', array(
+//            'fields' => array('id', 'url', 'name', 'start_date', 'end_date'),
+//            'conditions' => array(
+//                'status' => 0
+//            ),
+//            'limit' => 1,
+//            'recursive' => -1
+//        ));
+//        $content = $this->KosovoMps->getMpsContact($data[0]);
 //        $id = 10;
 //        $content = $this->KosovoPdf->getContentPdfFromId($id);
 //        if ($content) {
