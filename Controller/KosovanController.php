@@ -12,6 +12,8 @@ class KosovanController extends AppController {
         'KosovoMpsDetail',
         'KosovoSpeecheIndex',
         'KosovoSpeecheContent',
+        'KosovoCommittee',
+        'KosovoCommitteFunc',
         'KosovoParliamentaryGroup',
         'KosovoParty',
         'KosovoMpsPersonalData',
@@ -36,20 +38,23 @@ class KosovanController extends AppController {
     }
 
     public function getPlenarySpeeches() {
-//        $data = $this->KosovoMpsIndex->find('all', array(
-//            'fields' => array('id', 'url', 'name', 'start_date', 'end_date'),
-//            'conditions' => array(
-//                'status' => 0
-//            ),
-//            'limit' => 1,
-//            'recursive' => -1
-//        ));
-//        $content = $this->KosovoMps->getMpsContact($data[0]);
-//        $id = 10;
-//        $content = $this->KosovoPdf->getContentPdfFromId($id);
-//        if ($content) {
-//            // $this->KosovoSpeecheContent->saveAll($content);
+        $link = 'http://www.kuvendikosoves.org/?cid=3,177';
+        $content = $this->Kosovo->getPlenarySpeechesScrap($link);
+        $id = 10;
+//        $content[] = $contents;
+        if ($content) {
+//            if ($this->KosovoMpsDetail->saveAll($content)) {
+//                if (!empty($content['KosovoCommitteFunc'])) {
+//                    foreach ($content['KosovoCommitteFunc'] as $comm) {
+//                        if ($this->KosovoCommitteFunc->save($comm)) {
+//                            pr($comm);
+//                        }
+//                    }
+//                }
 //        }
+        }
+        // $this->KosovoSpeecheContent->saveAll($content);
+
         $this->set(compact('content'));
     }
 
@@ -117,6 +122,18 @@ class KosovanController extends AppController {
             )
         );
         $content = $this->paginate('KosovoParliamentaryGroup');
+
+        $this->set(compact('content'));
+    }
+
+    public function mpsCommittee() {
+        $this->paginate = array(
+            'limit' => 50,
+            'contain' => array(
+                'KosovoMpsDetail.id'
+            )
+        );
+        $content = $this->paginate('KosovoCommittee');
 
         $this->set(compact('content'));
     }

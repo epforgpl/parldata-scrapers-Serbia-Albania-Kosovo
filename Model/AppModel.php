@@ -167,15 +167,15 @@ class AppModel extends Model {
         $searchs = explode(' ', $name);
 //        pr($searchs);
         foreach ($searchs as $na) {
-            $cond[] = array('KosovoMpsDetail.name LIKE' => '%' . $na . '%');
+            $cond[] = array('KosovoMpsIndex.name LIKE' => '%' . $na . '%');
         }
         $conditions[] = array('AND' => $cond);
-        $conditions[] = array('KosovoMpsDetail.kosovo_mps_index_id' => $menuId);
+        $conditions[] = array('KosovoMpsIndex.kosovo_mps_menu_id' => $menuId);
 
-        App::import('Model', 'KosovoMpsDetail');
-        $this->KosovoMpsDetail = new KosovoMpsDetail();
-        $checkName = $this->KosovoMpsDetail->field(
-                'KosovoMpsDetail.name', $conditions
+        App::import('Model', 'KosovoMpsIndex');
+        $this->KosovoMpsIndex = new KosovoMpsIndex();
+        $checkName = $this->KosovoMpsIndex->field(
+                'KosovoMpsIndex.name', $conditions
         );
         if ($checkName) {
             return 'mp_' . $menuId . '_' . $this->toCamelCase($checkName);
@@ -194,6 +194,39 @@ class AppModel extends Model {
             return $newId;
         }
     }
+
+//        public function checkKosovoPeopleExist($name, $menuId) {
+//        $name = trim(preg_replace('/\:/', '', $name));
+//        $searchs = explode(' ', $name);
+////        pr($searchs);
+//        foreach ($searchs as $na) {
+//            $cond[] = array('KosovoMpsDetail.name LIKE' => '%' . $na . '%');
+//        }
+//        $conditions[] = array('AND' => $cond);
+//        $conditions[] = array('KosovoMpsDetail.kosovo_mps_index_id' => $menuId);
+//
+//        App::import('Model', 'KosovoMpsDetail');
+//        $this->KosovoMpsDetail = new KosovoMpsDetail();
+//        $checkName = $this->KosovoMpsDetail->field(
+//                'KosovoMpsDetail.name', $conditions
+//        );
+//        if ($checkName) {
+//            return 'mp_' . $menuId . '_' . $this->toCamelCase($checkName);
+//        } else {
+//            $newId = 'mp_' . $menuId . '_' . $this->toCamelCase($name);
+//            $data[]['people']['id'] = $newId;
+////            $data[]['logs'] = array(
+////                'id' => 'people_' . $newId . '_voteId_' . $this->voteId . '_' . time() . '_' . rand(0, 999),
+////                'label' => 'not found: ' . $newId,
+////                'status' => 'finished',
+//////                        'params' => $t
+////            );
+//            App::import('Model', 'QueleToSend');
+//            $this->QueleToSend = new QueleToSend();
+//            $this->QueleToSend->putDataDB($data, 'Kosovan', false);
+//            return $newId;
+//        }
+//    }
 
     public function checkPartyeExist($shortcut) {
         $shortcut = trim(preg_replace('/\s+|\(|\)/', '', $shortcut));
@@ -269,6 +302,31 @@ class AppModel extends Model {
             }
         }
         return $date;
+    }
+
+    public function kosovoTextRepir($data) {
+        $find_table = array(
+            '/\&\#263\;/',
+            '/\&\#158\;/',
+            '/\&\#154\;/',
+            '/\&\#305\;/',
+            '/\&\#287\;/',
+            '/\&\#350\;/',
+            '/\&\#273\;/',
+            '/\s+/'
+        );
+
+        $replace_table = array(
+            'ć',
+            'ž',
+            'š',
+            'ı',
+            'ğ',
+            "Ş",
+            'đ',
+            ' '
+        );
+        return preg_replace($find_table, $replace_table, $data);
     }
 
 }

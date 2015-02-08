@@ -1115,7 +1115,7 @@ class SerbianTask extends Shell {
                 'SerbianPdf.status' => 1
             ),
 //            'order' => 'post_uid DESC',
-            'limit' => 1
+            'limit' => 5
         ));
         if ($content) {
             foreach ($content as $c) {
@@ -1261,7 +1261,7 @@ class SerbianTask extends Shell {
             return $this->QueleToSend->find('list', array(
                         'fielsd' => array('id', 'id'),
                         'conditions' => array(
-//                            'direct' => 'Kosovan',
+                            'direct' => 'Serbian',
                             'type' => $type, //organizations //people
                             'status' => 0,
                             'hints <' => 100,

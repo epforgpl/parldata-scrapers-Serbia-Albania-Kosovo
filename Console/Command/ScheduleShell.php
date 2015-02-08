@@ -13,7 +13,7 @@ class ScheduleShell extends Shell {
 //        $now = CakeTime::toServer(time(), "- 84 minute");
 //        $now = CakeTime::format('2011-08-22 11:53:00', '%B %e, %Y %H:%M %p');
 //        $now = CakeTime::format('-84 minutes', '%Y-%m-%d %H:%M:%S');
-//        $now = CakeTime::format('-' . 10 . ' minutes', '%Y-%m-%d %H:%M:%S');
+        $now = CakeTime::format('-' . 10 . ' minutes', '%Y-%m-%d %H:%M:%S');
 //        return;
         //     echo $this->Albanian->check_mps_contacts($now);
 //        echo $this->Kosovan->combine_pdfs(3);
@@ -30,10 +30,11 @@ class ScheduleShell extends Shell {
 //        pr($command);
 //        $output = shell_exec($command);
 //        echo $output;
-//        echo $this->Kosovan->get_mps_contacts(100);
+        #############################
+//        echo $this->Kosovan->kosovo_combine_to_quelle(600);
 //        echo $this->Serbian->combine_pdfs(30);
 //        return;
-//        echo $this->Serbian->serbia_send_to_quelle();
+//        echo $this->Kosovan->kosovo_send_to_quelle();
 //////////////
 ////        echo $this->Serbian->serbia_combine_to_quelle();
 //        return;
@@ -45,78 +46,96 @@ class ScheduleShell extends Shell {
                 $now = CakeTime::format('-' . $schedule['Schedule']['interval'] . ' minutes', '%Y-%m-%d %H:%M:%S');
                 switch ($schedule['Schedule']['task']) {
                     //Kosovan
-//                    case'get_index_list_page':
-//                        $this->out('#now ' . $now);
-//                        $this->out('#modified ' . $schedule['Schedule']['modified']);
-//                        if ($schedule['Schedule']['modified'] < $now) {
-//                            $this->out('var ' . $now);
-//                            echo $this->Kosovan->get_index_list_page();
-//                            echo $this->Schedule->hint($schedule['Schedule']['id']);
-//                        }
-//                        break;
-//                    case'get_mps_index':
-//                        $this->out('#now ' . $now);
-//                        $this->out('#modified ' . $schedule['Schedule']['modified']);
-//                        if ($schedule['Schedule']['modified'] < $now) {
-//                            $this->out('var ' . $now);
-//                            echo $this->Kosovan->get_mps_index();
-//                            echo $this->Schedule->hint($schedule['Schedule']['id']);
-//                        }
-//                        break;
-//                    case'get_kosovo_mps_contacts':
-//                        $this->out('#now ' . $now);
-//                        $this->out('#modified ' . $schedule['Schedule']['modified']);
-//                        if ($schedule['Schedule']['modified'] < $now) {
-//                            $this->out('var ' . $now);
-//                            echo $this->Kosovan->get_mps_contacts(10);
-//                            echo $this->Schedule->hint($schedule['Schedule']['id']);
-//                        }
-//                        break;
-//                    case'check_kosovo_mps_contacts':
-//                        $this->out('#now ' . $now);
-//                        $this->out('#modified ' . $schedule['Schedule']['modified']);
-//                        if ($schedule['Schedule']['modified'] < $now) {
-//                            $this->out('var ' . $now);
-//                            echo $this->Kosovan->check_mps_contacts($now, 5);
-//                            echo $this->Schedule->hint($schedule['Schedule']['id']);
-//                        }
-//                        break;
-//                    case'index_kosovo_plenary_speeches':
-//                        $this->out('#now ' . $now);
-//                        $this->out('#modified ' . $schedule['Schedule']['modified']);
-//                        if ($schedule['Schedule']['modified'] < $now) {
-//                            $this->out('var ' . $now);
-//                            echo $this->Kosovan->get_index();
-//                            echo $this->Schedule->hint($schedule['Schedule']['id']);
-//                        }
-//                        break;
-//                    case'get_content_kosovo_plenary_speeches':
-//                        $this->out('#now ' . $now);
-//                        $this->out('#modified ' . $schedule['Schedule']['modified']);
-//                        if ($schedule['Schedule']['modified'] < $now) {
-//                            $this->out('var ' . $now);
-//                            echo $this->Kosovan->get_content(30);
-//                            echo $this->Schedule->hint($schedule['Schedule']['id']);
-//                        }
-//                        break;
-//                    case'download_kosovo_txts':
-//                        $this->out('#$now ' . $now);
-//                        $this->out('#modified ' . $schedule['Schedule']['modified']);
-//                        if ($schedule['Schedule']['modified'] < $now) {
-//                            $this->out('var ' . $now);
-//                            echo $this->Kosovan->combine_txts(30);
-//                            echo $this->Schedule->hint($schedule['Schedule']['id']);
-//                        }
-//                        break;
-//                    case'download_kosovo_pdfs':
-//                        $this->out('#$now ' . $now);
-//                        $this->out('#modified ' . $schedule['Schedule']['modified']);
-//                        if ($schedule['Schedule']['modified'] < $now) {
-//                            $this->out('var ' . $now);
-//                            echo $this->Kosovan->combine_pdfs(3);
-//                            echo $this->Schedule->hint($schedule['Schedule']['id']);
-//                        }
-//                        break;
+                    case'get_index_list_page':
+                        $this->out('#now ' . $now);
+                        $this->out('#modified ' . $schedule['Schedule']['modified']);
+                        if ($schedule['Schedule']['modified'] < $now) {
+                            $this->out('var ' . $now);
+                            echo $this->Kosovan->get_index_list_page();
+                            echo $this->Schedule->hint($schedule['Schedule']['id']);
+                        }
+                        break;
+                    case'get_mps_index':
+                        $this->out('#now ' . $now);
+                        $this->out('#modified ' . $schedule['Schedule']['modified']);
+                        if ($schedule['Schedule']['modified'] < $now) {
+                            $this->out('var ' . $now);
+                            echo $this->Kosovan->get_mps_index();
+                            echo $this->Schedule->hint($schedule['Schedule']['id']);
+                        }
+                        break;
+                    case'get_kosovo_mps_contacts':
+                        $this->out('#now ' . $now);
+                        $this->out('#modified ' . $schedule['Schedule']['modified']);
+                        if ($schedule['Schedule']['modified'] < $now) {
+                            $this->out('var ' . $now);
+                            echo $this->Kosovan->get_mps_contacts(10);
+                            echo $this->Schedule->hint($schedule['Schedule']['id']);
+                        }
+                        break;
+                    case'check_kosovo_mps_contacts':
+                        $this->out('#now ' . $now);
+                        $this->out('#modified ' . $schedule['Schedule']['modified']);
+                        if ($schedule['Schedule']['modified'] < $now) {
+                            $this->out('var ' . $now);
+                            echo $this->Kosovan->check_mps_contacts($now, 5);
+                            echo $this->Schedule->hint($schedule['Schedule']['id']);
+                        }
+                        break;
+                    case'index_kosovo_plenary_speeches':
+                        $this->out('#now ' . $now);
+                        $this->out('#modified ' . $schedule['Schedule']['modified']);
+                        if ($schedule['Schedule']['modified'] < $now) {
+                            $this->out('var ' . $now);
+                            echo $this->Kosovan->get_index();
+                            echo $this->Schedule->hint($schedule['Schedule']['id']);
+                        }
+                        break;
+                    case'get_content_kosovo_plenary_speeches':
+                        $this->out('#now ' . $now);
+                        $this->out('#modified ' . $schedule['Schedule']['modified']);
+                        if ($schedule['Schedule']['modified'] < $now) {
+                            $this->out('var ' . $now);
+                            echo $this->Kosovan->get_content(30);
+                            echo $this->Schedule->hint($schedule['Schedule']['id']);
+                        }
+                        break;
+                    case'download_kosovo_txts':
+                        $this->out('#$now ' . $now);
+                        $this->out('#modified ' . $schedule['Schedule']['modified']);
+                        if ($schedule['Schedule']['modified'] < $now) {
+                            $this->out('var ' . $now);
+                            echo $this->Kosovan->combine_txts(30);
+                            echo $this->Schedule->hint($schedule['Schedule']['id']);
+                        }
+                        break;
+                    case'download_kosovo_pdfs':
+                        $this->out('#$now ' . $now);
+                        $this->out('#modified ' . $schedule['Schedule']['modified']);
+                        if ($schedule['Schedule']['modified'] < $now) {
+                            $this->out('var ' . $now);
+                            echo $this->Kosovan->combine_pdfs(3);
+                            echo $this->Schedule->hint($schedule['Schedule']['id']);
+                        }
+                        break;
+                    case'kosovo_combine_to_quelle':
+                        $this->out('#$now ' . $now);
+                        $this->out('#modified ' . $schedule['Schedule']['modified']);
+                        if ($schedule['Schedule']['modified'] < $now) {
+                            $this->out('var ' . $now);
+                            echo $this->Kosovan->kosovo_combine_to_quelle();
+                            echo $this->Schedule->hint($schedule['Schedule']['id']);
+                        }
+                        break;
+                    case'kosovo_send_to_quelle':
+                        $this->out('#$now ' . $now);
+                        $this->out('#modified ' . $schedule['Schedule']['modified']);
+                        if ($schedule['Schedule']['modified'] < $now) {
+                            $this->out('var ' . $now);
+                            echo $this->Kosovan->kosovo_send_to_quelle();
+                            echo $this->Schedule->hint($schedule['Schedule']['id']);
+                        }
+                        break;
                     //Serbian
                     case'combine_mps_list_from_menu':
                         $this->out('#now ' . $now);

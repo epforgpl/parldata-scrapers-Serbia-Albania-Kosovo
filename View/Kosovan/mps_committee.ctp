@@ -1,35 +1,41 @@
 <div class="actions">
     <?php
-    echo $this->element('m_serbia_api');
+    echo $this->element('m_kosovo_mps_contact');
     ?>
 </div>
 <div class="posts form">
-    <h2>List combined Quelle data</h2>
-    <?php //pr($content); ?>
+    <h2>List Committee</h2>
+    <?php
+    // pr($content);
+    ?>
     <?php if (isset($content) && !empty($content)): ?>
         <table cellpadding="0" cellspacing="0">
             <?php
             $tableHeaders = $this->Html->tableHeaders(array(
                 $this->Paginator->sort('id'),
                 $this->Paginator->sort('uid'),
-                $this->Paginator->sort('type'),
-                $this->Paginator->sort('status'),
-                $this->Paginator->sort('hints'),
-                $this->Paginator->sort('code'),
+                $this->Paginator->sort('url'),
+                __('Mps'),
+                $this->Paginator->sort('name'),
                 $this->Paginator->sort('created'),
+                $this->Paginator->sort('modified'),
             ));
             echo $tableHeaders;
 
             $rows = array();
             foreach ($content AS $record) {
+                $url = null;
+                if (!empty($record['KosovoCommittee']['url'])) {
+                    $url = $this->Html->link('link', $kosovoHost . $record['KosovoCommittee']['url'], array('target' => '_blanc'));
+                }
                 $rows[] = array(
-                    $this->Html->link($record['QueleToSend']['id'], '/serbianApi/viewData/' . $record['QueleToSend']['id']),
-                    $record['QueleToSend']['uid'],
-                    $record['QueleToSend']['type'],
-                    $record['QueleToSend']['status'],
-                    $record['QueleToSend']['hints'],
-                    $record['QueleToSend']['code'],
-                    $record['QueleToSend']['created'],
+                    $record['KosovoCommittee']['id'],
+                    $record['KosovoCommittee']['uid'],
+                    $url,
+                    count($record['KosovoMpsDetail']),
+                    $record['KosovoCommittee']['name'],
+                    $record['KosovoCommittee']['created'],
+                    $record['KosovoCommittee']['modified'],
                 );
             }
 

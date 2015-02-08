@@ -154,7 +154,7 @@ class Kosovo extends AppModel {
                 $ndata[] = array(
                     'id' => is_null($type) ? $this->getUid($result) : $this->getUidMps($result),
                     'url' => $url,
-                    'name' => trim(strip_tags($result)),
+                    'name' => $this->kosovoTextRepir(trim(strip_tags($result))),
                 );
             }
         }
@@ -207,7 +207,7 @@ class Kosovo extends AppModel {
                         'id' => $id,
                         'post_uid' => $id,
                         'post_date' => $this->extractDateAndTrim($d),
-                        'post_group_title' => $this->extractTrimStrip($d, $formulaH4),
+                        'post_group_title' => $this->kosovoTextRepir($this->extractTrimStrip($d, $formulaH4)),
                         'url' => $this->extractAndReplace($result, $formulaUrl, $formulaUrlReplace),
                         'index_md5' => md5($d)
                     );
@@ -244,7 +244,7 @@ class Kosovo extends AppModel {
     }
 
     private function extractPdfs($data, $id) {
-        $formulaPdf = '/href="common\/docs\/proc\/trans.*?(\.pdf")/msxi';
+        $formulaPdf = '/href="common\/docs\/proc\/.*?(\.pdf")/msxi';
         $ndata = array();
         if (preg_match($formulaPdf, $data, $matches)) {
             $result = reset($matches);
@@ -281,7 +281,7 @@ class Kosovo extends AppModel {
     }
 
     public function extractMoreWithOutDate($data, $formula) {
-        $d = null;
+        $d = $result = null;
         $formulaDate = '/\d{2}\.\d{2}\.\d{4}\s\d{2}\:\d{2}/i';
         $formulaTitle = '/<p><strong>.*?(<\/strong>)/i';
         $formulaListNum = '/\d+\.\s.*?(<strong>|">)/msxi';

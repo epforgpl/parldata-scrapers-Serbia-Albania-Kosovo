@@ -108,8 +108,8 @@ class QueleToSend extends AppModel {
 
         $postSend = unserialize($data['QueleToSend']['data']);
         $putSend = $postSend;
-        pr($putSend);
-        pr(json_encode($postSend));
+//        pr($putSend);
+//        pr(json_encode($postSend));
         unset($putSend['id']);
 
         $delete = false;
@@ -123,7 +123,7 @@ class QueleToSend extends AppModel {
         usleep(300);
         $results = $HttpSocket->post($combine['url_post'], $combine['post_send'], $request);
         if ($test) {
-            pr($results);
+//            pr($results);
         }
         $result = json_decode($results->body);
         $status['status'] = false;
@@ -142,7 +142,7 @@ class QueleToSend extends AppModel {
                 return $status;
             }
             if ($test) {
-                pr($results);
+//                pr($results);
             }
             $result = json_decode($results->body);
             if ($result->_status == 'OK') {
@@ -152,7 +152,7 @@ class QueleToSend extends AppModel {
             $status['status'] = true;
         }
         if ($test) {
-            pr(array($status, $data, $results, $postSend));
+//            pr(array($status, $data, $results, $postSend));
         } else {
             return $status;
         }

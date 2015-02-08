@@ -1,6 +1,6 @@
 <div class="actions">
     <?php
-    echo $this->element('m_serbia_api');
+    echo $this->element('m_kosovan_api');
     ?>
 </div>
 <div class="posts form">
@@ -23,7 +23,7 @@
             $rows = array();
             foreach ($content AS $record) {
                 $rows[] = array(
-                    $this->Html->link($record['QueleToSend']['id'], '/serbianApi/viewData/' . $record['QueleToSend']['id']),
+                    $this->Html->link($record['QueleToSend']['id'], '/kosovanApi/viewData/' . $record['QueleToSend']['id']),
                     $record['QueleToSend']['uid'],
                     $record['QueleToSend']['type'],
                     $record['QueleToSend']['status'],

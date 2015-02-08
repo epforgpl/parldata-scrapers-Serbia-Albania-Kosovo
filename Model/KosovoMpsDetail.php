@@ -6,6 +6,7 @@ class KosovoMpsDetail extends AppModel {
         'KosovoMpsIndex'
     );
     public $hasMany = array(
+        'KosovoCommitteFunc' => array('dependent' => true),
         'KosovoMpsPersonalData' => array('dependent' => true),
         'KosovoMpsEducation' => array('dependent' => true),
         'KosovoMpsActivity' => array('dependent' => true),
@@ -13,6 +14,7 @@ class KosovoMpsDetail extends AppModel {
         'KosovoMpsAddress' => array('dependent' => true),
     );
     public $hasAndBelongsToMany = array(
+        'KosovoCommittee',
         'KosovoParliamentaryGroup',
         'KosovoParty',
     );
@@ -20,7 +22,7 @@ class KosovoMpsDetail extends AppModel {
     public function combineToApiArray($data) {
 
         $name = trim($data['KosovoMpsDetail']['name']);
-        $nname['id'] = 'mp_' . $data['KosovoMpsDetail']['kosovo_mps_index_id'] . '_' . $this->toCamelCase($name);
+        $nname['id'] = 'mp_' . $data['KosovoMpsIndex']['kosovo_mps_menu_id'] . '_' . $this->toCamelCase($name);
 
         $nname['name'] = $name;
         $name = preg_replace('/\s\-\s/', '-', $name);
@@ -61,7 +63,7 @@ class KosovoMpsDetail extends AppModel {
                     $birth_date = $date;
                 }
             }
-            if ($birth_date) {
+            if (isset($birth_date) && $birth_date) {
                 $nname['birth_date'] = $birth_date;
             }
         }

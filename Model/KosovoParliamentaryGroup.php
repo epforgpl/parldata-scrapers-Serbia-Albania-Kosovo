@@ -45,7 +45,7 @@ class KosovoParliamentaryGroup extends AppModel {
             foreach ($content['KosovoMpsDetail'] as $key => $mp) {
                 $i++;
 //                $person = $i;
-                $person = $this->checkKosovoPeopleExist($mp['name'], $mp['kosovo_mps_index_id']);
+                $person = $this->checkKosovoPeopleExist($mp['name'], $mp['KosovoMpsIndex']['kosovo_mps_menu_id']);
                 $group[$i]['memberships']['id'] = $groupId . '-' . $person;
                 $group[$i]['memberships']['label'] = 'MP';
                 $group[$i]['memberships']['person_id'] = $person;

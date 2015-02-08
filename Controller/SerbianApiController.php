@@ -342,57 +342,67 @@ class SerbianApiController extends AppController {
         $this->set(compact('content', 'combine'));
     }
 
-    public function sendToApi() {
+    public function sendToApi($limit = null) {
+        $limit = !is_null($limit) && (int) $limit ? $limit : 50;
+        $halfLimit = $limit / 2;
+        $trinityLimit = $limit * 3;
+
         $info[] = CakeTime::toServer(time()) . ' Serbia serbia_send_to_quelle start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
-        $ids = $this->getListQueleToSend('organizations', 50);
+        $ids = $this->getListQueleToSend('organizations', $limit);
         $info[] = 'organizations count: ' . count($ids);
-        if (!$ids) {
-            $ids = $this->getListQueleToSend('people', 50);
-            $info[] = 'people count: ' . count($ids);
+        if (!$ids || count($ids) < $trinityLimit) {
+            $people = $this->getListQueleToSend('people', $trinityLimit);
+            $info[] = 'people count: ' . count($people);
+            $ids = array_merge($ids, $people);
         }
-        if (!$ids) {
-            $ids = $this->getListQueleToSend('events', 50);
-            $info[] = 'events count: ' . count($ids);
+        if (!$ids || count($ids) < $trinityLimit) {
+            $events = $this->getListQueleToSend('events', $limit);
+            $info[] = 'events count: ' . count($events);
+            $ids = array_merge($ids, $events);
         }
-        if (!$ids) {
-            $ids = $this->getListQueleToSend('speeches', 50);
-            $info[] = 'speeches count: ' . count($ids);
+        if (!$ids || count($ids) < $trinityLimit) {
+            $speeches = $this->getListQueleToSend('speeches', $limit);
+            $info[] = 'speeches count: ' . count($speeches);
+            $ids = array_merge($ids, $speeches);
         }
-        if (!$ids) {
-            $ids = $this->getListQueleToSend('motions', 50);
-            $info[] = 'motions count: ' . count($ids);
+        if (!$ids || count($ids) < $trinityLimit) {
+            $motions = $this->getListQueleToSend('motions', $limit);
+            $info[] = 'motions count: ' . count($motions);
+            $ids = array_merge($ids, $motions);
         }
-        if (!$ids) {
-            $ids = $this->getListQueleToSend('vote-events', 50);
-            $info[] = 'vote-events count: ' . count($ids);
+        if (!$ids || count($ids) < $trinityLimit) {
+            $vote_events = $this->getListQueleToSend('vote-events', $limit);
+            $info[] = 'vote-events count: ' . count($vote_events);
+            $ids = array_merge($ids, $vote_events);
         }
-        if (!$ids) {
-            $ids1 = $this->getListQueleToSend('votes', 1000);
-            $info[] = 'votes count: ' . count($ids1);
-            $ids2 = $this->getListQueleToSend('memberships', 1000);
-            $info[] = 'memberships count: ' . count($ids2);
-            $ids = array_merge($ids1, $ids2);
+        if (!$ids || count($ids) < $trinityLimit) {
+            $memberships = $this->getListQueleToSend('memberships', $trinityLimit);
+            $info[] = 'memberships count: ' . count($memberships);
+            $ids = array_merge($ids, $memberships);
         }
-//        if (!$ids) {
-//            $ids = $this->getListQueleToSend('memberships', 50);
-//            $info[] = 'memberships count: ' . count($ids);
-//        }
+        if (!$ids || count($ids) < $trinityLimit) {
+            $votes = $this->getListQueleToSend('votes', $trinityLimit);
+            $info[] = 'votes count: ' . count($votes);
+            $ids = array_merge($ids, $votes);
+        }
+
         $result = null;
         $wait = $send = array();
         if ($ids) {
             foreach ($ids as $id) {
                 $result = $this->QueleToSend->doRequest($id);
-                if ($result) {
-                    $this->QueleToSend->id = $id;
+                $this->QueleToSend->id = $id;
+                if ($result['status'] == 1) {
                     $this->QueleToSend->saveField('status', 1);
                     $send[] = $id;
                 } else {
                     $hint = $this->QueleToSend->hint($id);
                     $wait[] = $id;
-                    if ($hint == 1 || $hint == 1000) {
-                        //$info[] = 'wait for id: ' . $id;
+                    if ($hint == 1 || $hint == 100) {
+//                        $info[] = 'wait for id: ' . $id;
                     }
                 }
+                $this->QueleToSend->saveField('code', $result['code']);
             }
             $info[] = 'send count: ' . count($send);
             $info[] = 'wait count: ' . count($wait);
@@ -411,6 +421,7 @@ class SerbianApiController extends AppController {
             return $this->QueleToSend->find('list', array(
                         'fielsd' => array('id', 'id'),
                         'conditions' => array(
+                            'direct' => 'Serbian',
                             'type' => $type, //organizations //people
                             'status' => 0,
                             'hints <' => 1000,

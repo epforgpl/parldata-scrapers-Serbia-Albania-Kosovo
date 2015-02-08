@@ -7,8 +7,7 @@ $menu = array(
     $this->Html->link('Plenary voting', '/albanian/getPlenaryVoting'),
     $this->Html->link('Plenary speeches', '/albanian/getPlenarySpeeches'),
     $this->Html->link('Schedules', '/albanian/getSchedules'),
-//    $this->Html->link('Albania', '/albanian'),
-//    $this->Html->link('Kosowo', '/kosovan'),
+    $this->Html->link('Albania - Api', '/albanianApi'),
 );
 echo $this->Html->nestedList($menu);
 ?>

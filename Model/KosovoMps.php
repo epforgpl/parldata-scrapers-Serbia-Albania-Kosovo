@@ -34,11 +34,39 @@ class KosovoMps extends AppModel {
 
         $data['KosovoMpsDetail']['id'] = $data['KosovoMpsDetail']['kosovo_mps_index_id'] = $id;
         $data['KosovoMpsDetail']['md5'] = md5(trim(strip_tags($result)));
-        $data['KosovoMpsDetail']['name'] = $this->extractTrimStrip($result, $formulaName);
+        $data['KosovoMpsDetail']['name'] = $this->kosovoTextRepir($this->extractTrimStrip($result, $formulaName));
         $data['KosovoMpsDetail']['image'] = $this->extractAndReplace($result, $formulaImage, $formulaImageReplace);
         $data['KosovoMpsDetail']['phone'] = $this->extractAndReplace($result, $formulaPhone, $formulaPhoneReplace);
+        $data['KosovoMpsDetail']['status'] = 0;
 
+//KosovoCommittee
+        $formulaCommittee = '/Kuvendin\se\sKosovës<\/h3>.*?(<\/ul>)/msxi';
+        $formulaCommitteeReplace = '/Kuvendin\se\sKosovës|<\/h3>/';
+        $getCommittee = $this->extractListsAndReplace($result, $formulaCommittee, $formulaCommitteeReplace, 'KosovoCommittee');
+        pr($getCommittee);
+        $cd = array();
+        if ($getCommittee) {
+            App::import('Model', 'KosovoCommitteFunc');
+            $this->KosovoCommitteFunc = new KosovoCommitteFunc();
+//            $this->KosovoCommitteFunc->deleteAll(array('kosovo_mps_detail_id' => $id), false);
+            foreach ($getCommittee as $k => $v) {
+                if (!empty($v['role'])) {
+                    $cd[] = $d = array(
+                        'id' => $id . $v['id'],
+                        'kosovo_mps_detail_id' => $id,
+                        'kosovo_committee_id' => $v['id'],
+                        'name' => $v['role']
+                    );
+                    if ($this->KosovoCommitteFunc->save($d)) {
+                        unset($getCommittee[$k]['role']);
+                    }
+                }
+            }
+        }
 
+//        $data['committe'] = $getCommittee;
+        $data['KosovoCommittee'] = Set::extract('/id', $getCommittee);
+        $data['KosovoCommitteFunc'] = $cd;
 //KosovoParliamentaryGroup
         $formulaParliamentaryGroup = '/Grupi\sparlamentar<\/h3>.*?(<\/ul>)/msxi';
         $formulaParliamentaryGroupReplace = '/Grupi\sparlamentar|<\/h3>/';
@@ -80,12 +108,12 @@ class KosovoMps extends AppModel {
     }
 
     public function extractListsAndReplace($data, $formula, $replace, $model, $id = null) {
-        // pr($data);
+//        pr($data);
         $formulaLi = '/<li.*?(<\/li>)/msxi';
         $newData = array();
         if (preg_match($formula, $data, $matches)) {
             $result = trim(reset($matches));
-            //   pr($result);
+//            pr($result);
             if (preg_match_all($formulaLi, $result, $matches)) {
                 $results = reset($matches);
                 foreach ($results as $r) {
@@ -93,6 +121,7 @@ class KosovoMps extends AppModel {
                 }
             } else {
                 $newData[] = $this->combineLists($result, $replace, $model, $id);
+                pr($newData);
             }
 
             return $newData;
@@ -108,12 +137,14 @@ class KosovoMps extends AppModel {
         $formulaShortcut = '/\(.*?(\))/i';
         $formulaShortcutReplace = '/\(|\)/i';
         $formulaShortcutRemove = '/\(.*\)/i';
+        $formulaRole = '/\,\sAnëtar|\,\sKryetar|\,\sZëvendëskryetare\se\sparë|\,\sZëvendëskryetar\si\s parë|\,\sZëvendëskryetar\si\sdytë|\,\sZëvendëskryetare\se\sdytë/msxi';
+        $formulaRoleReplace = '/\,|\./i';
 
         //  pr($result);
         $uid = $this->extractAndReplace($result, $formulaUrlUids, $formulaUrlUidsReplace);
 //        pr($uid);
         $name = trim(strip_tags(preg_replace($replace, '', $result)));
-        $name = trim(preg_replace($formulaShortcutRemove, '', $name));
+        $name = trim(preg_replace(array($formulaShortcutRemove, $formulaRole), '', $name));
 
         App::import('Model', $model);
         $this->$model = new $model();
@@ -127,6 +158,7 @@ class KosovoMps extends AppModel {
         }
         $url = $this->extractAndReplace($result, $formulaHref, $formulaHrefReplace);
         $shortcut = $this->extractAndReplace($result, $formulaShortcut, $formulaShortcutReplace);
+        $role = trim($this->extractAndReplace($result, $formulaRole, $formulaRoleReplace));
 
         $newData['id'] = $getId;
         if (!is_null($id)) {
@@ -134,6 +166,11 @@ class KosovoMps extends AppModel {
         }
         if ($uid) {
             $newData['uid'] = $uid;
+        }
+        if (!empty($role)) {
+            $newData['role'] = $role;
+        } elseif (in_array($name, array('Nënkryetar i Kuvendit', 'Kryetar i Kuvendit', 'Nënkryetare e Kuvendit'))) {
+            $newData['role'] = $name;
         }
         $newData['name'] = $name;
         if ($url) {
@@ -149,7 +186,7 @@ class KosovoMps extends AppModel {
             }
         }
 
-        return $newData;
+        return !empty($name) ? $newData : null;
     }
 
 }
