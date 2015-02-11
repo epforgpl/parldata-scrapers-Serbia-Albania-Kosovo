@@ -27,6 +27,7 @@ $menu = array(
     $this->Html->link('organization Committe', '/kosovanApi/organizationCommitte'),
     $this->Html->link('speeche events', '/kosovanApi/speecheEvents'),
     $this->Html->link('votes', '/kosovanApi/votes'),
+    $this->Html->link('speeches', '/kosovanApi/speeches'),
 );
 echo $this->Html->nestedList($menu);
 ?>

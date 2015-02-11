@@ -26,17 +26,6 @@ class KosovoMpsDetail extends AppModel {
 
         $nname['name'] = $name;
         $name = preg_replace('/\s\-\s/', '-', $name);
-
-//        $find_table = array(
-//            '/ ДОЦ. ДР /',
-//        );
-//
-//        $replace_table = array(
-//            ' dd ',
-//        );
-//
-//        $name = preg_replace($find_table, $replace_table, $name);
-//
         $name = explode(' ', $name);
         $name = array_values($name);
 
@@ -69,11 +58,14 @@ class KosovoMpsDetail extends AppModel {
         }
 //
         if (!empty($data['KosovoMpsDetail']['phone'])) {
-            $nname['contact_details'] = array(
+            $contactDetails[] = array(
                 'label' => 'Phone',
                 'type' => 'tel',
                 'value' => $data['KosovoMpsDetail']['phone']
             );
+        }
+        if (isset($contactDetails)) {
+            $nname['contact_details'] = $contactDetails;
         }
         if (!empty($data['KosovoMpsIndex']['url'])) {
             $nname['sources'] = array(

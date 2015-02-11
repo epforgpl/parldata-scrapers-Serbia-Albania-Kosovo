@@ -38,23 +38,37 @@ class KosovanController extends AppController {
     }
 
     public function getPlenarySpeeches() {
-        $link = 'http://www.kuvendikosoves.org/?cid=3,177';
-        $content = $this->Kosovo->getPlenarySpeechesScrap($link);
-        $id = 10;
-//        $content[] = $contents;
-        if ($content) {
-//            if ($this->KosovoMpsDetail->saveAll($content)) {
-//                if (!empty($content['KosovoCommitteFunc'])) {
-//                    foreach ($content['KosovoCommitteFunc'] as $comm) {
-//                        if ($this->KosovoCommitteFunc->save($comm)) {
-//                            pr($comm);
-//                        }
-//                    }
+        $ids = $this->KosovoPdf->find('list', array(
+            'fields' => array('id', 'id'),
+            'conditions' => array(
+                'KosovoPdf.status' => 1
+            ),
+            'limit' => 30
+        ));
+//        $id = 176;
+//        if ($ids) {
+//            foreach ($ids as $id) {
+//                $fileFolder = WWW_ROOT . 'files' . DS . 'kosovo' . DS;
+//                $content = (file_get_contents($fileFolder . $id . '.html'));
+//                $content = preg_replace('/&nbsp;/i', ' ', $content);
+//                $content = preg_replace('/|<hr>|<\!DOCTYPE.*?(>)|<BODY.*?(>)|<\/BODY>|<\/HTML>/i', '', $content);
+//                $content = preg_replace('/<HTML>.*?(<\/HEAD>)/ism', '', $content);
+//                $content = preg_replace('/\s<br>\\n(?=[Ј,с,\(])/ism', ' ', $content);
+//                $content = preg_replace('/\\n<A.*?(<\/a>)/ism', '', $content);
+//                $content = preg_replace('/(\xC2\xA0|&nbsp;)/', ' ', $content);
+////        $content = preg_replace('/<br>\s<br>|<b>\s<\/b>/ism', '', $content);
+//                $content = preg_replace('/<br><br><br><br>|<br><br><br>|<br><br>/ism', '<br>', $content);
+//                $content = preg_replace('/<br><b>\s\s+<\/b><br>/i', '', $content);
+//                $content = preg_replace('/\s\s+/i', ' ', $content);
+//                $content = trim($content);
+//                if ($content) {
+//                    $this->KosovoPdf->id = $id;
+//                    $this->KosovoPdf->saveField('content_sr', $content);
+//                    $this->KosovoPdf->saveField('status', 2);
 //                }
+//            }
 //        }
-        }
-        // $this->KosovoSpeecheContent->saveAll($content);
-
+        $content = $ids;
         $this->set(compact('content'));
     }
 

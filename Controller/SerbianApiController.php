@@ -434,7 +434,7 @@ class SerbianApiController extends AppController {
     }
 
     public function testSend($id = null) {
-        $this->autoRender = false;
+//        $this->autoRender = false;
         if (!is_null($id)) {
             $result = $this->QueleToSend->doRequest($id, true);
         } else {

@@ -329,6 +329,38 @@ class KosovanApiController extends AppController {
         $this->set(compact('content', 'combine'));
     }
 
+    public function speeches() {
+        $content = $this->KosovoPdf->find('all', array(
+            'conditions' => array(
+//                'KosovoPdf.id' => 310,
+                'KosovoPdf.status' => 1
+            ),
+            'contain' => array(
+                'KosovoSpeecheContent' => array(
+                    'KosovoSpeecheIndex'
+                )
+            ),
+//            'order' => 'post_uid DESC',
+            'limit' => 10
+        ));
+        if ($content) {
+            foreach ($content as $c) {
+//
+                $combines = $this->KosovoPdf->combineToApiArray($c);
+                $combine[] = $combines;
+                if (isset($combines) && $combines) {
+                    $result = $this->QueleToSend->putDataDB($combines, 'Kosovan');
+//                    //  pr($result);
+                    if ($result) {
+                        $this->KosovoPdf->id = $c['KosovoPdf']['id'];
+                        $this->KosovoPdf->saveField('status', 2);
+                    }
+                }
+            }
+        }
+        $this->set(compact('content', 'combine'));
+    }
+
     public function getListQueleToSend($type = null, $limit = null) {
         $limit = !is_null($limit) && (int) $limit ? $limit : 100;
         if (!is_null($type)) {
@@ -345,6 +377,12 @@ class KosovanApiController extends AppController {
                         'limit' => $limit
             ));
         }
+    }
+
+    public function testPeople($name = 'Džezair Murati') {
+        $this->autoRender = false;
+        $combines = $this->KosovoPdf->checkKosovoPeopleExist($name, 3);
+        pr($combines);
     }
 
 }

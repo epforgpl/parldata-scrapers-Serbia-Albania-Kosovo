@@ -86,6 +86,17 @@ class AppModel extends Model {
         return $d;
     }
 
+    public function extractMoreAndStripTrim($data, $formula) {
+        $d = null;
+        if (preg_match_all($formula, $data, $matches)) {
+            $result = reset($matches);
+            foreach ($result as $r) {
+                $d[] = trim(strip_tags($r));
+            }
+        }
+        return $d;
+    }
+
     public function hint($id) {
         if ((int) $id) {
             $this->id = $id;
@@ -115,7 +126,7 @@ class AppModel extends Model {
     }
 
     public function toCamelCase($result) {
-        $result = preg_replace('/\s+|:|\.|\-|\(|\)/i', " ", $result);
+        $result = preg_replace('/\s+|:|\.|\,|\-|\(|\)/i', " ", $result);
         $result = trim(mb_convert_case(mb_strtolower($result), MB_CASE_TITLE, "UTF-8"));
         $result = preg_replace('/\s/i', "", $result); //to CamelCase
         return $result;
@@ -128,6 +139,33 @@ class AppModel extends Model {
 
     public function toSerbiaNameSplit($name = null) {
 
+    }
+
+    public function findAlbaniaChamber($name) {
+        $name = trim($name);
+        App::import('Model', 'AlbaniaChamber');
+        $this->AlbaniaChamber = new AlbaniaChamber();
+        $checkName = $this->AlbaniaChamber->find('first', array(
+            'fields' => array('id', 'name', 'start_date', 'end_date'),
+            'conditions' => array('AlbaniaChamber.name LIKE' => $name)
+                )
+        );
+        if ($checkName) {
+            return $checkName;
+        } else {
+            $newId = 'chamber_' . $name;
+            $data[]['organizations']['id'] = $newId;
+//            $data[]['logs'] = array(
+//                'id' => 'people_' . $newId . '_voteId_' . $this->voteId . '_' . time() . '_' . rand(0, 999),
+//                'label' => 'not found: ' . $newId,
+//                'status' => 'finished',
+////                        'params' => $t
+//            );
+            App::import('Model', 'QueleToSend');
+            $this->QueleToSend = new QueleToSend();
+            $this->QueleToSend->putDataDB($data, 'Albanian', false);
+            return $newId;
+        }
     }
 
     public function checkPeopleExist($name) {
@@ -165,7 +203,7 @@ class AppModel extends Model {
     public function checkKosovoPeopleExist($name, $menuId) {
         $name = trim(preg_replace('/\:/', '', $name));
         $searchs = explode(' ', $name);
-//        pr($searchs);
+//        pr($name);
         foreach ($searchs as $na) {
             $cond[] = array('KosovoMpsIndex.name LIKE' => '%' . $na . '%');
         }
@@ -191,6 +229,7 @@ class AppModel extends Model {
             App::import('Model', 'QueleToSend');
             $this->QueleToSend = new QueleToSend();
             $this->QueleToSend->putDataDB($data, 'Kosovan', false);
+            pr($data);
             return $newId;
         }
     }

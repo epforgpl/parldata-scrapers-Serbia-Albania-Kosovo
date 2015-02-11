@@ -13,7 +13,7 @@ class ScheduleShell extends Shell {
 //        $now = CakeTime::toServer(time(), "- 84 minute");
 //        $now = CakeTime::format('2011-08-22 11:53:00', '%B %e, %Y %H:%M %p');
 //        $now = CakeTime::format('-84 minutes', '%Y-%m-%d %H:%M:%S');
-        $now = CakeTime::format('-' . 10 . ' minutes', '%Y-%m-%d %H:%M:%S');
+//        $now = CakeTime::format('-' . 10 . ' minutes', '%Y-%m-%d %H:%M:%S');
 //        return;
         //     echo $this->Albanian->check_mps_contacts($now);
 //        echo $this->Kosovan->combine_pdfs(3);
@@ -34,7 +34,9 @@ class ScheduleShell extends Shell {
 //        echo $this->Kosovan->kosovo_combine_to_quelle(600);
 //        echo $this->Serbian->combine_pdfs(30);
 //        return;
+//        echo $this->Albanian->albania_send_to_quelle();
 //        echo $this->Kosovan->kosovo_send_to_quelle();
+//        echo $this->Serbian->serbia_send_to_quelle();
 //////////////
 ////        echo $this->Serbian->serbia_combine_to_quelle();
 //        return;

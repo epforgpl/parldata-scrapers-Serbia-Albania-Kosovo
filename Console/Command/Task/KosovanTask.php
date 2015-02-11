@@ -838,6 +838,48 @@ class KosovanTask extends Shell {
         $this->out($info);
         $toLog .= $info . "\n";
 
+        ////////////////speecheEvents
+        $info = CakeTime::toServer(time()) . ' Kosovo speeches start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $this->out($info);
+        $toLog = $info . "\n";
+        $content = $this->KosovoPdf->find('all', array(
+            'conditions' => array(
+//                'KosovoPdf.id' => 310,
+                'KosovoPdf.status' => 1
+            ),
+            'contain' => array(
+                'KosovoSpeecheContent' => array(
+                    'KosovoSpeecheIndex'
+                )
+            ),
+//            'order' => 'post_uid DESC',
+            'limit' => 10
+        ));
+//        pr($content);
+        if ($content) {
+            foreach ($content as $c) {
+                $combines = $this->KosovoPdf->combineToApiArray($c);
+                $combine[] = $combines;
+                $info = 'KosovoPdf id: ' . $c['KosovoPdf']['id'];
+                $this->out($info);
+                $toLog .= $info . "\n";
+                if (isset($combines) && $combines) {
+                    $result = $this->QueleToSend->putDataDB($combines, 'Kosovan');
+                    //  pr($result);
+                    if ($result) {
+                        $this->KosovoPdf->id = $c['KosovoPdf']['id'];
+                        $this->KosovoPdf->saveField('status', 2);
+                    }
+                }
+            }
+        } else {
+            $info = 'speeches nothing to do';
+            $this->out($info);
+            $toLog .= $info . "\n";
+        }
+        $info = CakeTime::toServer(time()) . ' Kosovo speeches end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $this->out($info);
+        $toLog .= $info . "\n";
 
         ////////////////votes
         $info = CakeTime::toServer(time()) . ' Kosovo votes start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
@@ -910,7 +952,7 @@ class KosovanTask extends Shell {
             $ids = array_merge($ids, $events);
         }
         if (!$ids || count($ids) < $trinityLimit) {
-            $speeches = $this->getListQueleToSend('speeches', $limit);
+            $speeches = $this->getListQueleToSend('speeches', $trinityLimit);
             $info = 'speeches count: ' . count($speeches);
             $this->out($info);
             $toLog .= $info . "\n";

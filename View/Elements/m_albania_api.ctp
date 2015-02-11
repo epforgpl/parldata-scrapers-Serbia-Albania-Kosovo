@@ -19,8 +19,8 @@ echo $this->Html->nestedList($menu);
 echo $this->Html->tag('h4', 'manual execute');
 $menu = array(
 //    $this->Html->link('send to api', '/serbianApi/sendToApi'),
+    $this->Html->link('organization Convocations', '/albanianApi/organizationConvocation'),
     $this->Html->link('people', '/albanianApi/people'),
-//    $this->Html->link('organization Convocations', '/kosovanApi/organizationConvocation'),
 //    $this->Html->link('organization Party', '/kosovanApi/organizationParty'),
 //    $this->Html->link('organization Parliamentary groups', '/kosovanApi/organizationParliamentaryGroups'),
 //    $this->Html->link('organization Committe', '/kosovanApi/organizationCommitte'),
