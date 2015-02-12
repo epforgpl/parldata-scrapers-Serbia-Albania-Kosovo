@@ -104,7 +104,7 @@ class AlbaniaMpsDetail extends AppModel {
                 }
             }
             if (!empty($data['AlbaniaMpsDetail']['opting_in'])) {
-                $chamber = $this->getChamber($data['AlbaniaMpsDetail']['opting_in']);
+                $chamber = $this->findAllAlbaniaChamberFromContent($data['AlbaniaMpsDetail']['opting_in']);
 
                 if ($chamber) {
                     $g = $m = null;
@@ -171,6 +171,7 @@ class AlbaniaMpsDetail extends AppModel {
         $formulaDate = '/\d{4}/';
         $results = explode("<br />", $content);
         if ($results) {
+            $p = array();
             foreach ($results as $k => $r) {
                 $pt = $this->extractTrimStrip($r, $formulaParty);
                 if ($pt) {
@@ -196,24 +197,6 @@ class AlbaniaMpsDetail extends AppModel {
         }
     }
 
-    public function getChamber($content) {
-        $formulaChamber = '/(X{0,3})(IX|IV|V?I{0,3})/';
-
-        if (preg_match_all($formulaChamber, trim(strip_tags($content)), $matches)) {
-            $results = reset($matches);
-            $results = array_unique($results);
-//            pr($results);
-            if ($results) {
-                foreach ($results as $r) {
-                    if (!empty($r)) {
-                        $ch[] = $this->findAlbaniaChamber($r);
-                    }
-                }
-                return $ch;
-            }
-        }
-    }
-
     public function getParlamentaryGroup($content) {
         $formulaParlamentaryGroup = '/parlamentar\:.*?(<br)/';
         $formulaParlamentaryGroupReplace = '/parlamentar\:|<br|\./';
@@ -229,6 +212,7 @@ class AlbaniaMpsDetail extends AppModel {
 
         $data = trim($this->extractAndReplace($content, $formulaCommittee, $formulaCommitteeReplace));
         $data = explode('.', $data);
+        $ndata = array();
         foreach ($data as $d) {
             if (!empty($d)) {
                 $name = trim(preg_replace($formulaRole, '', $d));

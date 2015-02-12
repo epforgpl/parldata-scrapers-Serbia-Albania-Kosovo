@@ -34,6 +34,7 @@ class ScheduleShell extends Shell {
 //        echo $this->Kosovan->kosovo_combine_to_quelle(600);
 //        echo $this->Serbian->combine_pdfs(30);
 //        return;
+//        echo $this->Albanian->albania_combine_to_quelle();
 //        echo $this->Albanian->albania_send_to_quelle();
 //        echo $this->Kosovan->kosovo_send_to_quelle();
 //        echo $this->Serbian->serbia_send_to_quelle();
@@ -230,61 +231,79 @@ class ScheduleShell extends Shell {
                         }
                         break;
 
-                    //Albanian
-//                    case'index_albania_plenary_speeches':
-//                        $this->out('#now ' . $now);
-//                        $this->out('#modified ' . $schedule['Schedule']['modified']);
-//                        if ($schedule['Schedule']['modified'] < $now) {
-//                            $this->out('var ' . $now);
-//                            echo $this->Albanian->get_index();
-//                            echo $this->Schedule->hint($schedule['Schedule']['id']);
-//                        }
-//                        break;
-//                    case'albania_get_doc_from_link':
-//                        $this->out('#now ' . $now);
-//                        $this->out('#modified ' . $schedule['Schedule']['modified']);
-//                        if ($schedule['Schedule']['modified'] < $now) {
-//                            $this->out('var ' . $now);
-//                            echo $this->Albanian->get_doc_from_link(3);
-//                            echo $this->Schedule->hint($schedule['Schedule']['id']);
-//                        }
-//                        break;
-//                    case'index_albania_vote':
-//                        $this->out('#now ' . $now);
-//                        $this->out('#modified ' . $schedule['Schedule']['modified']);
-//                        if ($schedule['Schedule']['modified'] < $now) {
-//                            $this->out('var ' . $now);
-//                            echo $this->Albanian->get_vote_index();
-//                            echo $this->Schedule->hint($schedule['Schedule']['id']);
-//                        }
-//                        break;
-//                    case'index_albania_mps':
-//                        $this->out('#now ' . $now);
-//                        $this->out('#modified ' . $schedule['Schedule']['modified']);
-//                        if ($schedule['Schedule']['modified'] < $now) {
-//                            $this->out('var ' . $now);
-//                            echo $this->Albanian->get_mps_index();
-//                            echo $this->Schedule->hint($schedule['Schedule']['id']);
-//                        }
-//                        break;
-//                    case'get_mps_details_from_index':
-//                        $this->out('#now ' . $now);
-//                        $this->out('#modified ' . $schedule['Schedule']['modified']);
-//                        if ($schedule['Schedule']['modified'] < $now) {
-//                            $this->out('var ' . $now);
-//                            echo $this->Albanian->get_mps_details_from_index(2);
-//                            echo $this->Schedule->hint($schedule['Schedule']['id']);
-//                        }
-//                        break;
-//                    case'check_mps_contacts':
-//                        $this->out('#now ' . $now);
-//                        $this->out('#modified ' . $schedule['Schedule']['modified']);
-//                        if ($schedule['Schedule']['modified'] < $now) {
-//                            $this->out('var ' . $now);
-//                            echo $this->Albanian->check_mps_contacts($now);
-//                            echo $this->Schedule->hint($schedule['Schedule']['id']);
-//                        }
-//                        break;
+//                    Albanian
+                    case'index_albania_plenary_speeches':
+                        $this->out('#now ' . $now);
+                        $this->out('#modified ' . $schedule['Schedule']['modified']);
+                        if ($schedule['Schedule']['modified'] < $now) {
+                            $this->out('var ' . $now);
+                            echo $this->Albanian->get_index();
+                            echo $this->Schedule->hint($schedule['Schedule']['id']);
+                        }
+                        break;
+                    case'albania_get_doc_from_link':
+                        $this->out('#now ' . $now);
+                        $this->out('#modified ' . $schedule['Schedule']['modified']);
+                        if ($schedule['Schedule']['modified'] < $now) {
+                            $this->out('var ' . $now);
+                            echo $this->Albanian->get_doc_from_link(3);
+                            echo $this->Schedule->hint($schedule['Schedule']['id']);
+                        }
+                        break;
+                    case'index_albania_vote':
+                        $this->out('#now ' . $now);
+                        $this->out('#modified ' . $schedule['Schedule']['modified']);
+                        if ($schedule['Schedule']['modified'] < $now) {
+                            $this->out('var ' . $now);
+                            echo $this->Albanian->get_vote_index();
+                            echo $this->Schedule->hint($schedule['Schedule']['id']);
+                        }
+                        break;
+                    case'index_albania_mps':
+                        $this->out('#now ' . $now);
+                        $this->out('#modified ' . $schedule['Schedule']['modified']);
+                        if ($schedule['Schedule']['modified'] < $now) {
+                            $this->out('var ' . $now);
+                            echo $this->Albanian->get_mps_index();
+                            echo $this->Schedule->hint($schedule['Schedule']['id']);
+                        }
+                        break;
+                    case'get_mps_details_from_index':
+                        $this->out('#now ' . $now);
+                        $this->out('#modified ' . $schedule['Schedule']['modified']);
+                        if ($schedule['Schedule']['modified'] < $now) {
+                            $this->out('var ' . $now);
+                            echo $this->Albanian->get_mps_details_from_index(2);
+                            echo $this->Schedule->hint($schedule['Schedule']['id']);
+                        }
+                        break;
+                    case'check_mps_contacts':
+                        $this->out('#now ' . $now);
+                        $this->out('#modified ' . $schedule['Schedule']['modified']);
+                        if ($schedule['Schedule']['modified'] < $now) {
+                            $this->out('var ' . $now);
+                            echo $this->Albanian->check_mps_contacts($now);
+                            echo $this->Schedule->hint($schedule['Schedule']['id']);
+                        }
+                        break;
+                    case'albania_combine_to_quelle':
+                        $this->out('#$now ' . $now);
+                        $this->out('#modified ' . $schedule['Schedule']['modified']);
+                        if ($schedule['Schedule']['modified'] < $now) {
+                            $this->out('var ' . $now);
+                            echo $this->Albanian->albania_combine_to_quelle();
+                            echo $this->Schedule->hint($schedule['Schedule']['id']);
+                        }
+                        break;
+                    case'albania_send_to_quelle':
+                        $this->out('#$now ' . $now);
+                        $this->out('#modified ' . $schedule['Schedule']['modified']);
+                        if ($schedule['Schedule']['modified'] < $now) {
+                            $this->out('var ' . $now);
+                            echo $this->Albanian->albania_send_to_quelle();
+                            echo $this->Schedule->hint($schedule['Schedule']['id']);
+                        }
+                        break;
                 }
 
                 pr($schedules);

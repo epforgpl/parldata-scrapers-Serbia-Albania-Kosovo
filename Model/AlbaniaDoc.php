@@ -8,6 +8,9 @@ class AlbaniaDoc extends AppModel {
 // unoconv fix find problem: yum install http://pkgs.repoforge.org/unoconv/unoconv-0.5-1.el6.rf.noarch.rpm
 
     public $belongsTo = 'AlbaniaSpeecheIndex';
+    public $eventId;
+
+//    public $formulaSpeaker = '/<B>.*?(<\/B>)(\–|\-|\s\–|\s\-)/msxi';
 
     public function getDocFromLink($link, $id) {
 
@@ -28,7 +31,7 @@ class AlbaniaDoc extends AppModel {
         }
         fclose($f);
         sleep(15);
-        //  return $link;
+//  return $link;
         if (file_exists($fileDocName)) {
             $command = '/usr/bin/unoconv -f html ' . $fileDocName . ' 2>&1';
             pr($command);
@@ -52,7 +55,7 @@ class AlbaniaDoc extends AppModel {
                 }
             }
             return false;
-            // return $httpSocket->response->code;
+// return $httpSocket->response->code;
         } else {
             return false;
         }
@@ -90,6 +93,131 @@ class AlbaniaDoc extends AppModel {
             $text = preg_replace('/\<!--(.)*--\>/isu', '', $text);
         }
         return $text;
+    }
+
+//    public $formulaSpeaker = '/<B>.*?(<\/B>\s\–|<\/B>\s\-|\-<\/B>|\-\s<\/B>)/';
+    public $formulaSpeaker = '/<B>([A-ZÇË]{1}[a-zëç]{1,}).([A-ZÇË]{1}[a-zëç]{1,}).*?(\-|\–|\–)/';
+
+    public function combineToApiArray($content) {
+
+        $this->eventId = $this->getEventIdFromUrl($content['AlbaniaDoc']['doc_url']);
+
+        $organization_id = $this->findAlbaniaChamberFromContent($content['AlbaniaDoc']['content_al']);
+//        pr($organization_id);
+//        return;
+
+        $combine = ':split: ' . $content['AlbaniaDoc']['content_al'] . ' :split: a';
+        $combine = preg_replace('/LANG=".*?(")|STYLE=".*?(")|CLASS=".*?(")|ALIGN=JUSTIFY|<!DOCTYPE.*?(<\/HEAD>)|<BODY.*?(">)|<!DOCTYPE\shtml>|<\/HTML>|<\/BODY>/msxi', '', $combine);
+        $combine = preg_replace($this->formulaSpeaker, " :split::split: $0", $combine);
+
+        $formulaSplit = '/:split:.*?(:split:)/msxi';
+
+        $results = $data = array();
+        if (preg_match_all($formulaSplit, $combine, $matches)) {
+            $results = reset($matches);
+        }
+        $date = $this->toApiDate($content['AlbaniaSpeecheIndex']['post_date']);
+
+        if (count($results) > 0) {
+            foreach ($results as $key => $result) {
+                $result = preg_replace('/:split:/i', "", $result);
+                $result = preg_replace('/\s+/i', " ", $result);
+
+                $text = $this->combineSpeche($result);
+
+                $speaker = $this->getSpeaker($result);
+                if ($speaker) {
+                    $data[$key]['speeches']['id'] = $this->eventId . '-' . $key;
+                    $data[$key]['speeches']['type'] = 'speech';
+                    $data[$key]['speeches']['text'] = trim(($text['speche']));
+                    $data[$key]['speeches']['date'] = $date;
+                    $data[$key]['speeches']['position'] = $key;
+                    $data[$key]['speeches']['event_id'] = 'event_' . $this->eventId;
+                    $data[$key]['speeches']['attribution_text'] = $speaker['attribution_text'];
+                    $data[$key]['speeches']['creator_id'] = $this->checkAlbaniaPeopleExist($speaker['attribution_text']);
+                } else {
+                    $data[$key]['speeches']['id'] = $this->eventId . '-' . $key;
+                    $data[$key]['speeches']['type'] = 'narrative';
+                    $data[$key]['speeches']['text'] = trim(($text['speche']));
+                    $data[$key]['speeches']['date'] = $date;
+                    $data[$key]['speeches']['position'] = $key;
+                    $data[$key]['speeches']['event_id'] = 'event_' . $this->eventId;
+                }
+            }
+        }
+
+
+        $data[]['events'] = array(
+            'id' => 'event_' . $this->eventId,
+            'organization_id' => $organization_id,
+            'start_date' => $date,
+            'sources' => array(
+                array(
+                    'url' => $content['AlbaniaSpeecheIndex']['url']
+                )
+            ),
+        );
+        if (isset($tlogs) && count($tlogs)) {
+            foreach ($tlogs as $tl) {
+                foreach ($tl as $t) {
+//                    $data[]['logs'] = array(
+//                        'id' => 'events_' . $content['SerbianSpeecheIndex']['post_uid'] . '_' . time() . '_' . rand(0, 999),
+//                        'label' => 'remove: ' . trim(strip_tags($t)),
+//                        'status' => 'finished',
+////                        'params' => $t
+//                    );
+                }
+            }
+        }
+        return $data;
+    }
+
+    public function findAlbaniaChamberFromContent($content) {
+        $formulaTop = '/LEGJISLATURA.*?(\–|\-)/msx';
+
+        if (preg_match($formulaTop, trim(strip_tags($content)), $matches)) {
+            $result = reset($matches);
+            $result = preg_replace('/LEGJISLATURA|\–|\-|\n|\r|\t|\s+/', '', $result);
+            $result = $this->findAlbaniaChamber($result);
+            if (is_array($result)) {
+//                pr($result);
+                return('chamber_' . $result['AlbaniaChamber']['name']);
+            } else {
+                return($result);
+            }
+        }
+    }
+
+    public function getSpeaker($combine) {
+        if (preg_match($this->formulaSpeaker, $combine, $matches)) {
+            $result = reset($matches);
+            if ($result) {
+                $result = preg_replace('/\–|\-/', '', $result);
+                $result = trim(strip_tags($result));
+//                pr($result);
+                $data['attribution_text'] = $result;
+                return($data);
+            }
+        }
+        return false;
+    }
+
+    public function combineSpeche($combine) {
+        $combine = preg_replace('/<P.*?(>)/', "<p>", $combine);
+        $combine = preg_replace('/<p>(\n+|\r+|\t+|\s+)<BR>(\n+|\r+|\t+|\s+)<\/P>/', "", $combine);
+        $combine = preg_replace('/<p>\s+<\/P>/', "", $combine);
+        $combine = preg_replace('/\n+|\t+|\r+|\s\s+/', "\n", $combine);
+        $combine = preg_replace('/\n+/', "\n", $combine);
+        $combine = preg_replace('/<p><BR>\n<\/P>/', "\n", $combine);
+        $combine = preg_replace('/<SPAN.*?(>)|<\/SPAN>|<FONT.*?(>)|<\/FONT>/', "", $combine);
+        $combine = preg_replace('/\s+/', " ", $combine);
+        return array('speche' => $combine);
+    }
+
+    public function getEventIdFromUrl($url) {
+        $formulaFile = '/pub\/.*?(\.doc)/i';
+        $formulaFileReplace = '/pub\/|\.doc/';
+        return $this->extractAndReplace($url, $formulaFile, $formulaFileReplace);
     }
 
 }

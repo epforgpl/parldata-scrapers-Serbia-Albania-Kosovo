@@ -109,6 +109,24 @@ class AppModel extends Model {
         return false;
     }
 
+    public function findAllAlbaniaChamberFromContent($content) {
+        $formulaChamber = '/(X{0,3})(IX|IV|V?I{0,3})/';
+
+        if (preg_match_all($formulaChamber, trim(strip_tags($content)), $matches)) {
+            $results = reset($matches);
+            $results = array_unique($results);
+//            pr($results);
+            if ($results) {
+                foreach ($results as $r) {
+                    if (!empty($r)) {
+                        $ch[] = $this->findAlbaniaChamber($r);
+                    }
+                }
+                return $ch;
+            }
+        }
+    }
+
     public function getChamber($date) {
         App::import('Model', 'SerbianMenuData');
         $this->SerbianMenuData = new SerbianMenuData();
@@ -155,15 +173,98 @@ class AppModel extends Model {
         } else {
             $newId = 'chamber_' . $name;
             $data[]['organizations']['id'] = $newId;
+            $data[]['logs'] = array(
+                'id' => $newId . '_' . time() . '_' . rand(0, 999),
+                'label' => 'not found: ' . $newId,
+                'status' => 'finished',
+//                        'params' => $t
+            );
+            App::import('Model', 'QueleToSend');
+            $this->QueleToSend = new QueleToSend();
+            $this->QueleToSend->putDataDB($data, 'Albanian', false);
+            return $newId;
+        }
+    }
+
+    public function findAlbaniaChamberDate($date) {
+
+        App::import('Model', 'AlbaniaChamber');
+        $this->AlbaniaChamber = new AlbaniaChamber();
+        $lastDate = $this->AlbaniaChamber->find('first', array(
+            'fields' => array('id', 'name', 'start_date', 'end_date'),
+            'order' => 'start_date DESC'
+                )
+        );
+        if ($lastDate['AlbaniaChamber']['start_date'] >= $date) {
+            $checkName = $this->AlbaniaChamber->find('first', array(
+                'fields' => array('id', 'name', 'start_date', 'end_date'),
+                'conditions' => array(
+                    'AlbaniaChamber.start_date <=' => $date,
+                    'AlbaniaChamber.end_date >=' => $date,
+                ),
+                'order' => 'start_date DESC'
+                    )
+            );
+        } elseif (CakeTime::format($lastDate['AlbaniaChamber']['start_date'] . ' + 4 years', '%Y-%m-%d') < $date) {
+            $data[]['logs'] = array(
+                'id' => 'Chamber_' . $date . '_' . time() . '_' . rand(0, 999),
+                'label' => 'AlbaniaChamber not found: ' . $date,
+                'status' => 'finished',
+//                        'params' => $t
+            );
+            App::import('Model', 'QueleToSend');
+            $this->QueleToSend = new QueleToSend();
+            $this->QueleToSend->putDataDB($data, 'Albanian', false);
+        } else {
+            $checkName = $lastDate;
+        }
+
+        if ($checkName) {
+            return $checkName;
+        } else {
+            $newId = 'chamber_' . $date;
+            $data[]['organizations']['id'] = $newId;
 //            $data[]['logs'] = array(
 //                'id' => 'people_' . $newId . '_voteId_' . $this->voteId . '_' . time() . '_' . rand(0, 999),
 //                'label' => 'not found: ' . $newId,
 //                'status' => 'finished',
 ////                        'params' => $t
 //            );
-            App::import('Model', 'QueleToSend');
-            $this->QueleToSend = new QueleToSend();
-            $this->QueleToSend->putDataDB($data, 'Albanian', false);
+//            App::import('Model', 'QueleToSend');
+//            $this->QueleToSend = new QueleToSend();
+//            $this->QueleToSend->putDataDB($data, 'Albanian', false);
+            return $newId;
+        }
+    }
+
+    public function checkAlbaniaPeopleExist($name) {
+        $name = trim(preg_replace('/\:/', '', $name));
+        $searchs = explode(' ', $name);
+//        pr($searchs);
+        foreach ($searchs as $na) {
+            $cond[] = array('AlbaniaMpsDetail.name LIKE' => '%' . $na . '%');
+        }
+        $conditions[] = array('AND' => $cond);
+
+        App::import('Model', 'AlbaniaMpsDetail');
+        $this->AlbaniaMpsDetail = new AlbaniaMpsDetail();
+        $checkName = $this->AlbaniaMpsDetail->field(
+                'AlbaniaMpsDetail.name', $conditions
+        );
+        if ($checkName) {
+            return 'mp_' . $this->toCamelCase($checkName);
+        } else {
+            $newId = 'mp_' . $this->toCamelCase($name);
+            $data[]['people']['id'] = $newId;
+//            $data[]['logs'] = array(
+//                'id' => 'people_' . $newId . '_voteId_' . $this->voteId . '_' . time() . '_' . rand(0, 999),
+//                'label' => 'not found: ' . $newId,
+//                'status' => 'finished',
+////                        'params' => $t
+//            );
+//            App::import('Model', 'QueleToSend');
+//            $this->QueleToSend = new QueleToSend();
+//            $this->QueleToSend->putDataDB($data, 'Serbian', false);
             return $newId;
         }
     }

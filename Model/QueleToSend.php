@@ -108,8 +108,8 @@ class QueleToSend extends AppModel {
 
         $postSend = unserialize($data['QueleToSend']['data']);
         $putSend = $postSend;
-        pr($putSend);
-        pr(json_encode($postSend));
+//        pr($putSend);
+//        pr(json_encode($postSend));
         unset($putSend['id']);
 
         $delete = false;
