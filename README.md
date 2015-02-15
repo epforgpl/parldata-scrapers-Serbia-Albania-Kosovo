@@ -38,6 +38,7 @@ git clone https://github.com/contributors-kodujdlapolski-pl/parldata-scrapers-Se
 chown USER:USER -R .
 chmod -R g-w .
 chmod -R g+w app/webroot
+chmod -R g+w app/tmp
 sudo adduser www-data USER
    ```
 
@@ -50,7 +51,8 @@ cp app/Config/database.php.default app/Config/database.php
 1. Create database user & pass
    
    ```
-mysql -u root -p -e "CREATE DATABASE scrapers_sak; GRANT ALL PRIVILEGES ON scrapers_sak.* TO scrapers_sak@localhost IDENTIFIED BY 'scrapers_sak';"
+mysql -u root -p -e "CREATE DATABASE scrapers_sak DEFAULT CHARACTER SET utf8
+  DEFAULT COLLATE utf8_general_ci; GRANT ALL PRIVILEGES ON scrapers_sak.* TO scrapers_sak@localhost IDENTIFIED BY 'scrapers_sak';"
    ```
 
 1. Load DB or create from schema
@@ -61,10 +63,13 @@ unrar x sql_scrapper\ 20150212\ 0226.rar
 cat sql_scrapper\ 20150212\ 0226.sql | mysql -u scrapers_sak -p   
 
 # Clear 'sent to API' flags
-mysql -u scrapers_sak -p -e "UPDATE quele_to_sends SET status=0;"
+mysql -u scrapers_sak -p -e "USE scrapers_sak; UPDATE quele_to_sends SET status=0;"
    
 # Console/cake schema create
 # Console/cake schema update
+
+# Go back
+cd ../..
    ```
 
 1. Update API user & pass
