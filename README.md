@@ -59,6 +59,9 @@ mysql -u root -p -e "CREATE DATABASE scrapers_sak; GRANT ALL PRIVILEGES ON scrap
 cd app/tmp
 unrar x sql_scrapper\ 20150212\ 0226.rar
 cat sql_scrapper\ 20150212\ 0226.sql | mysql -u scrapers_sak -p   
+
+# Clear 'sent to API' flags
+mysql -u scrapers_sak -p -e "UPDATE quele_to_sends SET status=0;"
    
 # Console/cake schema create
 # Console/cake schema update
@@ -69,10 +72,11 @@ cat sql_scrapper\ 20150212\ 0226.sql | mysql -u scrapers_sak -p
    ```
 cp app/Config/config.php.default app/Config/config.php
 vim app/Config/config.php
+# Super user can log to web panel
    ```
 
-1. Set up cron: `crontab -e`
+1. Set up cron: `sude -u USER crontab -e`
 
    ```
-/5 * * * * cd /home/scrapers/sak/app && Console/cake schedule
+/5 * * * * cd /home/scrapers/serbia-albania-kosovo/app && Console/cake schedule
    ```
