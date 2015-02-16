@@ -3,9 +3,8 @@
 
 ### Requirements
 - Cake 2.6.1
-- [Poppler](http://poppler.freedesktop.org/)
-- `sudo apt-get install poppler-utils`
-- [Unoconv](http://dag.wiee.rs/home-made/unoconv/): `sudo apt-get install unoconv`
+- [Poppler](http://poppler.freedesktop.org/) 0.12.4
+- [Unoconv](http://dag.wiee.rs/home-made/unoconv/): 0.5
 - MySQL
 
 ### Installation
