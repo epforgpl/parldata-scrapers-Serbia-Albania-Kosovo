@@ -72,9 +72,9 @@ class DATABASE_CONFIG {
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',
-		'login' => 'user',
-		'password' => 'password',
-		'database' => 'database_name',
+		'login' => 'scrapers_sak',
+		'password' => 'scrapers_sak',
+		'database' => 'scrapers_sak',
 		'prefix' => '',
 		//'encoding' => 'utf8',
 	);
