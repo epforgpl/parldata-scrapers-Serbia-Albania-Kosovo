@@ -165,18 +165,17 @@ class QueleToSend extends AppModel {
     }
 
     public function doLog($log) {
-        $HttpSocket = new HttpSocket(array(
-            'ssl_allow_self_signed' => true
-        ));
-        $HttpSocket->configAuth('Basic', $this->username, $this->password);
-        $request = array(
-            'header' => array('Content-Type' => 'application/json'),
-            'raw' => null,
-        );
-        $results = $HttpSocket->post($this->baseUrl . 'logs', json_encode($log), $request);
-
-        pr($log);
-        pr($results);
+//        $HttpSocket = new HttpSocket(array(
+//            'ssl_allow_self_signed' => true
+//        ));
+//        $HttpSocket->configAuth('Basic', $this->username, $this->password);
+//        $request = array(
+//            'header' => array('Content-Type' => 'application/json'),
+//            'raw' => null,
+//        );
+//        $results = $HttpSocket->post($this->baseUrl . 'logs', json_encode($log), $request);
+//        pr($log);
+//        pr($results);
     }
 
     public function deleteSerbiaAll($delete = null) {
