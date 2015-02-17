@@ -144,7 +144,7 @@ class AppModel extends Model {
     }
 
     public function toCamelCase($result) {
-        $result = preg_replace('/\s+|:|\.|\,|\-|\(|\)/i', " ", $result);
+        $result = preg_replace('/\s+|:|\.|\,|\-|\(|\)|\"/i', " ", $result);
         $result = trim(mb_convert_case(mb_strtolower($result), MB_CASE_TITLE, "UTF-8"));
         $result = preg_replace('/\s/i', "", $result); //to CamelCase
         return $result;
@@ -257,14 +257,14 @@ class AppModel extends Model {
             $newId = 'mp_' . $this->toCamelCase($name);
             $data[]['people']['id'] = $newId;
 //            $data[]['logs'] = array(
-//                'id' => 'people_' . $newId . '_voteId_' . $this->voteId . '_' . time() . '_' . rand(0, 999),
+//                'id' => 'people_' . $newId . '_people_' . $newId . '_' . time() . '_' . rand(0, 999),
 //                'label' => 'not found: ' . $newId,
 //                'status' => 'finished',
 ////                        'params' => $t
 //            );
-//            App::import('Model', 'QueleToSend');
-//            $this->QueleToSend = new QueleToSend();
-//            $this->QueleToSend->putDataDB($data, 'Serbian', false);
+            App::import('Model', 'QueleToSend');
+            $this->QueleToSend = new QueleToSend();
+            $this->QueleToSend->putDataDB($data, 'Albanian', false);
             return $newId;
         }
     }

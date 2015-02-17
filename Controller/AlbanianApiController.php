@@ -15,6 +15,7 @@ class AlbanianApiController extends AppController {
         'AlbaniaDoc',
         'AlbaniaPdf',
         'AlbaniaLog',
+        'AlbaniaDeputet',
         'QueleToSend'
     );
 
@@ -27,14 +28,18 @@ class AlbanianApiController extends AppController {
         $content = $this->AlbaniaChamber->find('all', array(
             //'fields' => array('id', 'id'),
             'conditions' => array('api' => 0),
-//            'limit' => 10
+            'contain' => array(
+                'AlbaniaDeputet'
+            ),
+            'order' => 'AlbaniaChamber.id DESC',
+            'limit' => 1
         ));
         if ($content) {
             foreach ($content as $c) {
                 $combines = $this->AlbaniaChamber->combineToApiArray($c);
                 $combine[] = $combines;
                 if (isset($combines) && $combines) {
-                    $result = $this->QueleToSend->putDataDB(array($combines), 'Albanian');
+                    $result = $this->QueleToSend->putDataDB($combines, 'Albanian');
 //                    //  pr($result);
                     if ($result) {
                         $this->AlbaniaChamber->id = $c['AlbaniaChamber']['id'];
@@ -84,7 +89,7 @@ class AlbanianApiController extends AppController {
                 'AlbaniaDoc.status' => 0
             ),
             'order' => 'AlbaniaDoc.id ASC',
-            'limit' => 1
+            'limit' => 10
         ));
 //        pr($content);
         if ($content) {

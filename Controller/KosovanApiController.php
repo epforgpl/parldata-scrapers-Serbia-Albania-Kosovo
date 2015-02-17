@@ -36,14 +36,15 @@ class KosovanApiController extends AppController {
         $content = $this->KosovoMpsMenu->find('all', array(
             //'fields' => array('id', 'id'),
             'conditions' => array('api' => 0),
-//            'limit' => 10
+            'contain' => array('KosovoMpsIndex'),
+            'limit' => 10
         ));
         if ($content) {
             foreach ($content as $c) {
                 $combines = $this->KosovoMpsMenu->combineToApiArray($c);
                 $combine[] = $combines;
                 if (isset($combines) && $combines) {
-                    $result = $this->QueleToSend->putDataDB(array($combines), 'Kosovan');
+                    $result = $this->QueleToSend->putDataDB($combines, 'Kosovan');
                     //  pr($result);
                     if ($result) {
                         $this->KosovoMpsMenu->id = $c['KosovoMpsMenu']['id'];

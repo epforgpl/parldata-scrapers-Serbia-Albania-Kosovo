@@ -217,7 +217,7 @@ Configure::write('App.encoding', 'UTF-8');
  *
  */
 Configure::write('Session', array(
-    'defaults' => 'php'
+    'defaults' => 'cake'
 ));
 
 /**

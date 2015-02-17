@@ -4,38 +4,9 @@ App::uses('HttpSocket', 'Network/Http');
 
 class QueleToSend extends AppModel {
 
-//    public $request = array(
-//        'method' => 'GET',
-//        'uri' => array(
-//            'scheme' => 'http',
-//            'host' => null,
-//            'port' => 80,
-//            'user' => null,
-//            'pass' => null,
-//            'path' => null,
-//            'query' => null,
-//            'fragment' => null
-//        ),
-//        'auth' => array(
-//            'method' => 'Basic',
-//            'user' => 'scraper',
-//            'pass' => 'ngaA(f77'
-//        ),
-//        'version' => '1.1',
-//        'body' => '',
-//        'line' => null,
-//        'header' => array(
-//            'Connection' => 'close',
-//            'User-Agent' => 'CakePHP'
-//        ),
-//        'raw' => null,
-//        'redirect' => false,
-//        'cookies' => array()
-//    );
-
-    public function beforeFilter() {
-        parent::beforeFilter();
-    }
+    public $username;
+    public $password;
+    public $baseUrl;
 
     public function putDataDB($data, $direct, $checkMd5 = true) {
 
@@ -88,18 +59,14 @@ class QueleToSend extends AppModel {
         $direct = $data['QueleToSend']['direct'];
         $getSet = Configure::read('api_server');
 
-        $username = $getSet[$direct]['username'];
-        $password = $getSet[$direct]['password'];
-        $baseUrl = $getSet[$direct]['base_url'];
+        $this->username = $getSet[$direct]['username'];
+        $this->password = $getSet[$direct]['password'];
+        $this->baseUrl = $getSet[$direct]['base_url'];
 
         $HttpSocket = new HttpSocket(array(
             'ssl_allow_self_signed' => true
         ));
-
-
-
-        //  $HttpSocket->configAuth('Basic', 'scraper', 'ngaA(f77');
-        $HttpSocket->configAuth('Basic', $username, $password);
+        $HttpSocket->configAuth('Basic', $this->username, $this->password);
         $request = array(
             'header' => array('Content-Type' => 'application/json'),
             'raw' => null,
@@ -114,12 +81,20 @@ class QueleToSend extends AppModel {
 
         $delete = false;
         $combine = array(
-            'url_post' => $baseUrl . $data['QueleToSend']['type'],
+            'url_post' => $this->baseUrl . $data['QueleToSend']['type'],
             'post_send' => json_encode($postSend),
-            'url_put' => $baseUrl . $data['QueleToSend']['type'] . '/' . $data['QueleToSend']['uid'],
+            'url_put' => $this->baseUrl . $data['QueleToSend']['type'] . '/' . $data['QueleToSend']['uid'],
             'put_send' => json_encode($putSend),
 //            'delete' => 'https://api.parldata.eu/rs/skupstina/' . $data['QueleToSend']['type'],
         );
+
+        $this->doLog(array(
+            'id' => $id . '_' . time() . '_' . rand(4, 99999),
+            'label' => 'Updating API : ' . $id,
+            'status' => 'running',
+        ));
+
+
         usleep(300);
         $results = $HttpSocket->post($combine['url_post'], $combine['post_send'], $request);
         if ($test) {
@@ -128,35 +103,80 @@ class QueleToSend extends AppModel {
         $result = json_decode($results->body);
         $status['status'] = false;
         $status['code'] = $results->code;
+
         if ($status['code'] == 500) {
+            $this->doLog(array(
+                'id' => $id . '_' . time() . '_' . rand(4, 99999),
+                'label' => 'Updating API : ' . $id,
+                'status' => 'interrupted',
+                'params' => 'https post code: ' . $status['code']
+            ));
+
             sleep(5);
-            return $status;
         }
 
         if ($result->_status == 'ERR') {
             $results = null;
             $results = $HttpSocket->put($combine['url_put'], $combine['put_send'], $request);
             $status['code'] = $results->code;
-            if ($status['code'] == 500) {
-                sleep(5);
-                return $status;
-            }
+            $result = json_decode($results->body);
             if ($test) {
                 pr($results);
             }
-            $result = json_decode($results->body);
-            if ($result->_status == 'OK') {
+            if ($status['code'] == 500) {
+                $this->doLog(array(
+                    'id' => $id . '_' . time() . '_' . rand(4, 99999),
+                    'label' => 'Updating API : ' . $id,
+                    'status' => 'interrupted',
+                    'params' => 'https put code: ' . $status['code']
+                ));
+
+                sleep(5);
+            } elseif ($result->_status == 'OK') {
+                $this->doLog(array(
+                    'id' => $id . '_' . time() . '_' . rand(4, 99999),
+                    'label' => 'Updating API : ' . $id,
+                    'status' => 'finished',
+                    'params' => 'https put code: ' . $status['code']
+                ));
                 $status['status'] = true;
+            } else {
+                $this->doLog(array(
+                    'id' => $id . '_' . time() . '_' . rand(4, 99999),
+                    'label' => 'Updating API : ' . $id,
+                    'status' => 'failed',
+                    'params' => 'https put code: ' . $status['code']
+                ));
             }
         } elseif ($result->_status == 'OK') {
+            $this->doLog(array(
+                'id' => $id . '_' . time() . '_' . rand(4, 99999),
+                'label' => 'Updating API : ' . $id,
+                'status' => 'finished',
+                'params' => 'https post code: ' . $status['code']
+            ));
             $status['status'] = true;
         }
+
         if ($test) {
-//            pr(array($status, $data, $results, $postSend));
-        } else {
-            return $status;
+            pr($status);
         }
-        // return array($status, $data, $results, $postSend);
+        return $status;
+    }
+
+    public function doLog($log) {
+        $HttpSocket = new HttpSocket(array(
+            'ssl_allow_self_signed' => true
+        ));
+        $HttpSocket->configAuth('Basic', $this->username, $this->password);
+        $request = array(
+            'header' => array('Content-Type' => 'application/json'),
+            'raw' => null,
+        );
+        $results = $HttpSocket->post($this->baseUrl . 'logs', json_encode($log), $request);
+
+        pr($log);
+        pr($results);
     }
 
     public function deleteSerbiaAll($delete = null) {
@@ -173,7 +193,7 @@ class QueleToSend extends AppModel {
         );
         if (is_null($delete)) {
             foreach ($list as $l) {
-                $results = $HttpSocket->delete('https://api.parldata.eu/al/kuvendi/' . $l, array(), $request);
+//                $results = $HttpSocket->delete('https://api.parldata.eu/al/kuvendi/' . $l, array(), $request);
             }
         }
     }

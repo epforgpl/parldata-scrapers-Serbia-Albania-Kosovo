@@ -604,7 +604,8 @@ class KosovanTask extends Shell {
         $this->KosovoMpsMenu->recursive = -1;
         $content = $this->KosovoMpsMenu->find('all', array(
             //'fields' => array('id', 'id'),
-            'conditions' => array('api' => 0),
+            'conditions' => array('api' => 1),
+            'contain' => array('KosovoMpsIndex'),
             'limit' => 10
         ));
         if ($content) {
@@ -615,7 +616,7 @@ class KosovanTask extends Shell {
                 $this->out($info);
                 $toLog .= $info . "\n";
                 if (isset($combines) && $combines) {
-                    $result = $this->QueleToSend->putDataDB(array($combines), 'Kosovan');
+                    $result = $this->QueleToSend->putDataDB($combines, 'Kosovan');
                     //  pr($result);
                     if ($result) {
                         $this->KosovoMpsMenu->id = $c['KosovoMpsMenu']['id'];

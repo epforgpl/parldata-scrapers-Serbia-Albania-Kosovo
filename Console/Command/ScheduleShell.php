@@ -286,6 +286,15 @@ class ScheduleShell extends Shell {
                             echo $this->Schedule->hint($schedule['Schedule']['id']);
                         }
                         break;
+                    case'albania_get_deputed':
+                        $this->out('#$now ' . $now);
+                        $this->out('#modified ' . $schedule['Schedule']['modified']);
+                        if ($schedule['Schedule']['modified'] < $now) {
+                            $this->out('var ' . $now);
+                            echo $this->Albanian->get_deputed();
+                            echo $this->Schedule->hint($schedule['Schedule']['id']);
+                        }
+                        break;
                     case'albania_combine_to_quelle':
                         $this->out('#$now ' . $now);
                         $this->out('#modified ' . $schedule['Schedule']['modified']);

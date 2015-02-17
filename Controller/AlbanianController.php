@@ -7,13 +7,15 @@ class AlbanianController extends AppController {
     public $uses = array(
         'Schedule',
         'Albania',
+        'AlbaniaChamber',
         'AlbaniaSpeecheIndex',
         'AlbaniaVoteIndex',
         'AlbaniaMpsIndex',
         'AlbaniaMpsDetail',
         'AlbaniaDoc',
         'AlbaniaPdf',
-        'AlbaniaLog'
+        'AlbaniaLog',
+        'AlbaniaDeputet'
     );
 
     public function index() {
@@ -22,6 +24,45 @@ class AlbanianController extends AppController {
 
     public function getMpsParty() {
 
+        $this->set(compact('content'));
+    }
+
+    public function listMpsActualDeputed() {
+//        $chamber = $this->AlbaniaChamber->find('first', array(
+//            'fields' => array('id', 'uid', 'name'),
+//            'conditions' => array(
+//                'AlbaniaChamber.status' => 1,
+//                'AlbaniaChamber.uid !=' => null,
+//            )
+//        ));
+//        if ($chamber) {
+////            $filePdfName = $this->AlbaniaPdf->getPdfFromIs($id);
+//            $filePdfName = '/home/scrapper/domains/scrapper.cakephp.com.pl/public_html/app/webroot/files/albania/20230.pdf';
+//            if ($filePdfName) {
+//                $content = $this->AlbaniaPdf->combinePdfToHtml($filePdfName, $chamber['AlbaniaChamber']['uid'], $chamber['AlbaniaChamber']['id']);
+//                if ($content) {
+//                    $change = false;
+//                    foreach ($content as $c) {
+//                        $check = $this->AlbaniaDeputet->find('first', array(
+//                            'fields' => array('id', 'name'),
+//                            'conditions' => array(
+//                                'AlbaniaDeputet.md5' => $c['md5'],
+//                                'AlbaniaDeputet.name LIKE' => $c['name'],
+//                            )
+//                        ));
+//                        if (!$check) {
+//                            $this->AlbaniaDeputet->create();
+//                            if ($this->AlbaniaDeputet->save($c)) {
+//                                $change = true;
+//                            }
+//                        }
+//                    }
+//                }
+//                $this->AlbaniaChamber->id = $chamber['AlbaniaChamber']['id'];
+//                $this->AlbaniaChamber->saveField('status', 1);
+//            }
+//        }
+        $content = null;
         $this->set(compact('content'));
     }
 

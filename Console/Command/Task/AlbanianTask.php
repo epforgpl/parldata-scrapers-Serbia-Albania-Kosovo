@@ -16,6 +16,7 @@ class AlbanianTask extends Shell {
         'AlbaniaDoc',
         'AlbaniaPdf',
         'AlbaniaLog',
+        'AlbaniaDeputet',
         'QueleToSend'
     );
 
@@ -165,6 +166,57 @@ class AlbanianTask extends Shell {
                 $this->out('save log id: ' . $this->AlbaniaLog->id);
             }
         }
+    }
+
+    public function get_deputed() {
+        $info = CakeTime::toServer(time()) . ' Albania get_deputed start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $this->out($info);
+        $toLog = $info . "\n";
+
+        $chamber = $this->AlbaniaChamber->find('first', array(
+            'fields' => array('id', 'uid', 'name'),
+            'conditions' => array(
+                'AlbaniaChamber.status' => 1,
+                'AlbaniaChamber.uid !=' => null,
+            )
+        ));
+        if ($chamber) {
+//            $filePdfName = $this->AlbaniaPdf->getPdfFromIs($id);
+            $filePdfName = '/home/scrapper/domains/scrapper.cakephp.com.pl/public_html/app/webroot/files/albania/20230.pdf';
+            if ($filePdfName) {
+                $content = $this->AlbaniaPdf->combinePdfToHtml($filePdfName, $chamber['AlbaniaChamber']['uid'], $chamber['AlbaniaChamber']['id']);
+                if ($content) {
+                    $change = false;
+                    foreach ($content as $c) {
+                        $check = $this->AlbaniaDeputet->find('first', array(
+                            'fields' => array('id', 'name'),
+                            'conditions' => array(
+                                'AlbaniaDeputet.md5' => $c['md5'],
+                                'AlbaniaDeputet.name LIKE' => $c['name'],
+                            )
+                        ));
+                        if (!$check) {
+                            $this->AlbaniaDeputet->create();
+                            if ($this->AlbaniaDeputet->save($c)) {
+                                $info = 'save new id: ' . $this->AlbaniaDeputet->getLastInsertId();
+                                $this->out($info);
+                                $toLog .= $info . "\n";
+                                $change = true;
+                            }
+                        } else {
+                            $info = 'exists, nothing changed | id: ' . $check['AlbaniaDeputet']['id'];
+                            $this->out($info);
+                            $toLog .= $info . "\n";
+                        }
+                    }
+                }
+                $this->AlbaniaChamber->id = $chamber['AlbaniaChamber']['id'];
+                $this->AlbaniaChamber->saveField('status', 1);
+            }
+        }
+        $info = CakeTime::toServer(time()) . ' Albania get_deputed end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $this->out($info);
+        $toLog .= $info . "\n";
     }
 
     public function get_index() {
@@ -366,6 +418,9 @@ class AlbanianTask extends Shell {
         $content = $this->AlbaniaChamber->find('all', array(
             //'fields' => array('id', 'id'),
             'conditions' => array('api' => 0),
+            'contain' => array(
+                'AlbaniaDeputet'
+            ),
 //            'limit' => 10
         ));
         if ($content) {
@@ -376,7 +431,7 @@ class AlbanianTask extends Shell {
                 $this->out($info);
                 $toLog .= $info . "\n";
                 if (isset($combines) && $combines) {
-                    $result = $this->QueleToSend->putDataDB(array($combines), 'Albanian');
+                    $result = $this->QueleToSend->putDataDB($combines, 'Albanian');
                     //  pr($result);
                     if ($result) {
                         $this->AlbaniaChamber->id = $c['AlbaniaChamber']['id'];

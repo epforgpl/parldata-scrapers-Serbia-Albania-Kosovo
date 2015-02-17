@@ -9,6 +9,33 @@ class AlbaniaPdf extends AppModel {
         return $link;
     }
 
+    public function getPdfFromIs($id) {
+        $link = ('http://www.parlament.al/previewdoc.php?file_id=' . $id);
+        $fileFolder = WWW_ROOT . 'files' . DS . 'albania' . DS;
+//        $this->id = $l['SerbianPdf']['id'];
+//
+        $HttpSocket = new HttpSocket();
+        if ($this->enableProxy) {
+            $HttpSocket->configProxy($this->proxyServer['ip'], $this->proxyServer['port']);
+        }
+        $filePdfName = $fileFolder . $id . '.pdf';
+        $f = fopen($filePdfName, 'w');
+        chmod($filePdfName, 0666);
+        $HttpSocket->setContentResource($f);
+        $HttpSocket->get($link);
+        if ($HttpSocket->response->code != 200) {
+            $HttpSocket->get($link);
+        }
+        fclose($f);
+        sleep(15);
+//  return $link;
+        if (file_exists($filePdfName)) {
+            return $filePdfName;
+        } else {
+            return false;
+        }
+    }
+
     public function getContentPdfFromId($id) {
         $url = ('http://www.parlament.al/previewdoc.php?file_id=' . $id);
         $fileFolder = WWW_ROOT . 'files' . DS . 'albania' . DS;
@@ -76,8 +103,7 @@ class AlbaniaPdf extends AppModel {
             return $filesize;
     }
 
-    public function combinePdfToHtml($filePath, $id) {
-
+    public function combinePdfToHtml($filePath, $uid, $id) {
         $fileFolder = WWW_ROOT . 'files' . DS . 'albania' . DS;
         if (file_exists($filePath)) {
             $pdf = new \Gufy\PdfToHtml;
@@ -85,58 +111,116 @@ class AlbaniaPdf extends AppModel {
             $pdf->generateOptions('singlePage');
             $pdf->setOutputDirectory($fileFolder);
             if ($pdf->generate()) {
-                $content = (file_get_contents($fileFolder . $id . '.html'));
-                pr($content);
-            }
-        }
-    }
+                $content = (file_get_contents($fileFolder . $uid . '.html'));
+                $content = preg_replace('/&nbsp;/i', ' ', $content);
+                $content = preg_replace('/|<hr>|<\!DOCTYPE.*?(>)|<BODY.*?(>)|<\/BODY>|<\/HTML>/i', '', $content);
+                $content = preg_replace('/<HTML>.*?(<\/HEAD>)/ism', '', $content);
+                $content = preg_replace('/\s<br>\\n(?=[Ј,с,\(])/ism', ' ', $content);
+                $content = preg_replace('/\\n<A.*?(<\/a>)/ism', '', $content);
+                $content = preg_replace('/\s<br><b>\s<\/b><br>|<br>/i', '<br />', $content);
+                $content = trim($content);
+                //  pr($content);
+                if ($content) {
+                    $formulaSplit = '/:split:.*?(:split:)/msxi';
 
-    public function getContentPdfFromIda($id) {
-        $fileFolder = WWW_ROOT . 'files' . DS . 'albania' . DS;
-//        $this->id = $id;
-//        $this->recursive = -1;
-//        $pdf = $this->read();
-//        // pr($pdf);
-//        if ($pdf) {
-//        $url = ($this->getKosovoHost . $pdf['KosovoPdf']['pdf_url']);
-        $url = ('http://www.parlament.al/previewdoc.php?file_id=' . $id);
-        //  pr($url);
-        $httpSocket = new HttpSocket();
-        $filePdfName = $fileFolder . $id . '.pdf';
-        $f = fopen($filePdfName, 'w');
-        chmod($filePdfName, 0666);
-//        $httpSocket->get($url);
-//        if ($httpSocket->response->code == 200) {
-        $httpSocket->setContentResource($f);
-        $httpSocket->get($url);
-//        }
-        fclose($f);
-        sleep(5);
-        if (file_exists($filePdfName) && $httpSocket->response->code == 200 && filesize($filePdfName) > 0) {
-//            $content = $this->combinePdfToHtml($filePdfName, $id);
-//            if ($content) {
-//                $pdf_md5 = md5($content);
-//                if ($pdf['KosovoPdf']['pdf_md5'] != $pdf_md5) {
-//                    $this->set(array(
-//                        'pdf_md5' => $pdf_md5,
-//                        'content_sr' => $content,
-//                        'status' => 1
-//                    ));
-//                    if ($this->save()) {
-//                        return true;
-//                    }
-//                }
-//            }
-//            } else {
-//                $this->set(array(
-//                    'status' => 1
-//                ));
-//                if ($this->save()) {
-//                    return false;
-//                }
-//            }
+                    $combine = ':split: ' . $content . ' :split: a';
+                    $combine = preg_replace('/\d+\./', " :split::split: $0", $combine);
+                    if (preg_match_all($formulaSplit, $combine, $matches)) {
+                        $results = reset($matches);
+                    }
+
+                    if (count($results) > 0) {
+                        foreach ($results as $key => $result) {
+                            $result = preg_replace('/:split:/i', "", $result);
+                            $toMd5 = $result = preg_replace('/\s+/i', " ", $result);
+                            $result = explode('<br />', $result);
+                            $name = $paternity = $surname = $party = null;
+                            if (preg_match('/\d+\./', $result[0])) {
+                                $i = 0;
+                                $data['albania_chamber_id'] = $id;
+                                $data['md5'] = md5($toMd5);
+                                $data['status'] = 0;
+                                $name = trim(strip_tags(preg_replace('/\d+\./', "", $result[$i])));
+                                if (empty($name)) {
+                                    $i++;
+                                    $name = trim(strip_tags(preg_replace('/\d+\./', "", $result[$i])));
+                                }
+
+                                if (preg_match('/\s/', $name)) {
+                                    $tmps = explode(' ', $name);
+//                                    pr($tmps);
+                                    $name = trim(strip_tags($tmps[0]));
+                                    $paternity = trim(strip_tags($tmps[1]));
+                                }
+
+                                $data['name'] = $name;
+                                if (is_null($paternity)) {
+                                    $i++;
+                                    $paternity = trim(strip_tags($result[$i]));
+                                }
+
+                                $data['paternity'] = $paternity;
+                                $i++;
+                                $surname = trim(strip_tags(preg_replace('/\d+|\(.*?(\))/', "", $result[$i])));
+                                if (preg_match('/\s/', $surname)) {
+                                    $surname = preg_replace('/\s+/', " ", $surname);
+                                    $tmps = explode(' ', $surname);
+//                                    pr($tmps);
+                                    $surname = trim(strip_tags($tmps[0]));
+                                    $party = trim(strip_tags($tmps[1])) . ' ';
+                                }
+
+                                if (!is_null($surname)) {
+                                    $data['surname'] = $surname;
+                                } else {
+                                    $data['surname'] = trim(strip_tags(preg_replace('/\d+/', "", $result[$i])));
+                                }
+                                $i++;
+
+                                $tmp = trim(strip_tags($result[$i]));
+                                if (!empty($tmp)) {
+                                    $party .= $tmp;
+                                    $i++;
+                                    $tmp = trim(strip_tags($result[$i]));
+                                    if (!empty($tmp)) {
+                                        $party .= ' ' . $tmp;
+                                        $i++;
+                                        if (isset($result[$i])) {
+                                            $tmp = trim(strip_tags($result[$i]));
+                                            if (!empty($tmp) && strpos($tmp, 'Qarku') === false) {
+                                                $party .= ' ' . $tmp;
+                                                $i++;
+                                                if (isset($result[$i])) {
+                                                    $tmp = trim(strip_tags($result[$i]));
+                                                    if (!empty($tmp)) {
+                                                        $party .= ' ' . $tmp;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if ($party == 'Partia') {
+                                    $tmp = trim(strip_tags($result[10]));
+                                    $party .= ' ' . $tmp;
+                                }
+                                $data['party'] = $party;
+                                $all[] = $data;
+                            }
+                        }
+                    }
+
+                    return $all;
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
         }
-        return false;
     }
 
 }
