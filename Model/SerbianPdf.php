@@ -1,7 +1,6 @@
 <?php
 
 App::uses('HttpSocket', 'Network/Http');
-App::import('Vendor', 'GoogleTranslate', array('file' => 'Stichoza' . DS . 'Google' . DS . 'GoogleTranslate.php'));
 App::import('Vendor', 'PdfToHtml', array('file' => 'Gufy' . DS . 'PdfToHtml.php'));
 
 class SerbianPdf extends AppModel {
@@ -15,15 +14,6 @@ class SerbianPdf extends AppModel {
         $fileFolder = WWW_ROOT . 'files' . DS . 'serbia' . DS;
         $this->id = $l['SerbianPdf']['id'];
 
-        $this->GoogleTranslate = new GoogleTranslate();
-        $name_en = $this->GoogleTranslate->setLangFrom(
-                        $this->translate_from)
-                ->setLangTo($this->translate_into)
-                ->translate(strip_tags($l['SerbianPdf']['name_sr'])
-        );
-        if ($name_en) {
-            $this->saveField('name_en', $name_en);
-        }
         $url = ($this->getSerbiaHost . rawurlencode($l['SerbianPdf']['pdf_url']));
         $url = str_replace('%2F', '/', $url);
         $httpSocket = new HttpSocket();
@@ -90,27 +80,6 @@ class SerbianPdf extends AppModel {
                 } else {
                     return false;
                 }
-
-                //disable translate
-//                $translate = null;
-//                foreach (preg_split("/((\r?\n)|(\r\n?))/", $content) as $line) {
-//                    //  if (!empty($line)) {
-//                    $translates = $this->GoogleTranslate->setLangFrom(
-//                                    $this->translate_from)
-//                            ->setLangTo($this->translate_into)
-//                            ->translate($line);
-//                    $translate .= str_replace($vowels, $vowels1, $translates);
-//                    $translate .= "\n";
-//                    //  }
-//                    usleep(1500);
-//                }
-//                if ($translate) {
-//                    $this->saveField('content_en', $translate);
-//                    $this->saveField('status', 1);
-//                    return true;
-//                } else {
-//                    return false;
-//                }
             } else {
                 return false;
             }
@@ -129,15 +98,6 @@ class SerbianPdf extends AppModel {
             foreach ($list as $l) {
                 $this->id = $l['SerbianPdf']['id'];
 
-                $this->GoogleTranslate = new GoogleTranslate();
-                $name_en = $this->GoogleTranslate->setLangFrom(
-                                $this->translate_from)
-                        ->setLangTo($this->translate_into)
-                        ->translate(strip_tags($l['SerbianPdf']['name_sr'])
-                );
-                if ($name_en) {
-                    $this->saveField('name_en', $name_en);
-                }
                 $url = ($this->getSerbiaHost . rawurlencode($l['SerbianPdf']['pdf_url']));
                 $url = str_replace('%2F', '/', $url);
 
@@ -166,23 +126,6 @@ class SerbianPdf extends AppModel {
                         pr($content);
                         if ($content) {
                             $this->saveField('content_sr', $content);
-                            $translate = null;
-                            foreach (preg_split("/((\r?\n)|(\r\n?))/", $content) as $line) {
-                                //  if (!empty($line)) {
-                                $translates = $this->GoogleTranslate->setLangFrom(
-                                                $this->translate_from)
-                                        ->setLangTo($this->translate_into)
-                                        ->translate($line);
-                                $translate .= str_replace($vowels, $vowels1, $translates);
-                                $translate .= "\n";
-                                //  }
-                                usleep(1500);
-                            }
-                            if ($translate) {
-                                $this->saveField('content_en', $translate);
-                                $this->saveField('status', 1);
-                            }
-                            pr($translate);
                         }
                     }
                 }

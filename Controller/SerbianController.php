@@ -28,9 +28,6 @@ class SerbianController extends AppController {
         'SerbianFunction',
         'QueleToSend'
     );
-    public $components = array(
-        'GoogleTranslate',
-    );
 
     public function beforeRender() {
         parent::beforeRender();
