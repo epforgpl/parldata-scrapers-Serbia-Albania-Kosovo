@@ -21,7 +21,14 @@ class AlbanianTask extends Shell {
     );
 
     public function check_mps_contacts($now) {
-        $info = CakeTime::toServer(time()) . ' Albania check mps contacts start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'check_mps_contacts',
+            'status' => 'running',
+                ), 'Albanian'
+        );
+        $info = CakeTime::toServer(time()) . ' Albania check_mps_contacts start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
 
@@ -80,24 +87,28 @@ class AlbanianTask extends Shell {
 
 
 
-        $info = CakeTime::toServer(time()) . ' Albania check mps contacts end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $info = CakeTime::toServer(time()) . ' Albania check_mps_contacts end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        if ($toLog) {
-            $this->AlbaniaLog->create();
-            $this->AlbaniaLog->set(array(
-                'type' => 4,
-                'logcontent' => $toLog
-                    )
-            );
-            if ($this->AlbaniaLog->save()) {
-                $this->out('save log id: ' . $this->AlbaniaLog->id);
-            }
-        }
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'check_mps_contacts',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Albanian'
+        );
     }
 
     public function get_mps_details_from_index($limit = null) {
         $limit = !is_null($limit) && (int) $limit ? $limit : 2;
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_mps_details_from_index',
+            'status' => 'running',
+                ), 'Albanian'
+        );
         $info = CakeTime::toServer(time()) . ' Albania get_mps_details_from_index start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
@@ -155,20 +166,24 @@ class AlbanianTask extends Shell {
         $info = CakeTime::toServer(time()) . ' Albania get_mps_details_from_index end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        if ($toLog) {
-            $this->AlbaniaLog->create();
-            $this->AlbaniaLog->set(array(
-                'type' => 3,
-                'logcontent' => $toLog
-                    )
-            );
-            if ($this->AlbaniaLog->save()) {
-                $this->out('save log id: ' . $this->AlbaniaLog->id);
-            }
-        }
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_mps_details_from_index',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Albanian'
+        );
     }
 
     public function get_deputed() {
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_deputed',
+            'status' => 'running',
+                ), 'Albanian'
+        );
         $info = CakeTime::toServer(time()) . ' Albania get_deputed start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
@@ -217,10 +232,25 @@ class AlbanianTask extends Shell {
         $info = CakeTime::toServer(time()) . ' Albania get_deputed end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_deputed',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Albanian'
+        );
     }
 
     public function get_index() {
-        $info = CakeTime::toServer(time()) . ' Albania get index start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_index',
+            'status' => 'running',
+                ), 'Albanian'
+        );
+        $info = CakeTime::toServer(time()) . ' Albania get_index start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
 
@@ -249,24 +279,28 @@ class AlbanianTask extends Shell {
             $toLog .= $info . "\n";
         }
 
-        $info = CakeTime::toServer(time()) . ' Albania get index end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $info = CakeTime::toServer(time()) . ' Albania get_index end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        if ($toLog) {
-            $this->AlbaniaLog->create();
-            $this->AlbaniaLog->set(array(
-                'type' => 0,
-                'logcontent' => $toLog
-                    )
-            );
-            if ($this->AlbaniaLog->save()) {
-                $this->out('save log id: ' . $this->AlbaniaLog->id);
-            }
-        }
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_index',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Albanian'
+        );
     }
 
     public function get_vote_index() {
-        $info = CakeTime::toServer(time()) . ' Albania get vote index start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_vote_index',
+            'status' => 'running',
+                ), 'Albanian'
+        );
+        $info = CakeTime::toServer(time()) . ' Albania get_vote_index start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
 
@@ -295,24 +329,28 @@ class AlbanianTask extends Shell {
             $toLog .= $info . "\n";
         }
 
-        $info = CakeTime::toServer(time()) . ' Albania get vote index end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $info = CakeTime::toServer(time()) . ' Albania get_vote_index end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        if ($toLog) {
-            $this->AlbaniaLog->create();
-            $this->AlbaniaLog->set(array(
-                'type' => 1,
-                'logcontent' => $toLog
-                    )
-            );
-            if ($this->AlbaniaLog->save()) {
-                $this->out('save log id: ' . $this->AlbaniaLog->id);
-            }
-        }
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_vote_index',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Albanian'
+        );
     }
 
     public function get_mps_index() {
-        $info = CakeTime::toServer(time()) . ' Albania get Mps index start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_mps_index',
+            'status' => 'running',
+                ), 'Albanian'
+        );
+        $info = CakeTime::toServer(time()) . ' Albania get_mps_index start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
 
@@ -347,23 +385,27 @@ class AlbanianTask extends Shell {
             $toLog .= $info . "\n";
         }
 
-        $info = CakeTime::toServer(time()) . ' Albania get Mps index end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $info = CakeTime::toServer(time()) . ' Albania get_mps_index end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        if ($toLog) {
-            $this->AlbaniaLog->create();
-            $this->AlbaniaLog->set(array(
-                'type' => 2,
-                'logcontent' => $toLog
-                    )
-            );
-            if ($this->AlbaniaLog->save()) {
-                $this->out('save log id: ' . $this->AlbaniaLog->id);
-            }
-        }
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_mps_index',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Albanian'
+        );
     }
 
     public function get_doc_from_link($limit) {
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_doc_from_link',
+            'status' => 'running',
+                ), 'Albanian'
+        );
         $info = CakeTime::toServer(time()) . ' Albania get_doc_from_link start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
@@ -396,20 +438,24 @@ class AlbanianTask extends Shell {
         $info = CakeTime::toServer(time()) . ' Albania get_doc_from_link end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        if ($toLog) {
-            $this->AlbaniaLog->create();
-            $this->AlbaniaLog->set(array(
-                'type' => 5,
-                'logcontent' => $toLog
-                    )
-            );
-            if ($this->AlbaniaLog->save()) {
-                $this->out('save log id: ' . $this->AlbaniaLog->id);
-            }
-        }
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_doc_from_link',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Albanian'
+        );
     }
 
     public function albania_combine_to_quelle() {
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'albania_combine_to_quelle',
+            'status' => 'running',
+                ), 'Albanian'
+        );
         ////////////////organizationConvocation
         $info = CakeTime::toServer(time()) . ' Albania organizationConvocation start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
@@ -451,7 +497,7 @@ class AlbanianTask extends Shell {
         ////////////////people organizationParty organizationParliamentaryGroups organizationCommitte
         $info = CakeTime::toServer(time()) . ' Albania people start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
-        $toLog = $info . "\n";
+        $toLog .= $info . "\n";
         $content = $this->AlbaniaMpsDetail->find('all', array(
             'conditions' => array(
                 'AlbaniaMpsDetail.status' => 0
@@ -492,7 +538,7 @@ class AlbanianTask extends Shell {
         //////////////speeche
         $info = CakeTime::toServer(time()) . ' Albania speecheEvents start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
-        $toLog = $info . "\n";
+        $toLog .= $info . "\n";
         $content = $this->AlbaniaDoc->find('all', array(
             'conditions' => array(
                 'AlbaniaDoc.status' => 0
@@ -525,6 +571,14 @@ class AlbanianTask extends Shell {
         $info = CakeTime::toServer(time()) . ' Albania speecheEvents end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'albania_combine_to_quelle',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Albanian'
+        );
         //////
     }
 
@@ -533,9 +587,17 @@ class AlbanianTask extends Shell {
         $halfLimit = $limit / 2;
         $trinityLimit = $limit * 3;
 
-        $info = CakeTime::toServer(time()) . ' Kosovo albania_send_to_quelle start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'albania_send_to_quelle',
+            'status' => 'running',
+                ), 'Albanian'
+        );
+        $info = CakeTime::toServer(time()) . ' Albania albania_send_to_quelle start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
+
         $ids = $this->getListQueleToSend('organizations', $limit);
         $info = 'organizations count: ' . count($ids);
         $this->out($info);
@@ -623,9 +685,17 @@ class AlbanianTask extends Shell {
             $this->out($info);
             $toLog .= $info . "\n";
         }
-        $info = CakeTime::toServer(time()) . ' Kosovo albania_send_to_quelle end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $info = CakeTime::toServer(time()) . ' Albania albania_send_to_quelle end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'albania_send_to_quelle',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Albanian'
+        );
     }
 
     public function getListQueleToSend($type = null, $limit = null) {

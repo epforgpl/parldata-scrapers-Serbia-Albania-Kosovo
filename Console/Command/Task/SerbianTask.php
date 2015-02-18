@@ -57,6 +57,13 @@ class SerbianTask extends Shell {
     }
 
     public function get_party_data($now) {
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_party_data',
+            'status' => 'running',
+                ), 'Serbian'
+        );
         $info = CakeTime::toServer(time()) . ' Serbia get_party_data start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
@@ -102,21 +109,25 @@ class SerbianTask extends Shell {
         $info = CakeTime::toServer(time()) . ' Serbia get_party_data end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        if ($toLog) {
-            $this->SerbianLog->create();
-            $this->SerbianLog->set(array(
-                'type' => 8,
-                'logcontent' => $toLog
-                    )
-            );
-            if ($this->SerbianLog->save()) {
-                $this->out('save log id: ' . $this->SerbianLog->id);
-            }
-        }
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_party_data',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Serbian'
+        );
     }
 
     public function check_mps_contacts($now) {
-        $info = CakeTime::toServer(time()) . ' Serbia check mps contacts start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'check_mps_contacts',
+            'status' => 'running',
+                ), 'Serbian'
+        );
+        $info = CakeTime::toServer(time()) . ' Serbia check_mps_contacts start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
 
@@ -168,25 +179,29 @@ class SerbianTask extends Shell {
             $toLog .= $info . "\n";
         }
 
-        $info = CakeTime::toServer(time()) . ' Serbia check mps contacts end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $info = CakeTime::toServer(time()) . ' Serbia check_mps_contacts end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        if ($toLog) {
-            $this->SerbianLog->create();
-            $this->SerbianLog->set(array(
-                'type' => 7,
-                'logcontent' => $toLog
-                    )
-            );
-            if ($this->SerbianLog->save()) {
-                $this->out('save log id: ' . $this->SerbianLog->id);
-            }
-        }
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'check_mps_contacts',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Serbian'
+        );
     }
 
     public function get_mps_table_delegates($limit = null) {
         $limit = !is_null($limit) && (int) $limit ? $limit : 30;
-        $info = CakeTime::toServer(time()) . ' Serbia get delegates from table start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_mps_table_delegates',
+            'status' => 'running',
+                ), 'Serbian'
+        );
+        $info = CakeTime::toServer(time()) . ' Serbia get_mps_table_delegates start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
 
@@ -241,24 +256,28 @@ class SerbianTask extends Shell {
             $toLog .= $info . "\n";
         }
 
-        $info = CakeTime::toServer(time()) . ' Serbia get delegates from table end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $info = CakeTime::toServer(time()) . ' Serbia get_mps_table_delegates end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        if ($toLog) {
-            $this->SerbianLog->create();
-            $this->SerbianLog->set(array(
-                'type' => 6,
-                'logcontent' => $toLog
-                    )
-            );
-            if ($this->SerbianLog->save()) {
-                $this->out('save log id: ' . $this->SerbianLog->id);
-            }
-        }
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_mps_table_delegates',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Serbian'
+        );
     }
 
     public function get_mps_menu() {
-        $info = CakeTime::toServer(time()) . ' Serbia get menu start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_mps_menu',
+            'status' => 'running',
+                ), 'Serbian'
+        );
+        $info = CakeTime::toServer(time()) . ' Serbia get_mps_menu start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
         $menuData = $this->SerbianMps->getMenuFromLink();
@@ -280,24 +299,28 @@ class SerbianTask extends Shell {
                 }
             }
         }
-        $info = CakeTime::toServer(time()) . ' Serbia get menu end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $info = CakeTime::toServer(time()) . ' Serbia get_mps_menu end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        if ($toLog) {
-            $this->SerbianLog->create();
-            $this->SerbianLog->set(array(
-                'type' => 4,
-                'logcontent' => $toLog
-                    )
-            );
-            if ($this->SerbianLog->save()) {
-                $this->out('save log id: ' . $this->SerbianLog->id);
-            }
-        }
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_mps_menu',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Serbian'
+        );
     }
 
     public function get_mps_tables() {
-        $info = CakeTime::toServer(time()) . ' Serbia get table start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_mps_tables',
+            'status' => 'running',
+                ), 'Serbian'
+        );
+        $info = CakeTime::toServer(time()) . ' Serbia get_mps_tables start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
         $menuData = $this->SerbianMenuData->find('all', array(
@@ -383,24 +406,28 @@ class SerbianTask extends Shell {
         } else {
             $this->SerbianMenuData->updateAll(array('status' => 0), array('status' => 1));
         }
-        $info = CakeTime::toServer(time()) . ' Serbia get table end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $info = CakeTime::toServer(time()) . ' Serbia get_mps_tables end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        if ($toLog) {
-            $this->SerbianLog->create();
-            $this->SerbianLog->set(array(
-                'type' => 5,
-                'logcontent' => $toLog
-                    )
-            );
-            if ($this->SerbianLog->save()) {
-                $this->out('save log id: ' . $this->SerbianLog->id);
-            }
-        }
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_mps_tables',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Serbian'
+        );
     }
 
     public function get_index() {
-        $info = CakeTime::toServer(time()) . ' Serbia get index start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_index',
+            'status' => 'running',
+                ), 'Serbian'
+        );
+        $info = CakeTime::toServer(time()) . ' Serbia get_index start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
 
@@ -457,27 +484,31 @@ class SerbianTask extends Shell {
             }
             usleep(350000);
         }
-        $info = CakeTime::toServer(time()) . ' Serbia get index end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $info = CakeTime::toServer(time()) . ' Serbia get_index end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        if ($toLog) {
-            $this->SerbianLog->create();
-            $this->SerbianLog->set(array(
-                'type' => 0,
-                'logcontent' => $toLog
-                    )
-            );
-            if ($this->SerbianLog->save()) {
-                $this->out('save log id: ' . $this->SerbianLog->id);
-            }
-        }
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_index',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Serbian'
+        );
     }
 
     public function get_content($limit = null) {
         $limit = !is_null($limit) && (int) $limit ? $limit : 30;
-        $info = CakeTime::toServer(time()) . ' Serbia get content start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_content',
+            'status' => 'running',
+                ), 'Serbian'
+        );
+        $info = CakeTime::toServer(time()) . ' Serbia get_content start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
-        $toLog = $toLogPdf = $info . "\n";
+        $toLog = $info . "\n";
 
         $change = false;
         $dataIndex = $this->SerbianSpeecheIndex->find('list', array(
@@ -557,7 +588,6 @@ class SerbianTask extends Shell {
                             $info = 'find content pdfs (key: ' . $key . ') pcs: ' . count($content['pdfs']);
                             $this->out($info);
                             $toLog .= $info . "\n";
-                            $toLogPdf .= $info . "\n";
 
                             foreach ($content['pdfs'] as $pdf) {
                                 $p = $this->SerbianPdf->findByStampInText($pdf['stamp_in_text']);
@@ -568,7 +598,7 @@ class SerbianTask extends Shell {
 
                                         $info = 'save new pdf (key: ' . $pdf['stamp_in_text'] . ')';
                                         $this->out($info);
-                                        $toLogPdf .= $info . "\n";
+                                        $toLog .= $info . "\n";
 
                                         $changePdf = true;
                                     }
@@ -581,7 +611,7 @@ class SerbianTask extends Shell {
 
                                             $info = 'diff md5 update pdf (key: ' . $pdf['stamp_in_text'] . ')';
                                             $this->out($info);
-                                            $toLogPdf .= $info . "\n";
+                                            $toLog .= $info . "\n";
 
                                             $changePdf = true;
                                         }
@@ -592,13 +622,11 @@ class SerbianTask extends Shell {
                                 $info = 'pdfs nothing to do';
                                 $this->out($info);
                                 $toLog .= $info . "\n";
-                                $toLogPdf .= $info . "\n";
                             }
 
                             $info = 'end content pdfs';
                             $this->out($info);
                             $toLog .= $info . "\n";
-                            $toLogPdf .= $info . "\n";
                         }
                     } else {
                         $info = 'something is wrong, I can not get content from (key: ' . $key . ') ' . $url;
@@ -618,35 +646,28 @@ class SerbianTask extends Shell {
             $this->out($info);
             $toLog .= $info . "\n";
         }
-        $info = CakeTime::toServer(time()) . ' Serbia get content end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $info = CakeTime::toServer(time()) . ' Serbia get_content end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        if ($toLog) {
-            $this->SerbianLog->create();
-            $this->SerbianLog->set(array(
-                'type' => 1,
-                'logcontent' => $toLog
-                    )
-            );
-            if ($this->SerbianLog->save()) {
-                $this->out('save content log id: ' . $this->SerbianLog->id);
-            }
-        }
-        if (isset($toLogPdf)) {
-            $this->SerbianLog->create();
-            $this->SerbianLog->set(array(
-                'type' => 2,
-                'logcontent' => $toLogPdf
-                    )
-            );
-            if ($this->SerbianLog->save()) {
-                $this->out('save pdfs log id: ' . $this->SerbianLog->id);
-            }
-        }
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_content',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Serbian'
+        );
     }
 
     public function combine_pdfs($limit = null) {
         $limit = !is_null($limit) && (int) $limit ? $limit : 30;
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'combine_pdfs',
+            'status' => 'running',
+                ), 'Serbian'
+        );
         $info = CakeTime::toServer(time()) . ' Serbia combine_pdfs start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
@@ -707,20 +728,24 @@ class SerbianTask extends Shell {
         $info = CakeTime::toServer(time()) . ' Serbia combine_pdfs end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        if ($toLog) {
-            $this->SerbianLog->create();
-            $this->SerbianLog->set(array(
-                'type' => 3,
-                'logcontent' => $toLog
-                    )
-            );
-            if ($this->SerbianLog->save()) {
-                $this->out('save combine_pdfs log id: ' . $this->SerbianLog->id);
-            }
-        }
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'combine_pdfs',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Serbian'
+        );
     }
 
     public function serbia_combine_to_quelle() {
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'serbia_combine_to_quelle',
+            'status' => 'running',
+                ), 'Serbian'
+        );
         ////////////////organizationConvocation
         $info = CakeTime::toServer(time()) . ' Serbia organizationConvocation start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
@@ -1152,14 +1177,27 @@ class SerbianTask extends Shell {
         $info = CakeTime::toServer(time()) . ' Serbia votes end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        //
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'serbia_combine_to_quelle',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Serbian'
+        );
     }
 
     public function serbia_send_to_quelle($limit = null) {
         $limit = !is_null($limit) && (int) $limit ? $limit : 100;
         $halfLimit = $limit / 2;
         $trinityLimit = $limit * 3;
-
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'serbia_send_to_quelle',
+            'status' => 'running',
+                ), 'Serbian'
+        );
         $info = CakeTime::toServer(time()) . ' Serbia serbia_send_to_quelle start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
@@ -1253,6 +1291,14 @@ class SerbianTask extends Shell {
         $info = CakeTime::toServer(time()) . ' Serbia serbia_send_to_quelle end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'serbia_combine_to_quelle',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Serbian'
+        );
     }
 
     public function getListQueleToSend($type = null, $limit = null) {

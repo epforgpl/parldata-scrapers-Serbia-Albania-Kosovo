@@ -172,13 +172,15 @@ class AppModel extends Model {
             return $checkName;
         } else {
             $newId = 'chamber_' . $name;
-            $data[]['organizations']['id'] = $newId;
-            $data[]['logs'] = array(
-                'id' => $newId . '_' . time() . '_' . rand(0, 999),
-                'label' => 'not found: ' . $newId,
-                'status' => 'finished',
-//                        'params' => $t
-            );
+            $data[0]['organizations']['id'] = $newId;
+            $data[0]['organizations']['classification'] = 'chamber';
+            $data[0]['organizations']['name'] = 'Kuvendi i Shqipërisë: Legjislatura ' . $name;
+//            $data[1]['logs'] = array(
+//                'id' => $newId . '_' . time() . '_' . rand(0, 999),
+//                'label' => 'not found: ' . $newId,
+//                'status' => 'finished',
+////                        'params' => $t
+//            );
             App::import('Model', 'QueleToSend');
             $this->QueleToSend = new QueleToSend();
             $this->QueleToSend->putDataDB($data, 'Albanian', false);

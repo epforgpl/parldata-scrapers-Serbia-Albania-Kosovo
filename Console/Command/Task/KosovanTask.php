@@ -30,6 +30,13 @@ class KosovanTask extends Shell {
     );
 
     public function get_mps_index() {
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_mps_index',
+            'status' => 'running',
+                ), 'Kosovan'
+        );
         $info = CakeTime::toServer(time()) . ' Kosovo get_mps_index start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
@@ -75,21 +82,25 @@ class KosovanTask extends Shell {
         $info = CakeTime::toServer(time()) . ' Kosovo get_mps_index end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        if ($toLog) {
-            $this->KosovoLog->create();
-            $this->KosovoLog->set(array(
-                'type' => 7,
-                'logcontent' => $toLog
-                    )
-            );
-            if ($this->KosovoLog->save()) {
-                $this->out('save log id: ' . $this->KosovoLog->id);
-            }
-        }
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_mps_index',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Kosovan'
+        );
     }
 
     public function get_index_list_page() {
-        $info = CakeTime::toServer(time()) . ' Kosovo getIndexListPage start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_index_list_page',
+            'status' => 'running',
+                ), 'Kosovan'
+        );
+        $info = CakeTime::toServer(time()) . ' Kosovo get_index_list_page start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
         $content = $this->Kosovo->getIndexListPage();
@@ -106,24 +117,28 @@ class KosovanTask extends Shell {
             $this->out($info);
             $toLog .= $info . "\n";
         }
-        $info = CakeTime::toServer(time()) . ' Kosovo getIndexListPage end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $info = CakeTime::toServer(time()) . ' Kosovo get_index_list_page end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        if ($toLog) {
-            $this->KosovoLog->create();
-            $this->KosovoLog->set(array(
-                'type' => 6,
-                'logcontent' => $toLog
-                    )
-            );
-            if ($this->KosovoLog->save()) {
-                $this->out('save log id: ' . $this->KosovoLog->id);
-            }
-        }
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_index_list_page',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Kosovan'
+        );
     }
 
     public function get_index() {
-        $info = CakeTime::toServer(time()) . ' Kosovo get index start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_index',
+            'status' => 'running',
+                ), 'Kosovan'
+        );
+        $info = CakeTime::toServer(time()) . ' Kosovo get_index start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
 
@@ -164,28 +179,31 @@ class KosovanTask extends Shell {
         }
 
 
-        $info = CakeTime::toServer(time()) . ' Kosovo get index end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $info = CakeTime::toServer(time()) . ' Kosovo get_index end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        if ($toLog) {
-            $this->KosovoLog->create();
-            $this->KosovoLog->set(array(
-                'type' => 0,
-                'logcontent' => $toLog
-                    )
-            );
-            if ($this->KosovoLog->save()) {
-                $this->out('save log id: ' . $this->KosovoLog->id);
-            }
-        }
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_index',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Kosovan'
+        );
     }
 
     public function get_content($limit = null) {
         $limit = !is_null($limit) && (int) $limit ? $limit : 30;
-        $this->out($limit);
-        $info = CakeTime::toServer(time()) . ' Kosovo get content start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_content',
+            'status' => 'running',
+                ), 'Kosovan'
+        );
+        $info = CakeTime::toServer(time()) . ' Kosovo get_content start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
-        $toLog = $toLogPdf = $toLogTxt = $info . "\n";
+        $toLog = $info . "\n";
 
         $change = false;
         $listDataIndex = $this->KosovoSpeecheIndex->find('list', array(
@@ -243,7 +261,6 @@ class KosovanTask extends Shell {
                         $info = 'find content pdfs (key: ' . $key . ') pcs: ' . count($content['KosovoPdf']);
                         $this->out($info);
                         $toLog .= $info . "\n";
-                        $toLogPdf .= $info . "\n";
 
                         foreach ($content['KosovoPdf'] as $pdf) {
                             $p = $this->KosovoPdf->findByPdfUrl($pdf['pdf_url']);
@@ -254,7 +271,7 @@ class KosovanTask extends Shell {
 
                                     $info = 'save new pdf (key: ' . $this->KosovoPdf->id . ')';
                                     $this->out($info);
-                                    $toLogPdf .= $info . "\n";
+                                    $toLog .= $info . "\n";
 
                                     $changePdf = true;
                                 }
@@ -264,13 +281,11 @@ class KosovanTask extends Shell {
                             $info = 'pdfs nothing to do';
                             $this->out($info);
                             $toLog .= $info . "\n";
-                            $toLogPdf .= $info . "\n";
                         }
 
                         $info = 'end content pdfs';
                         $this->out($info);
                         $toLog .= $info . "\n";
-                        $toLogPdf .= $info . "\n";
                     }
 
                     if (isset($content['KosovoTxt'])) {
@@ -278,7 +293,6 @@ class KosovanTask extends Shell {
                         $info = 'find content Txts (key: ' . $key . ') pcs: ' . count($content['KosovoTxt']);
                         $this->out($info);
                         $toLog .= $info . "\n";
-                        $toLogTxt .= $info . "\n";
 
                         foreach ($content['KosovoTxt'] as $txt) {
                             $t = $this->KosovoTxt->findByTxtUrl($txt['txt_url']);
@@ -289,7 +303,7 @@ class KosovanTask extends Shell {
 
                                     $info = 'save new txt (key: ' . $this->KosovoTxt->id . ')';
                                     $this->out($info);
-                                    $toLogTxt .= $info . "\n";
+                                    $toLog .= $info . "\n";
 
                                     $changeTxt = true;
                                 }
@@ -299,13 +313,11 @@ class KosovanTask extends Shell {
                             $info = 'Txts nothing to do';
                             $this->out($info);
                             $toLog .= $info . "\n";
-                            $toLogTxt .= $info . "\n";
                         }
 
                         $info = 'end content Txts';
                         $this->out($info);
                         $toLog .= $info . "\n";
-                        $toLogTxt .= $info . "\n";
                     }
                 } else {
                     $info = 'something is wrong, I can not get content from (key: ' . $key . ') ' . $url;
@@ -324,46 +336,28 @@ class KosovanTask extends Shell {
             $this->out($info);
             $toLog .= $info . "\n";
         }
-        $info = CakeTime::toServer(time()) . ' Kosovo get content end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
+        $info = CakeTime::toServer(time()) . ' Kosovo get_content end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        if ($toLog) {
-            $this->KosovoLog->create();
-            $this->KosovoLog->set(array(
-                'type' => 1,
-                'logcontent' => $toLog
-                    )
-            );
-            if ($this->KosovoLog->save()) {
-                $this->out('save content log id: ' . $this->KosovoLog->id);
-            }
-        }
-        if (isset($toLogPdf)) {
-            $this->KosovoLog->create();
-            $this->KosovoLog->set(array(
-                'type' => 2,
-                'logcontent' => $toLogPdf
-                    )
-            );
-            if ($this->KosovoLog->save()) {
-                $this->out('save pdfs log id: ' . $this->KosovoLog->id);
-            }
-        }
-        if (isset($toLogTxt)) {
-            $this->KosovoLog->create();
-            $this->KosovoLog->set(array(
-                'type' => 3,
-                'logcontent' => $toLogTxt
-                    )
-            );
-            if ($this->KosovoLog->save()) {
-                $this->out('save Txts log id: ' . $this->KosovoLog->id);
-            }
-        }
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_content',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Kosovan'
+        );
     }
 
     public function combine_txts($limit = null) {
         $limit = !is_null($limit) && (int) $limit ? $limit : 30;
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'combine_txts',
+            'status' => 'running',
+                ), 'Kosovan'
+        );
         $info = CakeTime::toServer(time()) . ' Kosovo combine_txts start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
@@ -401,21 +395,25 @@ class KosovanTask extends Shell {
         $info = CakeTime::toServer(time()) . ' Kosovo combine_txts end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        if ($toLog) {
-            $this->KosovoLog->create();
-            $this->KosovoLog->set(array(
-                'type' => 4,
-                'logcontent' => $toLog
-                    )
-            );
-            if ($this->KosovoLog->save()) {
-                $this->out('save combine_txts log id: ' . $this->KosovoLog->id);
-            }
-        }
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'combine_txts',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Kosovan'
+        );
     }
 
     public function combine_pdfs($limit = null) {
         $limit = !is_null($limit) && (int) $limit ? $limit : 30;
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'combine_pdfs',
+            'status' => 'running',
+                ), 'Kosovan'
+        );
         $info = CakeTime::toServer(time()) . ' Kosovo combine_pdfs start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
@@ -453,21 +451,25 @@ class KosovanTask extends Shell {
         $info = CakeTime::toServer(time()) . ' Kosovo combine_pdfs end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        if ($toLog) {
-            $this->KosovoLog->create();
-            $this->KosovoLog->set(array(
-                'type' => 5,
-                'logcontent' => $toLog
-                    )
-            );
-            if ($this->KosovoLog->save()) {
-                $this->out('save combine_pdfs log id: ' . $this->KosovoLog->id);
-            }
-        }
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'combine_pdfs',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Kosovan'
+        );
     }
 
     public function get_mps_contacts($limit) {
         $limit = !is_null($limit) && (int) $limit ? $limit : 30;
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_mps_contacts',
+            'status' => 'running',
+                ), 'Kosovan'
+        );
         $info = CakeTime::toServer(time()) . ' Kosovo get_mps_contacts start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
@@ -511,21 +513,25 @@ class KosovanTask extends Shell {
         $info = CakeTime::toServer(time()) . ' Kosovo get_mps_contacts end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        if ($toLog) {
-            $this->KosovoLog->create();
-            $this->KosovoLog->set(array(
-                'type' => 8,
-                'logcontent' => $toLog
-                    )
-            );
-            if ($this->KosovoLog->save()) {
-                $this->out('save get_mps_contacts log id: ' . $this->KosovoLog->id);
-            }
-        }
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'get_mps_contacts',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Kosovan'
+        );
     }
 
     public function check_mps_contacts($now, $limit) {
         $limit = !is_null($limit) && (int) $limit ? $limit : 30;
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'check_mps_contacts',
+            'status' => 'running',
+                ), 'Kosovan'
+        );
         $info = CakeTime::toServer(time()) . ' Kosovo check_mps_contacts start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
@@ -583,20 +589,24 @@ class KosovanTask extends Shell {
         $info = CakeTime::toServer(time()) . ' Kosovo check_mps_contacts end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        if ($toLog) {
-            $this->KosovoLog->create();
-            $this->KosovoLog->set(array(
-                'type' => 9,
-                'logcontent' => $toLog
-                    )
-            );
-            if ($this->KosovoLog->save()) {
-                $this->out('save check_mps_contacts log id: ' . $this->KosovoLog->id);
-            }
-        }
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'check_mps_contacts',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Kosovan'
+        );
     }
 
     public function kosovo_combine_to_quelle() {
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'kosovo_combine_to_quelle',
+            'status' => 'running',
+                ), 'Kosovan'
+        );
         ////////////////organizationConvocation
         $info = CakeTime::toServer(time()) . ' Kosovo organizationConvocation start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
@@ -923,7 +933,14 @@ class KosovanTask extends Shell {
         $info = CakeTime::toServer(time()) . ' Kosovo votes end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
-        //
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'kosovo_combine_to_quelle',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Kosovan'
+        );
     }
 
     public function kosovo_send_to_quelle($limit = null) {
@@ -931,6 +948,13 @@ class KosovanTask extends Shell {
         $halfLimit = $limit / 2;
         $trinityLimit = $limit * 3;
 
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'kosovo_send_to_quelle',
+            'status' => 'running',
+                ), 'Kosovan'
+        );
         $info = CakeTime::toServer(time()) . ' Kosovo kosovo_send_to_quelle start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
@@ -1024,6 +1048,14 @@ class KosovanTask extends Shell {
         $info = CakeTime::toServer(time()) . ' Kosovo kosovo_send_to_quelle end | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog .= $info . "\n";
+        $this->QueleToSend->doLog(
+                array(
+            'id' => time() . '_' . rand(4, 99999),
+            'label' => 'kosovo_send_to_quelle',
+            'status' => 'finished',
+            'params' => explode("\n", $toLog)
+                ), 'Kosovan'
+        );
     }
 
     public function getListQueleToSend($type = null, $limit = null) {

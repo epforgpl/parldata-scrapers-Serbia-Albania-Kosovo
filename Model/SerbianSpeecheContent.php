@@ -246,12 +246,12 @@ class SerbianSpeecheContent extends AppModel {
         } else {
             $newId = 'mp_' . $this->toCamelCase($name);
             $data[]['people']['id'] = $newId;
-            $data[]['logs'] = array(
-                'id' => 'people_' . $newId . '_eventId_' . $this->eventId . '_' . time() . '_' . rand(0, 999),
-                'label' => 'not found: ' . $newId,
-                'status' => 'finished',
-//                        'params' => $t
-            );
+//            $data[]['logs'] = array(
+//                'id' => 'people_' . $newId . '_eventId_' . $this->eventId . '_' . time() . '_' . rand(0, 999),
+//                'label' => 'not found: ' . $newId,
+//                'status' => 'finished',
+////                        'params' => $t
+//            );
             App::import('Model', 'QueleToSend');
             $this->QueleToSend = new QueleToSend();
             $this->QueleToSend->putDataDB($data, 'Serbian');
