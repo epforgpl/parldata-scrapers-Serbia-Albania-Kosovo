@@ -161,7 +161,7 @@ class QueleToSend extends AppModel {
         );
         if (is_null($delete)) {
             foreach ($list as $l) {
-                $results = $HttpSocket->delete('https://api.parldata.eu/al/kuvendi/' . $l, array(), $request);
+//                $results = $HttpSocket->delete('https://api.parldata.eu/al/kuvendi/' . $l, array(), $request);
             }
         }
     }
