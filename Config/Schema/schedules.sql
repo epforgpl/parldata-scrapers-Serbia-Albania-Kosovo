@@ -9,63 +9,63 @@
 
 SET NAMES 'utf8';
 
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (1, 'serbia', 'index_plenary_speeches', 900, 399, '2014-12-23 00:42:01', '2015-02-16 13:32:42');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (2, 'serbia', 'get_content_plenary_speeches', 110, 2482, '2014-12-23 00:42:01', '2015-02-16 16:14:13');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (5, 'serbia', 'combine_mps_list_from_menu', 100, 300, '2014-12-26 16:14:02', '2015-02-16 16:14:16');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (3, 'serbia', 'download_and_transform_pdfs', 150, 1960, '2014-12-23 01:02:50', '2015-02-16 16:14:18');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (6, 'serbia', 'get_mps_tables', 500, 68, '2014-12-27 16:22:39', '2015-02-16 16:14:24');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (7, 'serbia', 'get_mps_contact_from_table_delegates', 50, 551, '2014-12-27 16:34:49', '2015-02-16 16:14:24');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (8, 'serbia', 'check_mps_contacts', 60, 563, '2014-12-27 17:33:15', '2015-02-16 16:14:31');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (9, 'kosovo', 'index_kosovo_plenary_speeches', 500, 70, '2015-01-04 20:44:32', '2015-02-16 16:14:39');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (10, 'kosovo', 'get_content_kosovo_plenary_speeches', 100, 2013, '2015-01-04 20:44:32', '2015-02-16 16:14:39');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (11, 'kosovo', 'download_kosovo_txts', 100, 1991, '2015-01-04 20:44:32', '2015-02-16 16:14:39');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (12, 'kosovo', 'download_kosovo_pdfs', 60, 1965, '2015-01-04 20:44:32', '2015-02-16 16:14:56');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (13, 'albania', 'index_albania_plenary_speeches', 1000, 43, '2015-01-04 20:44:32', '2015-02-16 16:15:52');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (14, 'albania', 'index_albania_vote', 1000, 47, '2015-01-04 20:44:32', '2015-02-16 16:15:56');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (15, 'albania', 'index_albania_mps', 1000, 50, '2015-01-04 20:44:32', '2015-02-16 16:16:28');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (16, 'albania', 'get_mps_details_from_index', 100, 186, '2015-01-04 20:44:32', '2015-02-16 16:16:28');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (17, 'albania', 'check_mps_contacts', 400, 109, '2015-01-04 20:44:32', '2015-02-16 16:16:35');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (18, 'kosovo', 'get_index_list_page', 500, 58, '2015-01-04 20:44:32', '2015-02-16 16:16:39');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (19, 'kosovo', 'get_index_list_page', 1500, 25, '2015-01-04 20:44:32', '2015-02-16 16:16:43');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (20, 'kosovo', 'get_mps_index', 1000, 33, '2015-01-04 20:44:32', '2015-02-16 16:16:52');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (21, 'kosovo', 'get_kosovo_mps_contacts', 100, 1267, '2015-01-04 20:44:32', '2015-02-16 16:16:52');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (22, 'kosovo', 'check_kosovo_mps_contacts', 100, 1240, '2015-01-04 20:44:32', '2015-02-16 16:16:55');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (23, 'albania', 'albania_get_doc_from_link', 60, 366, '2015-01-04 20:44:32', '2015-02-16 16:16:55');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (24, 'serbia', 'get_party_data', 43200, 1, '2014-12-27 17:33:15', '2015-01-26 23:54:12');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (25, 'serbia', 'serbia_combine_to_quelle', 60, 100, '2014-12-27 17:33:15', '2015-02-16 16:16:59');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (26, 'serbia', 'serbia_send_to_quelle', 10, 352, '2014-12-27 17:33:15', '2015-02-16 16:17:30');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (27, 'kosovo', 'kosovo_combine_to_quelle', 60, 62, '2015-01-04 20:44:32', '2015-02-16 16:17:40');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (28, 'kosovo', 'kosovo_send_to_quelle', 10, 232, '2015-01-04 20:44:32', '2015-02-16 16:17:49');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (29, 'albania', 'albania_combine_to_quelle', 60, 2, '2015-01-04 20:44:32', '2015-02-16 16:17:53');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (30, 'albania', 'albania_send_to_quelle', 10, 2, '2015-01-04 20:44:32', '2015-02-16 16:18:07');
-INSERT INTO scrapers_sak.schedules(id, name, task, `interval`, hints, created, modified) VALUES
+INSERT INTO schedules(id, name, task, `interval`, hints, created, modified) VALUES
 (31, 'albania', 'albania_get_deputed', 1000, 2, '2015-01-04 20:44:32', '2015-02-16 16:18:07');
