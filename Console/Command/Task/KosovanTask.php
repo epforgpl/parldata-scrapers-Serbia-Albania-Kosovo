@@ -86,8 +86,7 @@ class KosovanTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'get_mps_index',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Kosovan'
         );
     }
@@ -124,8 +123,7 @@ class KosovanTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'get_index_list_page',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Kosovan'
         );
     }
@@ -186,8 +184,7 @@ class KosovanTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'get_index',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Kosovan'
         );
     }
@@ -343,8 +340,7 @@ class KosovanTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'get_content',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Kosovan'
         );
     }
@@ -399,8 +395,7 @@ class KosovanTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'combine_txts',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Kosovan'
         );
     }
@@ -455,8 +450,7 @@ class KosovanTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'combine_pdfs',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Kosovan'
         );
     }
@@ -517,8 +511,7 @@ class KosovanTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'get_mps_contacts',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Kosovan'
         );
     }
@@ -593,8 +586,7 @@ class KosovanTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'check_mps_contacts',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Kosovan'
         );
     }
@@ -937,8 +929,7 @@ class KosovanTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'kosovo_combine_to_quelle',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Kosovan'
         );
     }
@@ -1052,8 +1043,7 @@ class KosovanTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'kosovo_send_to_quelle',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Kosovan'
         );
     }
