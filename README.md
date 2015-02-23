@@ -64,8 +64,10 @@ cat sql_scrapper\ 20150212\ 0226.sql | mysql -u scrapers_sak -p
 # Clear 'sent to API' flags
 mysql -u scrapers_sak -p -e "USE scrapers_sak; UPDATE quele_to_sends SET status=0;"
    
-# Console/cake schema create
-# Console/cake schema update
+# Or start from scrach
+# mysql -p -u scrapers_sak scrapers_sak < Config/Schema/scrapper.sql
+# mysql -p -u scrapers_sak scrapers_sak < Config/Schema/schedules.sql 
+# mysql -p -u scrapers_sak scrapers_sak < Config/Schema/albania_chambers.sql
 
 # Go back
 cd ../..
