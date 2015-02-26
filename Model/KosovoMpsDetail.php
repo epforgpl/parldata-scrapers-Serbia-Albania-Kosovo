@@ -32,15 +32,15 @@ class KosovoMpsDetail extends AppModel {
         $nname['given_name'] = array_shift($name);
 
         if (count($name) > 0) {
-            $nname['additional_name'] = null;
+            $nname['family_name'] = null;
             foreach ($name as $nn) {
-                $nname['additional_name'] .= ' ' . $nn;
+                $nname['family_name'] .= ' ' . $nn;
             }
-            $nname['additional_name'] = trim($nname['additional_name']);
+            $nname['family_name'] = trim($nname['family_name']);
         }
 
-        if (isset($nname['additional_name']) && (is_null($nname['additional_name']) || $nname['additional_name'] == '' || empty($nname['additional_name']))) {
-            unset($nname['additional_name']);
+        if (isset($nname['family_name']) && (is_null($nname['family_name']) || $nname['family_name'] == '' || empty($nname['family_name']))) {
+            unset($nname['family_name']);
         }
 
         $nname['image'] = $this->getKosovoHost . '/' . $data['KosovoMpsDetail']['image'];
