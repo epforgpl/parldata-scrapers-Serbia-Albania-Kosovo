@@ -7,7 +7,6 @@
 --
 
 
-USE scrapers_sak;
 
 CREATE TABLE albania_chambers (
   id int(11) NOT NULL AUTO_INCREMENT,

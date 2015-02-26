@@ -9,19 +9,19 @@
 
 SET NAMES 'utf8';
 
-INSERT INTO scrapers_sak.albania_chambers(id, uid, name, start_date, end_date, status, api, created, modified) VALUES
+INSERT INTO albania_chambers(id, uid, name, start_date, end_date, status, api, created, modified) VALUES
 (12, NULL, 'XII', '1991-04-15', '1992-02-04', 1, 1, '2015-02-10 22:52:55', '2015-02-12 01:47:18');
-INSERT INTO scrapers_sak.albania_chambers(id, uid, name, start_date, end_date, status, api, created, modified) VALUES
+INSERT INTO albania_chambers(id, uid, name, start_date, end_date, status, api, created, modified) VALUES
 (13, NULL, 'XIII', '1992-04-04', '1996-03-29', 1, 1, '2015-02-10 22:52:55', '2015-02-12 01:47:18');
-INSERT INTO scrapers_sak.albania_chambers(id, uid, name, start_date, end_date, status, api, created, modified) VALUES
+INSERT INTO albania_chambers(id, uid, name, start_date, end_date, status, api, created, modified) VALUES
 (14, NULL, 'XIV', '1996-07-01', '1997-05-15', 1, 1, '2015-02-10 22:52:55', '2015-02-12 01:47:18');
-INSERT INTO scrapers_sak.albania_chambers(id, uid, name, start_date, end_date, status, api, created, modified) VALUES
+INSERT INTO albania_chambers(id, uid, name, start_date, end_date, status, api, created, modified) VALUES
 (15, NULL, 'XV', '1997-07-23', '2001-05-17', 1, 1, '2015-02-10 22:52:55', '2015-02-12 01:47:18');
-INSERT INTO scrapers_sak.albania_chambers(id, uid, name, start_date, end_date, status, api, created, modified) VALUES
+INSERT INTO albania_chambers(id, uid, name, start_date, end_date, status, api, created, modified) VALUES
 (16, NULL, 'XVI', '2001-09-03', '2005-07-03', 1, 1, '2015-02-10 22:52:55', '2015-02-12 01:47:18');
-INSERT INTO scrapers_sak.albania_chambers(id, uid, name, start_date, end_date, status, api, created, modified) VALUES
+INSERT INTO albania_chambers(id, uid, name, start_date, end_date, status, api, created, modified) VALUES
 (17, NULL, 'XVII', '2005-07-03', '2009-06-28', 1, 1, '2015-02-10 22:52:55', '2015-02-12 01:47:18');
-INSERT INTO scrapers_sak.albania_chambers(id, uid, name, start_date, end_date, status, api, created, modified) VALUES
+INSERT INTO albania_chambers(id, uid, name, start_date, end_date, status, api, created, modified) VALUES
 (18, NULL, 'XVIII', '2009-06-28', '2013-06-23', 1, 1, '2015-02-10 22:53:21', '2015-02-12 01:47:18');
-INSERT INTO scrapers_sak.albania_chambers(id, uid, name, start_date, end_date, status, api, created, modified) VALUES
+INSERT INTO albania_chambers(id, uid, name, start_date, end_date, status, api, created, modified) VALUES
 (19, 20230, 'XIX', '2013-06-23', NULL, 1, 1, '2015-02-10 22:52:55', '2015-02-17 02:38:07');

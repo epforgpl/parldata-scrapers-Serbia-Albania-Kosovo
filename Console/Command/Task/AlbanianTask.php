@@ -94,8 +94,7 @@ class AlbanianTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'check_mps_contacts',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Albanian'
         );
     }
@@ -170,8 +169,7 @@ class AlbanianTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'get_mps_details_from_index',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Albanian'
         );
     }
@@ -236,8 +234,7 @@ class AlbanianTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'get_deputed',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Albanian'
         );
     }
@@ -286,8 +283,7 @@ class AlbanianTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'get_index',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Albanian'
         );
     }
@@ -336,8 +332,7 @@ class AlbanianTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'get_vote_index',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Albanian'
         );
     }
@@ -392,8 +387,7 @@ class AlbanianTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'get_mps_index',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Albanian'
         );
     }
@@ -442,8 +436,7 @@ class AlbanianTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'get_doc_from_link',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Albanian'
         );
     }
@@ -575,8 +568,7 @@ class AlbanianTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'albania_combine_to_quelle',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Albanian'
         );
         //////
@@ -692,8 +684,7 @@ class AlbanianTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'albania_send_to_quelle',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Albanian'
         );
     }

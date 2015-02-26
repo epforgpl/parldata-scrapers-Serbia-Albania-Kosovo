@@ -113,8 +113,7 @@ class SerbianTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'get_party_data',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Serbian'
         );
     }
@@ -186,8 +185,7 @@ class SerbianTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'check_mps_contacts',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Serbian'
         );
     }
@@ -263,8 +261,7 @@ class SerbianTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'get_mps_table_delegates',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Serbian'
         );
     }
@@ -306,8 +303,7 @@ class SerbianTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'get_mps_menu',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Serbian'
         );
     }
@@ -413,8 +409,7 @@ class SerbianTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'get_mps_tables',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Serbian'
         );
     }
@@ -491,8 +486,7 @@ class SerbianTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'get_index',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Serbian'
         );
     }
@@ -653,8 +647,7 @@ class SerbianTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'get_content',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Serbian'
         );
     }
@@ -732,8 +725,7 @@ class SerbianTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'combine_pdfs',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Serbian'
         );
     }
@@ -1181,8 +1173,7 @@ class SerbianTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'serbia_combine_to_quelle',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Serbian'
         );
     }
@@ -1295,8 +1286,7 @@ class SerbianTask extends Shell {
                 array(
             'id' => time() . '_' . rand(4, 99999),
             'label' => 'serbia_combine_to_quelle',
-            'status' => 'finished',
-            'params' => explode("\n", $toLog)
+            'status' => 'finished'
                 ), 'Serbian'
         );
     }
