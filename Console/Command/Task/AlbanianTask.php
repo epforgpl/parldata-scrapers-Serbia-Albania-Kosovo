@@ -253,6 +253,7 @@ class AlbanianTask extends Shell {
 
         $link = 'http://www.parlament.al/web/Procesverbalet_e_Seancave_Plenare_te_Kuvendit_Legjislatura_XVIII_6643_1.php';
         $content = $this->Albania->getMenuListFromLink($link);
+        print_r($content);
         if ($content) {
             foreach ($content as $c) {
                 $check = $this->AlbaniaSpeecheIndex->findByUrl($c['url']);
@@ -264,9 +265,16 @@ class AlbanianTask extends Shell {
                         $toLog .= $info . "\n";
                     }
                 } else {
-                    $info = 'exists, nothing changed | postDate: ' . $c['post_date'];
-                    $this->out($info);
-                    $toLog .= $info . "\n";
+                    $this->AlbaniaSpeecheIndex->id = $check['AlbaniaSpeecheIndex']['id'];
+                    if ($this->AlbaniaSpeecheIndex->save($c)) {
+                        $info = 'update new index | postDate: ' . $c['post_date'];
+                        $this->out($info);
+                        $toLog .= $info . "\n";
+                    } else {
+                        $info = 'exists, nothing changed | postDate: ' . $c['post_date'];
+                        $this->out($info);
+                        $toLog .= $info . "\n";
+                    }
                 }
             }
 //            // $this->KosovoSpeecheContent->saveAll($content);
@@ -535,6 +543,11 @@ class AlbanianTask extends Shell {
         $content = $this->AlbaniaDoc->find('all', array(
             'conditions' => array(
                 'AlbaniaDoc.status' => 0
+            ),
+            'contain' => array(
+                'AlbaniaSpeecheIndex' => array(
+                    'AlbaniaSpecheSession'
+                )
             ),
             'order' => 'AlbaniaDoc.id ASC',
             'limit' => 10

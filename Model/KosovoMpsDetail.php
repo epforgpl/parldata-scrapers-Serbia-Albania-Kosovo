@@ -22,28 +22,10 @@ class KosovoMpsDetail extends AppModel {
     public function combineToApiArray($data) {
 
         $name = trim($data['KosovoMpsDetail']['name']);
-        $nname['id'] = 'mp_' . $data['KosovoMpsIndex']['kosovo_mps_menu_id'] . '_' . $this->toCamelCase($name);
-
-        $nname['name'] = $name;
-        $name = preg_replace('/\s\-\s/', '-', $name);
-        $name = explode(' ', $name);
-        $name = array_values($name);
-
-        $nname['given_name'] = array_shift($name);
-
-        if (count($name) > 0) {
-            $nname['family_name'] = null;
-            foreach ($name as $nn) {
-                $nname['family_name'] .= ' ' . $nn;
-            }
-            $nname['family_name'] = trim($nname['family_name']);
+        $nname = $this->combineKosovoPeopleName($name);
+        if (!empty($data['KosovoMpsDetail']['image'])) {
+            $nname['image'] = $this->getKosovoHost . '/' . $data['KosovoMpsDetail']['image'];
         }
-
-        if (isset($nname['family_name']) && (is_null($nname['family_name']) || $nname['family_name'] == '' || empty($nname['family_name']))) {
-            unset($nname['family_name']);
-        }
-
-        $nname['image'] = $this->getKosovoHost . '/' . $data['KosovoMpsDetail']['image'];
         if (isset($data['KosovoMpsPersonalData']) && !empty($data['KosovoMpsPersonalData'])) {
 
             foreach ($data['KosovoMpsPersonalData'] as $d) {
@@ -73,6 +55,11 @@ class KosovoMpsDetail extends AppModel {
                     'url' => $this->getKosovoHost . '/' . $data['KosovoMpsIndex']['url'],
                 )
             );
+        }
+        if (!empty($data['KosovoMpsIndex']['start_date'])) {
+//            $nname['effective_date'] = $this->toApiDate($data['KosovoMpsIndex']['start_date']);
+//            $nname['effective_date'] = $data['KosovoMpsIndex']['start_date'];
+//            $nname['effective_date'] = $data['KosovoMpsIndex']['start_date'];
         }
 
         return array('people' => $nname);

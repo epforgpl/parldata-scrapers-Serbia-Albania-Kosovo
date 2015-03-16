@@ -135,6 +135,11 @@ class AlbaniaDoc extends AppModel {
                     $data[$key]['speeches']['event_id'] = 'event_' . $this->eventId;
                     $data[$key]['speeches']['attribution_text'] = $speaker['attribution_text'];
                     $data[$key]['speeches']['creator_id'] = $this->checkAlbaniaPeopleExist($speaker['attribution_text']);
+                    $data[$key]['speeches']['sources'] = array(
+                        array(
+                            'url' => $content['AlbaniaSpeecheIndex']['url'],
+                        )
+                    );
                 } else {
                     $data[$key]['speeches']['id'] = $this->eventId . '-' . $key;
                     $data[$key]['speeches']['type'] = 'narrative';
@@ -142,33 +147,50 @@ class AlbaniaDoc extends AppModel {
                     $data[$key]['speeches']['date'] = $date;
                     $data[$key]['speeches']['position'] = $key;
                     $data[$key]['speeches']['event_id'] = 'event_' . $this->eventId;
+                    $data[$key]['speeches']['sources'] = array(
+                        array(
+                            'url' => $content['AlbaniaSpeecheIndex']['url'],
+                        )
+                    );
                 }
             }
         }
 
 
-        $data[]['events'] = array(
-            'id' => 'event_' . $this->eventId,
-            'organization_id' => $organization_id,
-            'start_date' => $date,
-            'sources' => array(
-                array(
-                    'url' => $content['AlbaniaSpeecheIndex']['url']
-                )
-            ),
+        $events['events']['id'] = 'event_' . $this->eventId;
+        $events['events']['organization_id'] = $organization_id;
+        $events['events']['start_date'] = $date;
+        $events['events']['sources'][] = array(
+            'url' => $content['AlbaniaSpeecheIndex']['url']
         );
-        if (isset($tlogs) && count($tlogs)) {
-            foreach ($tlogs as $tl) {
-                foreach ($tl as $t) {
-//                    $data[]['logs'] = array(
-//                        'id' => 'events_' . $content['SerbianSpeecheIndex']['post_uid'] . '_' . time() . '_' . rand(0, 999),
-//                        'label' => 'remove: ' . trim(strip_tags($t)),
-//                        'status' => 'finished',
-////                        'params' => $t
-//                    );
-                }
-            }
+        if (isset($content['AlbaniaSpeecheIndex']['AlbaniaSpecheSession']['id']) && !empty($content['AlbaniaSpeecheIndex']['AlbaniaSpecheSession']['id'])) {
+            $session_id = $organization_id . '-' . $content['AlbaniaSpeecheIndex']['AlbaniaSpecheSession']['id'];
+            $events['events']['type'] = 'sitting';
+            $events['events']['parent_id'] = $session_id;
+
+            $sessions['events']['id'] = $session_id;
+            $sessions['events']['organization_id'] = $organization_id;
+            $sessions['events']['name'] = $content['AlbaniaSpeecheIndex']['AlbaniaSpecheSession']['name'];
+            $sessions['events']['type'] = 'session';
+            $sessions['events']['sources'][] = array(
+                'url' => $content['AlbaniaSpeecheIndex']['AlbaniaSpecheSession']['url']
+            );
+            $data[] = $sessions;
         }
+
+        $data[] = $events;
+//        if (isset($tlogs) && count($tlogs)) {
+//            foreach ($tlogs as $tl) {
+//                foreach ($tl as $t) {
+////                    $data[]['logs'] = array(
+////                        'id' => 'events_' . $content['SerbianSpeecheIndex']['post_uid'] . '_' . time() . '_' . rand(0, 999),
+////                        'label' => 'remove: ' . trim(strip_tags($t)),
+////                        'status' => 'finished',
+//////                        'params' => $t
+////                    );
+//                }
+//            }
+//        }
         return $data;
     }
 

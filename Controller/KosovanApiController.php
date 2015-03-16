@@ -60,9 +60,10 @@ class KosovanApiController extends AppController {
 //        $this->KosovoMpsDetail->recursive = -1;
         $content = $this->KosovoMpsDetail->find('all', array(
             'conditions' => array(
-                'KosovoMpsDetail.status' => 0
+                'KosovoMpsDetail.status' => 0,
+//                'KosovoMpsIndex.kosovo_mps_menu_id' => 5
             ),
-//            'limit' => 1
+            'limit' => 100
         ));
         if ($content) {
             foreach ($content as $c) {
@@ -266,7 +267,7 @@ class KosovanApiController extends AppController {
         $ids = $this->getListQueleToSend('organizations', $limit);
         $info[] = 'organizations count: ' . count($ids);
         if (!$ids || count($ids) < $trinityLimit) {
-            $people = $this->getListQueleToSend('people', $trinityLimit);
+            $people = $this->getListQueleToSend('people', $trinityLimit, true);
             $info[] = 'people count: ' . count($people);
             $ids = array_merge($ids, $people);
         }
@@ -362,8 +363,9 @@ class KosovanApiController extends AppController {
         $this->set(compact('content', 'combine'));
     }
 
-    public function getListQueleToSend($type = null, $limit = null) {
+    public function getListQueleToSend($type = null, $limit = null, $order = false) {
         $limit = !is_null($limit) && (int) $limit ? $limit : 100;
+        $orders = $order ? 'QueleToSend.id DESC' : 'QueleToSend.modified DESC';
         if (!is_null($type)) {
             return $this->QueleToSend->find('list', array(
                         'fielsd' => array('id', 'id'),
@@ -371,10 +373,10 @@ class KosovanApiController extends AppController {
                             'direct' => 'Kosovan',
                             'type' => $type, //organizations //people
                             'status' => 0,
-                            'hints <' => 1000,
-                        // 'modified <' => CakeTime::format('-' . 30 . ' minutes', '%Y-%m-%d %H:%M:%S')
+                            'hints <' => 100,
+//                            'modified <' => CakeTime::format('-' . 30 . ' minutes', '%Y-%m-%d %H:%M:%S')
                         ),
-                        'orders' => 'modified DESC',
+                        'orders' => $orders,
                         'limit' => $limit
             ));
         }

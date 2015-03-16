@@ -59,6 +59,9 @@ class KosovoParty extends AppModel {
                 if (!empty($mp['KosovoMpsIndex']['end_date'])) {
                     $party[$i]['memberships']['end_date'] = $mp['KosovoMpsIndex']['end_date'];
                 }
+                $party[$i]['memberships']['sources'][] = array(
+                    'url' => $this->getKosovoHost . '/' . $mp['KosovoMpsIndex']['url'],
+                );
                 $party[$l]['organizations']['sources'][] = array(
                     'url' => $this->getKosovoHost . '/' . $mp['KosovoMpsIndex']['url'],
                 );

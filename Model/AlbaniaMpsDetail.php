@@ -5,24 +5,7 @@ class AlbaniaMpsDetail extends AppModel {
     public function combineToApiArray($data) {
 
         $name = trim($data['AlbaniaMpsDetail']['name']);
-        $nname['people']['id'] = 'mp_' . $this->toCamelCase($name);
-
-
-        $name = preg_replace('/\s\-\s/', '-', $name);
-        $name = preg_replace('/\,/', '', $name);
-        $name = preg_replace('/\s+/', ' ', $name);
-        $tmpName = explode(' ', $name);
-        $familyName = $this->toCamelCase(array_shift($tmpName));
-        $givenName = null;
-        if (count($tmpName) && is_array($tmpName)) {
-            foreach ($tmpName as $tn) {
-                $givenName .= ' ' . $tn;
-            }
-        }
-        $givenName = trim($givenName);
-        $nname['people']['name'] = $givenName . ' ' . $familyName;
-        $nname['people']['given_name'] = $givenName;
-        $nname['people']['family_name'] = trim($familyName);
+        $nname['people'] = $this->combineAlbaniaPeopleName($name);
         $nname['people']['image'] = $data['AlbaniaMpsDetail']['image'];
         if (!empty($data['AlbaniaMpsDetail']['year_of_birth'])) {
             $nname['people']['birth_date'] = $data['AlbaniaMpsDetail']['year_of_birth'];
@@ -78,11 +61,16 @@ class AlbaniaMpsDetail extends AppModel {
                 $g['organizations']['id'] = $groupId;
                 $g['organizations']['name'] = $group['name'];
                 $g['organizations']['classification'] = 'parliamentary_group';
-
+                if (isset($nname['people']['sources'])) {
+                    $g['organizations']['sources'] = $nname['people']['sources'];
+                }
                 $m['memberships']['id'] = $groupId . '-' . $nname['people']['id'];
                 $m['memberships']['label'] = 'MP';
                 $m['memberships']['person_id'] = $nname['people']['id'];
                 $m['memberships']['organization_id'] = $groupId;
+                if (isset($nname['people']['sources'])) {
+                    $m['memberships']['sources'] = $nname['people']['sources'];
+                }
                 $toSend['organizations'][] = $g;
                 $toSend['memberships'][] = $m;
             }
@@ -94,11 +82,17 @@ class AlbaniaMpsDetail extends AppModel {
                     $g['organizations']['id'] = $comId;
                     $g['organizations']['name'] = $com['name'];
                     $g['organizations']['classification'] = 'committee';
+                    if (isset($nname['people']['sources'])) {
+                        $g['organizations']['sources'] = $nname['people']['sources'];
+                    }
 
                     $m['memberships']['id'] = $comId . '-' . $nname['people']['id'];
                     $m['memberships']['label'] = 'MP';
                     $m['memberships']['person_id'] = $nname['people']['id'];
                     $m['memberships']['organization_id'] = $comId;
+                    if (isset($nname['people']['sources'])) {
+                        $m['memberships']['sources'] = $nname['people']['sources'];
+                    }
                     $toSend['organizations'][] = $g;
                     $toSend['memberships'][] = $m;
                 }
@@ -121,11 +115,17 @@ class AlbaniaMpsDetail extends AppModel {
                             if (!empty($ch['AlbaniaChamber']['end_date'])) {
                                 $m['memberships']['end_date'] = $ch['AlbaniaChamber']['end_date'];
                             }
+                            if (isset($nname['people']['sources'])) {
+                                $m['memberships']['sources'] = $nname['people']['sources'];
+                            }
                         } else {
                             $m['memberships']['id'] = $ch . '-' . $nname['people']['id'];
                             $m['memberships']['label'] = 'Deputet';
                             $m['memberships']['person_id'] = $nname['people']['id'];
                             $m['memberships']['organization_id'] = $ch;
+                            if (isset($nname['people']['sources'])) {
+                                $m['memberships']['sources'] = $nname['people']['sources'];
+                            }
                         }
                         $toSend['memberships'][] = $m;
                     }
@@ -141,6 +141,9 @@ class AlbaniaMpsDetail extends AppModel {
                         $g['organizations']['id'] = $prId;
                         $g['organizations']['name'] = $pr['name'];
                         $g['organizations']['classification'] = 'party';
+                        if (isset($nname['people']['sources'])) {
+                            $g['organizations']['sources'] = $nname['people']['sources'];
+                        }
 
                         $m['memberships']['id'] = $prId . '-' . $nname['people']['id'];
                         $m['memberships']['label'] = $pr['label'];
@@ -151,6 +154,9 @@ class AlbaniaMpsDetail extends AppModel {
                         }
                         if (isset($pr['end_date']) && !empty($pr['end_date'])) {
                             $m['memberships']['end_date'] = $pr['end_date'];
+                        }
+                        if (isset($nname['people']['sources'])) {
+                            $m['memberships']['sources'] = $nname['people']['sources'];
                         }
                         $toSend['organizations'][] = $g;
                         $toSend['memberships'][] = $m;

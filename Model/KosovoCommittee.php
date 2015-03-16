@@ -38,11 +38,13 @@ class KosovoCommittee extends AppModel {
         $committee[$i]['organizations']['id'] = $committeeId;
         $committee[$i]['organizations']['name'] = $content['KosovoCommittee']['name'];
         $committee[$i]['organizations']['classification'] = 'committee';
-        $committee[$i]['organizations']['sources'] = array(
-            array(
-                'url' => $this->getKosovoHost . '/' . $content['KosovoCommittee']['url'],
-            )
-        );
+        if (!empty($content['KosovoCommittee']['url'])) {
+            $committee[$i]['organizations']['sources'] = array(
+                array(
+                    'url' => $this->getKosovoHost . '/' . trim($content['KosovoCommittee']['url']),
+                )
+            );
+        }
 //
         if (isset($content['KosovoMpsDetail']) && !empty($content['KosovoMpsDetail'])) {
             foreach ($content['KosovoMpsDetail'] as $key => $mp) {
@@ -66,7 +68,16 @@ class KosovoCommittee extends AppModel {
                 if (!empty($mp['KosovoMpsIndex']['end_date'])) {
                     $committee[$i]['memberships']['end_date'] = $mp['KosovoMpsIndex']['end_date'];
                 }
-//                break;
+                if (!empty($content['KosovoCommittee']['url'])) {
+                    $committee[$i]['memberships']['sources'][] = array(
+                        'url' => $this->getKosovoHost . '/' . trim($content['KosovoCommittee']['url']),
+                    );
+                }
+                if (!empty($mp['KosovoMpsIndex']['url'])) {
+                    $committee[$i]['memberships']['sources'][] = array(
+                        'url' => $this->getKosovoHost . '/' . trim($mp['KosovoMpsIndex']['url']),
+                    );
+                }
             }
         }
         return $committee;

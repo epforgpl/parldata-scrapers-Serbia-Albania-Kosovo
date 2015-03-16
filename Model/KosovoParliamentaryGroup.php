@@ -35,11 +35,13 @@ class KosovoParliamentaryGroup extends AppModel {
         $group[$i]['organizations']['id'] = $groupId;
         $group[$i]['organizations']['name'] = $content['KosovoParliamentaryGroup']['name'];
         $group[$i]['organizations']['classification'] = 'parliamentary_group';
-        $group[$i]['organizations']['sources'] = array(
-            array(
-                'url' => $this->getKosovoHost . '/' . $content['KosovoParliamentaryGroup']['url'],
-            )
-        );
+        if (!empty($content['KosovoParliamentaryGroup']['url'])) {
+            $group[$i]['organizations']['sources'] = array(
+                array(
+                    'url' => $this->getKosovoHost . '/' . trim($content['KosovoParliamentaryGroup']['url']),
+                )
+            );
+        }
 
         if (isset($content['KosovoMpsDetail']) && !empty($content['KosovoMpsDetail'])) {
             foreach ($content['KosovoMpsDetail'] as $key => $mp) {
@@ -56,7 +58,16 @@ class KosovoParliamentaryGroup extends AppModel {
                 if (!empty($mp['KosovoMpsIndex']['end_date'])) {
                     $group[$i]['memberships']['end_date'] = $mp['KosovoMpsIndex']['end_date'];
                 }
-//                break;
+                if (!empty($content['KosovoParliamentaryGroup']['url'])) {
+                    $group[$i]['memberships']['sources'][] = array(
+                        'url' => $this->getKosovoHost . '/' . trim($content['KosovoParliamentaryGroup']['url']),
+                    );
+                }
+                if (!empty($mp['KosovoMpsIndex']['url'])) {
+                    $group[$i]['memberships']['sources'][] = array(
+                        'url' => $this->getKosovoHost . '/' . trim($mp['KosovoMpsIndex']['url']),
+                    );
+                }
             }
         }
         return $group;

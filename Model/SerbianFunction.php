@@ -48,12 +48,21 @@ class SerbianFunction extends AppModel {
                 $group[$i]['memberships']['id'] = $chamber . '-speaker-' . $person;
                 $group[$i]['memberships']['organization_id'] = $chamber . '-' . $type;
                 $group[$i]['memberships']['person_id'] = $person;
-//                $group['toMemberships'][$key]['memberships']['all'] = $mp;
+                $group[$i]['memberships']['sources'] = array(
+                    array(
+                        'url' => 'http://www.parlament.gov.rs/national-assembly/composition/members-of-parliament.' . $mp['id'] . '.245.html',
+                    )
+                );
 
                 $group[$i]['organizations']['id'] = $chamber . '-' . $type;
                 $group[$i]['organizations']['classification'] = $classification;
                 $group[$i]['organizations']['parent_id'] = $chamber;
                 $group[$i]['organizations']['name'] = $content['SerbianFunction']['name'];
+                $group[$i]['organizations']['sources'] = array(
+                    array(
+                        'url' => 'http://www.parlament.gov.rs/national-assembly/composition/members-of-parliament.' . $mp['id'] . '.245.html',
+                    )
+                );
             }
         }
 

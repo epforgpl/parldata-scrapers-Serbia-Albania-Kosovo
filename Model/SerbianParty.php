@@ -167,6 +167,11 @@ class SerbianParty extends AppModel {
                 $party[$i]['memberships']['label'] = 'MP';
                 $party[$i]['memberships']['person_id'] = $person;
                 $party[$i]['memberships']['organization_id'] = $partyId;
+                $party[$i]['memberships']['sources'] = array(
+                    array(
+                        'url' => 'http://www.parlament.gov.rs/national-assembly/composition/members-of-parliament.' . $mp['id'] . '.245.html',
+                    )
+                );
             }
         }
         return $party;

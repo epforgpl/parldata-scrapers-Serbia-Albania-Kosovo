@@ -130,6 +130,11 @@ class KosovoPdf extends AppModel {
                     $data[$key]['speeches']['creator_id'] = $speaker['attribution_text'];
                     $data[$key]['speeches']['role'] = $speaker['role'];
                     $data[$key]['speeches']['title'] = $content['KosovoSpeecheContent']['title'];
+                    if (!empty($content['KosovoPdf']['pdf_url'])) {
+                        $data[$key]['speeches']['sources'][] = array(
+                            'url' => $this->getKosovoHost . trim($content['KosovoPdf']['pdf_url']),
+                        );
+                    }
                 } else {
                     $data[$key]['speeches']['id'] = $content['KosovoSpeecheContent']['kosovo_speeche_index_id'] . '-' . $key;
                     $data[$key]['speeches']['type'] = 'narrative';
@@ -137,6 +142,11 @@ class KosovoPdf extends AppModel {
                     $data[$key]['speeches']['date'] = $date;
                     $data[$key]['speeches']['position'] = $key;
                     $data[$key]['speeches']['event_id'] = 'event_' . $content['KosovoSpeecheContent']['kosovo_speeche_index_id'];
+                    if (!empty($content['KosovoPdf']['pdf_url'])) {
+                        $data[$key]['speeches']['sources'][] = array(
+                            'url' => $this->getKosovoHost . trim($content['KosovoPdf']['pdf_url']),
+                        );
+                    }
                 }
             }
         }

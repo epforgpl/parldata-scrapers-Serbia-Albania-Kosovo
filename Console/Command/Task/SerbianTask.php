@@ -1045,7 +1045,7 @@ class SerbianTask extends Shell {
             // 'SerbianDelegate.url_uid' => null
             ),
             'contain' => array(
-                'SerbianMenuData.start_date'
+                'SerbianMenuData'
             ),
 //            'limit' => 100
         ));
@@ -1113,7 +1113,7 @@ class SerbianTask extends Shell {
         $this->out($info);
         $toLog .= $info . "\n";
 
-        ;
+
         ////////////////votes
         $info = CakeTime::toServer(time()) . ' Serbia votes start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);

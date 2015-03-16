@@ -38,8 +38,8 @@ class AppModel extends Model {
     public $getKosovoHost = 'http://www.kuvendikosoves.org';
     public $enableProxy = 0;
     public $proxyServer = array(
-        'ip' => 'w3cache.tpnet.pl',
-        'port' => '8080'
+        'ip' => '117.170.40.247',
+        'port' => '8123'
     );
     public $pdfUrl;
 
@@ -150,6 +150,30 @@ class AppModel extends Model {
         return $result;
     }
 
+    public function toNameCamelCase($result) {
+        $result = preg_replace('/\s+|:|\.|\,|\-|\(|\)|\"/i', " ", $result);
+        $result = trim(mb_convert_case(mb_strtolower($result), MB_CASE_TITLE, "UTF-8"));
+        return $result;
+    }
+
+    public function toLatinCamelCase($result) {
+        $result = preg_replace('/\s+|:|\.|\,|\-|\(|\)|\"/i', " ", $result);
+        $result = trim(mb_convert_case(mb_strtolower($result), MB_CASE_TITLE, "UTF-8"));
+        $result = preg_replace('/\s/i', "", $result); //to CamelCase
+        return $this->convertCyrToLat($result);
+    }
+
+    function convertCyrToLat($textcyr) {
+        $cyr = array('а', 'б', 'в', 'г', 'д', 'e', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у',
+            'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ь', 'ю', 'я', 'ђ', 'ћ', 'љ', 'њ', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У',
+            'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ь', 'Ю', 'Я', 'Ђ', 'Ћ', 'Љ', 'Њ');
+        $lat = array('a', 'b', 'v', 'g', 'd', 'e', 'zh', 'z', 'i', 'y', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'u',
+            'f', 'h', 'ts', 'ch', 'sh', 'sht', 'a', 'y', 'yu', 'ya', 'gj', 'c', 'lj', 'nj', 'A', 'B', 'V', 'G', 'D', 'E', 'Zh',
+            'Z', 'I', 'Y', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U',
+            'F', 'H', 'Ts', 'Ch', 'Sh', 'Sht', 'A', 'Y', 'Yu', 'Ya', 'Dj', 'C', 'Lj', 'Nj');
+        return str_replace($cyr, $lat, $textcyr);
+    }
+
     public function toApiDate($date) {
         $date = CakeTime::toAtom($date);
         return preg_replace('/Z/', '', $date);
@@ -256,8 +280,8 @@ class AppModel extends Model {
         if ($checkName) {
             return 'mp_' . $this->toCamelCase($checkName);
         } else {
-            $newId = 'mp_' . $this->toCamelCase($name);
-            $data[]['people']['id'] = $newId;
+
+            $data['people'] = $this->combineAlbaniaPeopleName($name);
 //            $data[]['logs'] = array(
 //                'id' => 'people_' . $newId . '_people_' . $newId . '_' . time() . '_' . rand(0, 999),
 //                'label' => 'not found: ' . $newId,
@@ -266,9 +290,30 @@ class AppModel extends Model {
 //            );
             App::import('Model', 'QueleToSend');
             $this->QueleToSend = new QueleToSend();
-            $this->QueleToSend->putDataDB($data, 'Albanian', false);
-            return $newId;
+            $this->QueleToSend->putDataDB(array($data), 'Albanian', false);
+            return $data['people']['id'];
         }
+    }
+
+    public function combineAlbaniaPeopleName($name) {
+        $nname['id'] = 'mp_' . $this->toCamelCase($name);
+        $name = preg_replace('/\s\-\s/', '-', $name);
+        $name = preg_replace('/\,/', '', $name);
+        $name = preg_replace('/\s+/', ' ', $name);
+        $tmpName = explode(' ', $name);
+        $familyName = $this->toCamelCase(array_shift($tmpName));
+        $givenName = null;
+        if (count($tmpName) && is_array($tmpName)) {
+            foreach ($tmpName as $tn) {
+                $givenName .= ' ' . $tn;
+            }
+        }
+        $givenName = trim($givenName);
+        $nname['name'] = $givenName . ' ' . $familyName;
+        $nname['given_name'] = $givenName;
+        $nname['family_name'] = trim($familyName);
+        $nname['sort_name'] = $nname['family_name'] . ' ' . $nname['given_name'];
+        return $nname;
     }
 
     public function checkPeopleExist($name) {
@@ -286,10 +331,10 @@ class AppModel extends Model {
                 'SerbianMpsDetail.name', $conditions
         );
         if ($checkName) {
-            return 'mp_' . $this->toCamelCase($checkName);
+            return 'mp_' . $this->toLatinCamelCase($checkName);
         } else {
-            $newId = 'mp_' . $this->toCamelCase($name);
-            $data[]['people']['id'] = $newId;
+            $data['people'] = $this->combineSerbianPeopleName($name);
+//            pr($data);
 //            $data[]['logs'] = array(
 //                'id' => 'people_' . $newId . '_voteId_' . $this->voteId . '_' . time() . '_' . rand(0, 999),
 //                'label' => 'not found: ' . $newId,
@@ -298,9 +343,101 @@ class AppModel extends Model {
 //            );
             App::import('Model', 'QueleToSend');
             $this->QueleToSend = new QueleToSend();
-            $this->QueleToSend->putDataDB($data, 'Serbian', false);
-            return $newId;
+            $this->QueleToSend->putDataDB(array($data), 'Serbian', false);
+            return $data['people']['id'];
         }
+    }
+
+    public function combineSerbianPeopleName($name) {
+        $nname['id'] = 'mp_' . $this->toLatinCamelCase($name);
+        $nname['name'] = $this->toNameCamelCase($name);
+        $name = preg_replace('/\s\-\s/', '-', $name);
+        $find_table = array(
+            '/ ДОЦ. ДР /',
+            '/ Проф. Др /',
+            '/ проф. др /',
+            '/ ПРОФ. ДР /',
+            '/ ДР /',
+            '/ Др /',
+            '/ др /',
+            '/ МР /',
+            '/ Мр /',
+            '/ мр /'
+        );
+
+        $replace_table = array(
+            ' dd ',
+            ' pd ',
+            ' pd ',
+            ' pd ',
+            ' dr ',
+            ' dr ',
+            ' dr ',
+            ' mgr ',
+            ' mgr ',
+            ' mgr ',
+        );
+
+        $honorific_prefix = array(
+            'dd' => 'Доц. Др',
+            'pd' => 'Проф. Др',
+            'dr' => 'Др',
+            'dr' => 'Мр',
+        );
+        $name = preg_replace($find_table, $replace_table, $name);
+        $name = explode(' ', $name);
+        foreach ($name as $key => $nn) {
+            if (array_key_exists($nn, $honorific_prefix)) {
+                $nname['honorific_prefix'] = $honorific_prefix[$nn];
+                unset($name[$key]);
+            }
+        }
+        $name = array_values($name);
+//        if (count($name) == 2) {
+//            $nname['given_name'] = $name[0];
+//            //  $nname['last_name'] = $name[1];
+//        } else {
+        $nname['given_name'] = array_shift($name);
+        $nname['given_name'] = trim($this->toNameCamelCase($nname['given_name']));
+//        $nname['last_name'] = array_pop($name);
+        $formulaCombineName = '/\(.*?(\))/msxi';
+        if (count($name) > 0) {
+            $nname['family_name'] = null;
+            foreach ($name as $nn) {
+                $nname['family_name'] .= ' ' . $nn;
+            }
+            if (preg_match($formulaCombineName, $nname['family_name'], $matches)) {
+                $result = reset($matches);
+                $newname = $result;
+            }
+            $tmp_family_name = $nname['family_name'];
+            $nname['family_name'] = trim($this->toNameCamelCase($nname['family_name']));
+        }
+//        }
+        if (isset($nname['family_name']) && (is_null($nname['family_name']) || $nname['family_name'] == '' || empty($nname['family_name']))) {
+            unset($nname['family_name']);
+        }
+
+        if (isset($newname) && !empty($newname)) {
+            $tmp_family_name = isset($tmp_family_name) ? preg_replace($formulaCombineName, '', trim($tmp_family_name)) : '';
+            $nname['identifiers'][] = array(
+                'scheme' => 'latin_name',
+                'identifier' => $nname['given_name'] . (isset($tmp_family_name) ? ' ' . trim($this->toNameCamelCase($tmp_family_name)) : '')
+            );
+            $tempname = preg_replace('/\(|\)|\s\s+/', '', trim($newname));
+            $tempname = explode(' ', $tempname);
+            $nname['given_name'] = array_shift($tempname);
+            $nname['given_name'] = trim($this->toNameCamelCase($nname['given_name']));
+            if (count($tempname) > 0) {
+                $nname['family_name'] = null;
+                foreach ($tempname as $nn) {
+                    $nname['family_name'] .= ' ' . $nn;
+                }
+                $nname['family_name'] = trim($this->toNameCamelCase($nname['family_name']));
+            }
+        }
+        $nname['sort_name'] = (isset($nname['family_name']) ? $nname['family_name'] : '') . ' ' . $nname['given_name'];
+        return $nname;
     }
 
     public function checkKosovoPeopleExist($name, $menuId) {
@@ -311,7 +448,7 @@ class AppModel extends Model {
             $cond[] = array('KosovoMpsIndex.name LIKE' => '%' . $na . '%');
         }
         $conditions[] = array('AND' => $cond);
-        $conditions[] = array('KosovoMpsIndex.kosovo_mps_menu_id' => $menuId);
+//        $conditions[] = array('KosovoMpsIndex.kosovo_mps_menu_id' => $menuId);
 
         App::import('Model', 'KosovoMpsIndex');
         $this->KosovoMpsIndex = new KosovoMpsIndex();
@@ -319,10 +456,9 @@ class AppModel extends Model {
                 'KosovoMpsIndex.name', $conditions
         );
         if ($checkName) {
-            return 'mp_' . $menuId . '_' . $this->toCamelCase($checkName);
+            return 'mp_' . $this->toCamelCase($checkName);
         } else {
-            $newId = 'mp_' . $menuId . '_' . $this->toCamelCase($name);
-            $data[]['people']['id'] = $newId;
+            $data['people'] = $this->combineKosovoPeopleName($name);
 //            $data[]['logs'] = array(
 //                'id' => 'people_' . $newId . '_voteId_' . $this->voteId . '_' . time() . '_' . rand(0, 999),
 //                'label' => 'not found: ' . $newId,
@@ -331,10 +467,30 @@ class AppModel extends Model {
 //            );
             App::import('Model', 'QueleToSend');
             $this->QueleToSend = new QueleToSend();
-            $this->QueleToSend->putDataDB($data, 'Kosovan', false);
-            pr($data);
-            return $newId;
+            $this->QueleToSend->putDataDB(array($data), 'Kosovan', false);
+            return $data['people']['id'];
         }
+    }
+
+    public function combineKosovoPeopleName($name) {
+        $nname['id'] = 'mp_' . $this->toCamelCase($name);
+        $nname['name'] = $name;
+        $name = preg_replace('/\s\-\s/', '-', $name);
+        $name = explode(' ', $name);
+        $name = array_values($name);
+        $nname['given_name'] = array_shift($name);
+        if (count($name) > 0) {
+            $nname['family_name'] = null;
+            foreach ($name as $nn) {
+                $nname['family_name'] .= ' ' . $nn;
+            }
+            $nname['family_name'] = trim($nname['family_name']);
+        }
+        if (isset($nname['family_name']) && (is_null($nname['family_name']) || $nname['family_name'] == '' || empty($nname['family_name']))) {
+            unset($nname['family_name']);
+        }
+        $nname['sort_name'] = (isset($nname['family_name']) ? $nname['family_name'] : '') . ' ' . $nname['given_name'];
+        return $nname;
     }
 
 //        public function checkKosovoPeopleExist($name, $menuId) {
@@ -448,23 +604,27 @@ class AppModel extends Model {
 
     public function kosovoTextRepir($data) {
         $find_table = array(
+            '/\&\#262\;/',
             '/\&\#263\;/',
             '/\&\#158\;/',
             '/\&\#154\;/',
             '/\&\#305\;/',
             '/\&\#287\;/',
             '/\&\#350\;/',
+            '/\&\#351\;/',
             '/\&\#273\;/',
             '/\s+/'
         );
 
         $replace_table = array(
+            'Ć',
             'ć',
             'ž',
             'š',
             'ı',
             'ğ',
             "Ş",
+            "ş",
             'đ',
             ' '
         );

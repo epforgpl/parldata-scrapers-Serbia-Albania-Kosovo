@@ -35,6 +35,11 @@ class SerbianCommitte extends AppModel {
         $group[$i]['organizations']['id'] = $valId;
         $group[$i]['organizations']['name'] = $content['SerbianCommitte']['name'];
         $group[$i]['organizations']['classification'] = 'committee';
+        $group[$i]['organizations']['sources'] = array(
+            array(
+                'url' => $this->getSerbiaHost . $content['SerbianCommitte']['url'],
+            )
+        );
         if (isset($content['SerbianMpsDetail']) && !empty($content['SerbianMpsDetail'])) {
             foreach ($content['SerbianMpsDetail'] as $key => $mp) {
                 $i++;
@@ -43,7 +48,14 @@ class SerbianCommitte extends AppModel {
                 $group[$i]['memberships']['label'] = 'MP';
                 $group[$i]['memberships']['person_id'] = $person;
                 $group[$i]['memberships']['organization_id'] = $valId;
-//                $group['toMemberships'][$key]['memberships']['all'] = $mp;
+                $group[$i]['memberships']['sources'] = array(
+                    array(
+                        'url' => $this->getSerbiaHost . $content['SerbianCommitte']['url'],
+                    ),
+                    array(
+                        'url' => 'http://www.parlament.gov.rs/national-assembly/composition/members-of-parliament.' . $mp['id'] . '.245.html',
+                    )
+                );
             }
         }
         return $group;
