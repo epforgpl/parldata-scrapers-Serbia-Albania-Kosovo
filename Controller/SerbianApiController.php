@@ -37,7 +37,7 @@ class SerbianApiController extends AppController {
         $this->SerbianMpsDetail->recursive = -1;
         $content = $this->SerbianMpsDetail->find('all', array(
             'conditions' => array('status' => 0),
-//            'limit' => 50
+//            'limit' => 1
         ));
         if ($content) {
             foreach ($content as $c) {
@@ -62,7 +62,7 @@ class SerbianApiController extends AppController {
         $content = $this->SerbianMenuData->find('all', array(
             //'fields' => array('id', 'id'),
             'conditions' => array('api' => 0),
-//            'limit' => 10
+//            'limit' => 1
         ));
         if ($content) {
             foreach ($content as $c) {
@@ -119,7 +119,7 @@ class SerbianApiController extends AppController {
                 'api' => 0,
             ),
 //            'recursive' => -1,
-//            'limit' => 2
+//            'limit' => 1
         ));
         if ($content) {
             foreach ($content as $c) {
@@ -145,7 +145,7 @@ class SerbianApiController extends AppController {
                 'api' => 0,
             ),
 //            'recursive' => -1,
-//            'limit' => 2
+//            'limit' => 1
         ));
         if ($content) {
             foreach ($content as $c) {
@@ -171,7 +171,7 @@ class SerbianApiController extends AppController {
                 'api' => 0,
             ),
 //            'recursive' => -1,
-//            'limit' => 2
+//            'limit' => 1
         ));
         if ($content) {
             foreach ($content as $c) {
@@ -197,7 +197,7 @@ class SerbianApiController extends AppController {
                 'api' => 0,
             ),
 //            'recursive' => -1,
-//            'limit' => 2
+//            'limit' => 1
         ));
         if ($content) {
             foreach ($content as $c) {
@@ -223,7 +223,7 @@ class SerbianApiController extends AppController {
 //                'api' => 0,
             ),
 //            'recursive' => -1,
-//            'limit' => 2
+//            'limit' => 1
         ));
         if ($content) {
             foreach ($content as $c) {
@@ -245,9 +245,9 @@ class SerbianApiController extends AppController {
             // 'SerbianDelegate.url_uid' => null
             ),
             'contain' => array(
-                'SerbianMenuData.start_date'
+                'SerbianMenuData'
             ),
-//            'limit' => 100
+//            'limit' => 1
         ));
 
         if ($content) {
@@ -276,7 +276,7 @@ class SerbianApiController extends AppController {
                 'SerbianSpeecheIndex.status' => 1
             ),
             'order' => 'post_uid DESC',
-//            'limit' => 50
+            'limit' => 100
         ));
 //        pr($content);
         if ($content) {
@@ -311,7 +311,7 @@ class SerbianApiController extends AppController {
                 'SerbianPdf.status' => 1
             ),
 //            'order' => 'post_uid DESC',
-            'limit' => 5
+            'limit' => 50
         ));
         if ($content) {
             foreach ($content as $c) {

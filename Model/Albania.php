@@ -78,35 +78,54 @@ class Albania extends AppModel {
         $formulaDivClass = '/<div\sclass="li_item_inner">.*?(<\/div>)/msxi';
 
         $ndata = $pagin = $list = array();
-        $HttpSocket = new HttpSocket();
+        $HttpSocket = new HttpSocket(array(
+            'timeout' => 1200
+        ));
         if ($this->enableProxy) {
             $HttpSocket->configProxy($this->proxyServer['ip'], $this->proxyServer['port']);
         }
         $page = $HttpSocket->get($linkMenu);
+
         if (preg_match_all($formulaDivClass, $page->body, $matches)) {
             $results = reset($matches);
+
             foreach ($results as $result) {
-                $ndata[] = $this->getUrl($result);
+                $session_url = $this->getUrl($result);
+                $ndata[] = array(
+                    'id' => $this->getUid($session_url),
+                    'name' => trim(strip_tags($result)),
+                    'url' => $session_url
+                );
             }
         }
 
         if (count($ndata)) {
-            // pr($ndata);
+            App::import('Model', 'AlbaniaSpecheSession');
+            $this->AlbaniaSpecheSession = new AlbaniaSpecheSession();
+
             foreach ($ndata as $nd) {
-                $p = $this->checkPagin($nd);
-                if (count($p) > 1) {
-                    foreach ($p as $l) {
-                        $pagin[] = $l;
+                if ($this->AlbaniaSpecheSession->save($nd)) {
+                    $p = $this->checkPagin($nd['url']);
+                    if (count($p) > 1) {
+                        foreach ($p as $l) {
+                            $pagin[] = array(
+                                'link' => $l,
+                                'session_id' => $nd['id']
+                            );
+                        }
+                    } else {
+                        $pagin[] = array(
+                            'link' => $nd['url'],
+                            'session_id' => $nd['id']
+                        );
                     }
-                } else {
-                    $pagin[] = $nd;
                 }
             }
         }
 
         if (count($pagin)) {
             foreach ($pagin as $d) {
-                $pd = $this->getPaginPage($d);
+                $pd = $this->getPaginPage($d['link'], $d['session_id']);
                 if (!empty($pd) && count($pd)) {
                     foreach ($pd as $pl) {
                         $list[] = $pl;
@@ -117,7 +136,7 @@ class Albania extends AppModel {
         return $list;
     }
 
-    public function getPaginPage($link) {
+    public function getPaginPage($link, $session_id = 0) {
         $formulaDivClass = '/<div\sclass="li_item_inner">.*?(<\/div>)/msxi';
         $HttpSocket = new HttpSocket();
         if ($this->enableProxy) {
@@ -131,6 +150,7 @@ class Albania extends AppModel {
             foreach ($results as $result) {
                 $ndata[] = array(
                     'uid' => $this->getUid($result),
+                    'albania_speche_session_id' => $session_id,
                     'post_date' => $this->extractDateAndTrim($result),
                     'name' => trim(strip_tags($result)),
                     'url' => $this->getUrl($result)

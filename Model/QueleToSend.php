@@ -75,8 +75,10 @@ class QueleToSend extends AppModel {
 
         $postSend = unserialize($data['QueleToSend']['data']);
         $putSend = $postSend;
-//        pr($putSend);
-//        pr(json_encode($postSend));
+        if ($test) {
+            pr($putSend);
+            pr(json_encode($postSend));
+        }
         unset($putSend['id']);
 
         $delete = false;
@@ -153,14 +155,16 @@ class QueleToSend extends AppModel {
             'header' => array('Content-Type' => 'application/json'),
             'raw' => null,
         );
-        $list = array(
+//        $list = array(
 //            'logs', 'people', 'posts', 'organizations', 'speeches', 'events', 'motions', 'votes', 'areas', 'memberships', 'vote-events'
-        );
+//        );
         $list = array(
-            'logs'
+            'events', 'speeches',
         );
         if (is_null($delete)) {
             foreach ($list as $l) {
+//                $results = $HttpSocket->delete('https://api.parldata.eu/rs/skupstina/' . $l, array(), $request);
+//                $results = $HttpSocket->delete('https://api.parldata.eu/kv/kuvendi/' . $l, array(), $request);
 //                $results = $HttpSocket->delete('https://api.parldata.eu/al/kuvendi/' . $l, array(), $request);
             }
         }

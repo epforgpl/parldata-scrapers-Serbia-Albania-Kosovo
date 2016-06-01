@@ -20,16 +20,15 @@ class SerbianDelegate extends AppModel {
         if (!empty($content['SerbianDelegate']['end_date'])) {
             $data['memberships']['end_date'] = $content['SerbianDelegate']['end_date'];
         }
-//        $find =
-//        if (empty($content['SerbianDelegate']['url_uid'])) {
-//            $data['people']['id'] = $personId;
-//            $data['logs'] = array(
-//                'id' => 'people_memberships_' . $data['memberships']['id'] . '_' . time() . '_' . rand(0, 999),
-//                'label' => 'people not data exists: ' . $personId,
-//                'status' => 'finished',
-////                        'params' => $t
-//            );
-//        }
+        $sources[] = array(
+            'url' => $this->getSerbiaHost . trim($content['SerbianMenuData']['url']),
+        );
+        if (!empty($content['SerbianDelegate']['url'])) {
+            $sources[] = array(
+                'url' => $this->getSerbiaHost . trim($content['SerbianDelegate']['url']),
+            );
+        }
+        $data['memberships']['sources'] = $sources;
 
         return $data;
     }

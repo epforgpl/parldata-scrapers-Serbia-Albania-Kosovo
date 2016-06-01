@@ -98,6 +98,11 @@ class SerbianSpeecheContent extends AppModel {
                     $data[$key]['speeches']['position'] = $key;
                     $data[$key]['speeches']['event_id'] = 'event_' . $content['SerbianSpeecheIndex']['post_uid'];
                 }
+                $data[$key]['speeches']['sources'] = array(
+                    array(
+                        'url' => $this->getSerbiaHost . $content['SerbianSpeecheIndex']['url'],
+                    )
+                );
 
                 $narratives = $this->getNarrative($result);
                 if ($narratives && count($narratives) > 0) {
@@ -108,8 +113,14 @@ class SerbianSpeecheContent extends AppModel {
                         $data[$key . '-' . $nkey]['speeches']['date'] = $date;
                         $data[$key . '-' . $nkey]['speeches']['position'] = $key;
                         $data[$key . '-' . $nkey]['speeches']['event_id'] = 'event_' . $content['SerbianSpeecheIndex']['post_uid'];
+                        $data[$key . '-' . $nkey]['speeches']['sources'] = array(
+                            array(
+                                'url' => $this->getSerbiaHost . $content['SerbianSpeecheIndex']['url'],
+                            )
+                        );
                     }
                 }
+
                 if (isset($text) && !empty($text['logs'])) {
                     $tlogs[] = $text['logs'];
                 }
@@ -200,7 +211,7 @@ class SerbianSpeecheContent extends AppModel {
         if ($find) {
             $data = $find;
         } else {
-            $data = 'mp_' . $this->toCamelCase($data); //to CamelCase
+            $data = 'mp_' . $this->toLatinCamelCase($data); //to CamelCase
         }
         return $data;
     }
@@ -211,7 +222,7 @@ class SerbianSpeecheContent extends AppModel {
             if ($result) {
                 $name = $result;
                 $data = array();
-                $result = 'mp_' . $this->toCamelCase($result);
+                $result = 'mp_' . $this->toLatinCamelCase($result);
 
                 $data['role'] = 'speaker';
                 if ($result == 'Председник') {
@@ -242,9 +253,9 @@ class SerbianSpeecheContent extends AppModel {
                 'SerbianDelegate.api_uid', $conditions
         );
         if ($checkName) {
-            return 'mp_' . $checkName;
+            return 'mp_' . $this->toLatinCamelCase($checkName);
         } else {
-            $newId = 'mp_' . $this->toCamelCase($name);
+            $newId = 'mp_' . $this->toLatinCamelCase($name);
             $data[]['people']['id'] = $newId;
 //            $data[]['logs'] = array(
 //                'id' => 'people_' . $newId . '_eventId_' . $this->eventId . '_' . time() . '_' . rand(0, 999),

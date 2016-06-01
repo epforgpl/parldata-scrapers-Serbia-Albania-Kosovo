@@ -58,7 +58,7 @@ class KosovanTask extends Shell {
                         if (!empty($d['name'])) {
                             $d['kosovo_mps_menu_id'] = $lm['KosovoMpsMenu']['id'];
                             $d = array_merge($d, $data['date']);
-                            pr($d);
+//                            print_r($d);
                             if ($this->KosovoMpsIndex->save($d)) {
                                 $info = 'update index | menu_id: ' . $d['kosovo_mps_menu_id'] . ' | id: ' . $d['id'];
                                 $this->out($info);
@@ -713,7 +713,7 @@ class KosovanTask extends Shell {
         $this->out($info);
         $toLog .= $info . "\n";
 
-        ////////////////organizationParliamentaryGroups
+        //////////////organizationParliamentaryGroups
         $info = CakeTime::toServer(time()) . ' Kosovo organizationParliamentaryGroups start | pid:' . getmypid() . ' | mem: ' . $this->convert(memory_get_usage());
         $this->out($info);
         $toLog = $info . "\n";
@@ -898,7 +898,7 @@ class KosovanTask extends Shell {
                 )
             ),
 //            'order' => 'post_uid DESC',
-            'limit' => 5
+            'limit' => 10
         ));
         if ($content) {
             foreach ($content as $c) {
@@ -954,7 +954,7 @@ class KosovanTask extends Shell {
         $this->out($info);
         $toLog .= $info . "\n";
         if (!$ids || count($ids) < $trinityLimit) {
-            $people = $this->getListQueleToSend('people', $trinityLimit);
+            $people = $this->getListQueleToSend('people', $trinityLimit, true);
             $info = 'people count: ' . count($people);
             $this->out($info);
             $toLog .= $info . "\n";
@@ -1048,8 +1048,9 @@ class KosovanTask extends Shell {
         );
     }
 
-    public function getListQueleToSend($type = null, $limit = null) {
+    public function getListQueleToSend($type = null, $limit = null, $order = false) {
         $limit = !is_null($limit) && (int) $limit ? $limit : 100;
+        $orders = $order ? 'QueleToSend.id DESC' : 'QueleToSend.modified DESC';
         if (!is_null($type)) {
             return $this->QueleToSend->find('list', array(
                         'fielsd' => array('id', 'id'),
@@ -1060,7 +1061,7 @@ class KosovanTask extends Shell {
                             'hints <' => 100,
 //                            'modified <' => CakeTime::format('-' . 30 . ' minutes', '%Y-%m-%d %H:%M:%S')
                         ),
-                        'orders' => 'modified DESC',
+                        'orders' => $orders,
                         'limit' => $limit
             ));
         }

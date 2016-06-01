@@ -3,7 +3,10 @@
 class AlbaniaSpeecheIndex extends AppModel {
 
     public $hasOne = array(
-        'AlbaniaDoc'
+        'AlbaniaDoc',
+    );
+    public $belongsTo = array(
+        'AlbaniaSpecheSession'
     );
 
 }

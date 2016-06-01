@@ -10,36 +10,16 @@ class ScheduleShell extends Shell {
     );
 
     function main() {
-//        $now = CakeTime::toServer(time(), "- 84 minute");
-//        $now = CakeTime::format('2011-08-22 11:53:00', '%B %e, %Y %H:%M %p');
-//        $now = CakeTime::format('-84 minutes', '%Y-%m-%d %H:%M:%S');
-//        $now = CakeTime::format('-' . 10 . ' minutes', '%Y-%m-%d %H:%M:%S');
-//        return;
-        //     echo $this->Albanian->check_mps_contacts($now);
-//        echo $this->Kosovan->combine_pdfs(3);
-//        echo $this->Albanian->get_doc_from_link(1);
-//////        echo $this->Serbian->set_hint(9);
-////        //   $this->out('lipa');
-//        echo $this->Kosovan->check_mps_contacts($now, 5);
-//        echo $this->Kosovan->get_mps_contacts(100);
-//        return;
-//        $fileFolder = WWW_ROOT . 'files' . DS . 'albania' . DS;
-//        $fileName = $fileFolder . '123.doc';
-//        $fileName2 = $fileFolder . '123.html';
-//        $command = '/usr/bin/unoconv -c html ' . $fileName . ' 2>&1';
-//        pr($command);
-//        $output = shell_exec($command);
-//        echo $output;
+
         #############################
-//        echo $this->Kosovan->kosovo_combine_to_quelle(600);
-//        echo $this->Serbian->combine_pdfs(30);
-//        return;
-//        echo $this->Albanian->albania_combine_to_quelle();
-//        echo $this->Albanian->albania_send_to_quelle();
-//        echo $this->Kosovan->kosovo_send_to_quelle();
-//        echo $this->Serbian->serbia_send_to_quelle();
+//
+//        echo $this->Albanian->albania_send_to_quelle(3000);
+//        echo $this->Kosovan->kosovo_send_to_quelle(3000);
+//        echo $this->Serbian->serbia_send_to_quelle(3000);
 //////////////
-////        echo $this->Serbian->serbia_combine_to_quelle();
+//        echo $this->Serbian->serbia_combine_to_quelle();
+//        echo $this->Kosovan->kosovo_combine_to_quelle();
+//        echo $this->Albanian->albania_combine_to_quelle();
 //        return;
 
         $schedules = $this->Serbian->get_schedules();

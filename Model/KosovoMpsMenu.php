@@ -18,6 +18,12 @@ class KosovoMpsMenu extends AppModel {
         if (!empty($content['KosovoMpsMenu']['end_date'])) {
             $data[$i]['organizations']['dissolution_date'] = $content['KosovoMpsMenu']['end_date'];
         }
+        if (!empty($content['KosovoMpsMenu']['url'])) {
+            $data[$i]['organizations']['sources'][] = array(
+                'url' => $this->getKosovoHost . '/' . trim($content['KosovoMpsMenu']['url']),
+            );
+        }
+
         if (!empty($content['KosovoMpsIndex'])) {
             foreach ($content['KosovoMpsIndex'] as $key => $mp) {
                 $i++;
@@ -31,6 +37,16 @@ class KosovoMpsMenu extends AppModel {
                 }
                 if (!empty($mp['KosovoMpsIndex']['end_date'])) {
                     $data[$i]['memberships']['end_date'] = $mp['end_date'];
+                }
+                if (!empty($content['KosovoMpsMenu']['url'])) {
+                    $data[$i]['memberships']['sources'][] = array(
+                        'url' => $this->getKosovoHost . '/' . trim($content['KosovoMpsMenu']['url']),
+                    );
+                }
+                if (!empty($mp['url'])) {
+                    $data[$i]['memberships']['sources'][] = array(
+                        'url' => $this->getKosovoHost . '/' . trim($mp['url']),
+                    );
                 }
             }
         }

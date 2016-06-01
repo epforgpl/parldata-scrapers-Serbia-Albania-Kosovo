@@ -88,8 +88,13 @@ class AlbanianApiController extends AppController {
             'conditions' => array(
                 'AlbaniaDoc.status' => 0
             ),
+            'contain' => array(
+                'AlbaniaSpeecheIndex' => array(
+                    'AlbaniaSpecheSession'
+                )
+            ),
             'order' => 'AlbaniaDoc.id ASC',
-            'limit' => 10
+            'limit' => 1
         ));
 //        pr($content);
         if ($content) {
